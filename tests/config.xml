@@ -1,0 +1,26 @@
+<logging xmlns="http://www.erebot.net/xmlns/logging">
+    <loggers>
+        <logger name="root">
+            <level>DEBUG</level>
+            <handlers>
+                <handler>stderr</handler>
+            </handlers>
+        </logger>
+    </loggers>
+
+    <handlers>
+        <handler name="stderr">
+            <level>ERROR</level>
+            <formatter>detailed</formatter>
+            <class>StreamHandler</class>
+        </handler>
+    </handlers>
+
+    <formatters>
+        <formatter name="detailed">
+            <format>%(asctime)s - %(message)s</format>
+            <datefmt>%H:%M:%S</datefmt>
+        </formatter>
+    </formatters>
+</logging>
+

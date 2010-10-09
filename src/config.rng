@@ -1,0 +1,189 @@
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+    ns="http://www.erebot.net/xmlns/logging"
+    datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+
+    <start>
+        <ref name="logging"/>
+    </start>
+
+    <define name="logging">
+        <element name="logging">
+            <interleave>
+                <optional><ref name="loggers"/></optional>
+                <optional><ref name="handlers"/></optional>
+                <optional><ref name="formatters"/></optional>
+            </interleave>
+        </element>
+    </define>
+
+    <define name="loggers">
+        <element name="loggers">
+            <zeroOrMore>
+                <ref name="logger"/>
+            </zeroOrMore>
+        </element>
+    </define>
+
+    <define name="handlers">
+        <element name="handlers">
+            <zeroOrMore>
+                <ref name="handler"/>
+            </zeroOrMore>
+        </element>
+    </define>
+
+    <define name="formatters">
+        <element name="formatters">
+            <zeroOrMore>
+                <ref name="formatter"/>
+            </zeroOrMore>
+        </element>
+    </define>
+
+    <define name="logger">
+        <element name="logger">
+            <attribute name="name"><text/></attribute>
+
+            <interleave>
+                <element name="level">
+                    <choice>
+                        <data type="integer"/>
+                        <data type="string"/>
+                    </choice>
+                </element>
+
+                <optional>
+                    <element name="propagate"><data type="boolean"/></element>
+                </optional>
+
+                <optional>
+                    <element name="qualname"><text/></element>
+                </optional>
+
+                <element name="handlers">
+                    <oneOrMore>
+                        <element name="handler"><text/></element>
+                    </oneOrMore>
+                </element>
+            </interleave>
+        </element>
+    </define>
+
+    <define name="handler">
+        <element name="handler">
+            <attribute name="name"><text/></attribute>
+
+            <interleave>
+                <optional>
+                    <element name="level">
+                        <choice>
+                            <data type="integer"/>
+                            <data type="string"/>
+                        </choice>
+                    </element>
+                </optional>
+
+                <element name="class"><text/></element>
+
+                <optional>
+                    <element name="formatter"><text/></element>
+                </optional>
+
+                <optional>
+                    <element name="target"><text/></element>
+                </optional>
+
+                <optional>
+                    <element name="args">
+                        <zeroOrMore>
+                            <element name="arg">
+                                <attribute name="index">
+                                    <data type="positiveInteger"/>
+                                </attribute>
+                                <ref name="type-def"/>
+                            </element>
+                        </zeroOrMore>
+                    </element>
+                </optional>
+            </interleave>
+        </element>
+    </define>
+
+    <define name="formatter">
+        <element name="formatter">
+            <attribute name="name"><text/></attribute>
+
+            <interleave>
+                <optional>
+                    <element name="format"><text/></element>
+                </optional>
+
+                <optional>
+                    <element name="datefmt"><text/></element>
+                </optional>
+
+                <optional>
+                    <element name="class"><text/></element>
+                </optional>
+            </interleave>
+        </element>
+    </define>
+
+    <define name="type-def" combine="choice">
+        <group>
+            <attribute name="type">
+                <choice>
+                    <value>bool</value>
+                    <value>boolean</value>
+                </choice>
+            </attribute>
+            <data type="boolean"/>
+        </group>
+    </define>
+
+    <define name="type-def" combine="choice">
+        <group>
+            <attribute name="type">
+                <choice>
+                    <value>string</value>
+                </choice>
+            </attribute>
+            <data type="string"/>
+        </group>
+    </define>
+
+    <define name="type-def" combine="choice">
+        <group>
+            <attribute name="type">
+                <choice>
+                    <value>int</value>
+                    <value>integer</value>
+                </choice>
+            </attribute>
+            <data type="int"/>
+        </group>
+    </define>
+
+    <define name="type-def" combine="choice">
+        <group>
+            <attribute name="type">
+                <choice>
+                    <value>float</value>
+                </choice>
+            </attribute>
+            <data type="float"/>
+        </group>
+    </define>
+
+    <define name="type-def" combine="choice">
+        <group>
+            <attribute name="type">
+                <choice>
+                    <value>double</value>
+                </choice>
+            </attribute>
+            <data type="double"/>
+        </group>
+    </define>
+</grammar>
+
