@@ -1,0 +1,92 @@
+default namespace = "http://www.erebot.net/xmlns/logging"
+
+start = logging
+
+logging =
+    element logging {
+        loggers? &
+        handlers? &
+        formatters?
+    }
+
+loggers =
+    element loggers {
+        logger*
+    }
+
+handlers =
+    element handlers {
+        handler*
+    }
+
+formatters =
+    element formatters {
+        formatter*
+    }
+
+logger =
+    element logger {
+        attribute name { xsd:string },
+
+        (
+            element level       { xsd:string | xsd:integer } &
+            element propagate   { xsd:boolean }? &
+            element qualname    { xsd:string }? &
+            element handlers    {
+                element handler {
+                    xsd:string
+                }+
+            }
+        )
+    }
+
+handler =
+    element handler {
+        attribute name { xsd:string },
+
+        (
+            element level       { xsd:string | xsd:integer }? &
+            element class       { xsd:string } &
+            element formatter   { xsd:string }? &
+            element target      { xsd:string }? &
+            element args        {
+                element arg {
+                    attribute index { xsd:positiveInteger },
+                    attribute type  { "bool" | "boolean" },
+                    (xsd:boolean)
+                }* &
+                element arg {
+                    attribute index { xsd:positiveInteger },
+                    attribute type  { "string" },
+                    (xsd:string)
+                }* &
+                element arg {
+                    attribute index { xsd:positiveInteger },
+                    attribute type  { "int" | "integer" },
+                    (xsd:int)
+                }* &
+                element arg {
+                    attribute index { xsd:positiveInteger },
+                    attribute type  { "float" },
+                    (xsd:float)
+                }* &
+                element arg {
+                    attribute index { xsd:positiveInteger },
+                    attribute type  { "double" },
+                    (xsd:double)
+                }*
+            }?
+        )
+    }
+
+formatter =
+    element formatter {
+        attribute name  { xsd:string },
+
+        (
+            element format  { xsd:string }? &
+            element datefmt { xsd:string }? &
+            element class   { xsd:string }?
+        )
+    }
+
