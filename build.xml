@@ -84,8 +84,6 @@ and more user-friendly than Apache's log4php.
 
     <fileset dir="src/" id="sources">
         <include name="**/*.php"/>
-        <exclude name="orm/**"/>
-        <exclude name="logging/**"/>
     </fileset>
 
     <fileset dir="tests/" id="tests">
