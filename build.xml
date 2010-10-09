@@ -92,7 +92,7 @@ and more user-friendly than Apache's log4php.
         <include name="**/*.php"/>
     </fileset>
 
-    <target name="all" depends="i18n" description=""/>
+    <target name="all" depends="" description=""/>
 
     <!-- Documentation -->
     <target name="doc" description="" depends="doxygen"/>
