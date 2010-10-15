@@ -1,11 +1,7 @@
 <?php
 
 require_once('PHPUnit/Framework.php');
-include_once(dirname(dirname(__FILE__)).'/src/logging.php');
 
-/**
- * @runTestsInSeparateProcesses
- */
 class FileConfigTest
 extends PHPUnit_Framework_TestCase
 {
@@ -29,20 +25,6 @@ extends PHPUnit_Framework_TestCase
         $this->checkLoggingSettings();
     }
 
-#    public function testLoadXMLConfigurationWithSimpleXML()
-#    {
-#        $this->logging->fileConfig(dirname(__FILE__).'/config.xml',
-#            array(), 'XML');
-#        $this->checkLoggingSettings();
-#    }
-
-#    public function testLoadXMLConfigurationWithDOM()
-#    {
-#        $this->logging->fileConfig(dirname(__FILE__).'/config.xml',
-#            array(), 'XML');
-#        $this->checkLoggingSettings();
-#    }
-
     public function testLoadINIConfigurationWithFilename()
     {
         $this->logging->fileConfig(dirname(__FILE__).'/config.ini', array(), 'INI');
@@ -54,13 +36,6 @@ extends PHPUnit_Framework_TestCase
         $this->logging->fileConfig(dirname(__FILE__).'/config.ini');
         $this->checkLoggingSettings();
     }
-
-#    public function testLoadINIConfigurationWithArray()
-#    {
-#        $this->logging->fileConfig(dirname(__FILE__).'/config.ini',
-#            array(), Plop::LOAD_XML);
-#        $this->checkLoggingSettings();
-#    }
 }
 
 ?>

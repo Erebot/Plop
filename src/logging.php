@@ -6,6 +6,10 @@
  * to offer customizable logs.
  */
 
+// Prevent multiple inclusions.
+if (defined('PLOP_LEVEL_CRITICAL'))
+    return;
+
 define('PLOP_LEVEL_CRITICAL',   50);
 define('PLOP_LEVEL_ERROR',      40);
 define('PLOP_LEVEL_WARNING',    30);

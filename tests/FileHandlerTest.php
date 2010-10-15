@@ -1,7 +1,6 @@
 <?php
 
 require_once('PHPUnit/Framework.php');
-include_once(dirname(dirname(__FILE__)).'/src/logging.php');
 
 class FileHandlerTest
 extends PHPUnit_Framework_TestCase

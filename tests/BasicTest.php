@@ -2,7 +2,6 @@
 
 require_once('PHPUnit/Framework.php');
 require_once('PHPUnit/Extensions/OutputTestCase.php');
-include_once(dirname(dirname(__FILE__)).'/src/logging.php');
 
 class LevelCheckingTest
 extends PHPUnit_Extensions_OutputTestCase
