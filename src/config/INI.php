@@ -142,10 +142,8 @@ extends APlopConfig
             foreach ($hlist as $hand)
                 $logger->addHandler($handlers[trim($hand)]);
         }
-
         foreach ($existing as $log)
             $root->manager->loggerDict[$log]->disabled = 1;
     }
 }
 
-?>

@@ -188,4 +188,3 @@ extends PlopLogger
 PlopLogger::$root     = new PlopRootLogger(PLOP_LEVEL_WARNING);
 PlopLogger::$manager  = new PlopManager(PlopLogger::$root);
 
-?>

@@ -7,6 +7,8 @@ extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
+        PlopLogger::$root     = new PlopRootLogger(PLOP_LEVEL_WARNING);
+        PlopLogger::$manager  = new PlopManager(PlopLogger::$root);
         $this->tempfile = tempnam(sys_get_temp_dir(), 'PLOP');
         $this->logging =& Plop::getInstance();
         $this->logging->basicConfig(array(
