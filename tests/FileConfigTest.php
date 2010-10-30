@@ -8,7 +8,7 @@ extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         Plop_Logger::$root     = new Plop_RootLogger(PLOP_LEVEL_WARNING);
-        Plop_Logger::$manager  = new Plop_Manager(PlopLogger::$root);
+        Plop_Logger::$manager  = new Plop_Manager(Plop_Logger::$root);
         $this->logging =& Plop::getInstance();
     }
 
@@ -17,19 +17,27 @@ extends PHPUnit_Framework_TestCase
         $root = $this->logging->getLogger();
         $this->assertSame(PLOP_LEVEL_DEBUG, $root->level);
         $this->assertSame(1, count($root->handlers));
-        $this->assertTrue($root->handlers[0] instanceof PlopStreamHandler);
+        $this->assertTrue($root->handlers[0] instanceof Plop_Handler_Stream);
         $this->assertSame(PLOP_LEVEL_ERROR, $root->handlers[0]->level);
     }
 
     public function testLoadXMLConfigurationFromFilename()
     {
-        $this->logging->fileConfig(__DIR__.'/config.xml', array(), 'XML');
+        $this->logging->fileConfig(
+            __DIR__.'/config.xml',
+            array(),
+            'Plop_Config_Format_XML'
+        );
         $this->checkLoggingSettings();
     }
 
     public function testLoadINIConfigurationWithFilename()
     {
-        $this->logging->fileConfig(__DIR__.'/config.ini', array(), 'INI');
+        $this->logging->fileConfig(
+            __DIR__.'/config.ini',
+            array(),
+            'Plop_Config_Format_INI'
+        );
         $this->checkLoggingSettings();
     }
 
