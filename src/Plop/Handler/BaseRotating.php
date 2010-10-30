@@ -1,7 +1,5 @@
 <?php
 
-include_once(dirname(__FILE__).'/FileHandler.php');
-
 abstract class  Plop_Handler_BaseRotating
 extends         Plop_Handler_File
 {

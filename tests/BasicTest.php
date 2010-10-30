@@ -2,6 +2,7 @@
 
 require_once('PHPUnit/Framework.php');
 require_once('PHPUnit/Extensions/OutputTestCase.php');
+require_once(dirname(__FILE__).'/../src/Plop/Plop.php');
 
 class LevelCheckingTest
 extends PHPUnit_Extensions_OutputTestCase
@@ -65,4 +66,3 @@ EXPECTED;
     }
 }
 
-?>

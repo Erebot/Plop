@@ -1,7 +1,5 @@
 <?php
 
-include_once(dirname(__FILE__).'/SocketHandler.php');
-
 class   Plop_Handler_Datagram
 extends Plop_Handler_Socket
 {

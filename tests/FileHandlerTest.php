@@ -1,6 +1,7 @@
 <?php
 
 require_once('PHPUnit/Framework.php');
+require_once(dirname(__FILE__).'/../src/Plop/Plop.php');
 
 class FileHandlerTest
 extends PHPUnit_Framework_TestCase
@@ -34,4 +35,3 @@ extends PHPUnit_Framework_TestCase
     }
 }
 
-?>

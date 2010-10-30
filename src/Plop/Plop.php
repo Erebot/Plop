@@ -159,11 +159,11 @@ class Plop
             $filename = isset($args['filename']) ? $args['filename'] : NULL;
             if ($filename !== NULL) {
                 $mode = isset($args['filemode']) ? $args['filemode'] : 'a';
-                $hdlr = new Plop_FileHandler($filename, $mode);
+                $hdlr = new Plop_Handler_File($filename, $mode);
             }
             else {
                 $stream = isset($args['stream']) ? $args['stream'] : NULL;
-                $hdlr = new Plop_StreamHandler($stream);
+                $hdlr = new Plop_Handler_Stream($stream);
             }
             $fs = isset($args['format']) ? $args['format'] : self::BASIC_FORMAT;
             $dfs = isset($args['datefmt']) ? $args['datefmt'] : NULL;
@@ -198,7 +198,7 @@ class Plop
     public function fileConfig(
         $fname,
         $defaults   = array(),
-        $class     = 'Plop_Config_INI'
+        $class     = 'Plop_Config_Format_INI'
     )
     {
         $configParser = new $class($this, $fname);
@@ -208,7 +208,7 @@ class Plop
 
 /// Autoloader for Plop's classes.
 function _plop_autoloader($class) {
-    $fname = dirname(__FILE__).DIRECTORY_SEPARATOR.
+    $fname = dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.
         str_replace(array('_', '\\'), DIRECTORY_SEPARATOR, $class).'.php';
     if (!file_exists($fname))
         return FALSE;

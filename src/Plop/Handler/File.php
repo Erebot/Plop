@@ -1,7 +1,5 @@
 <?php
 
-include_once(dirname(__FILE__).'/StreamHandler.php');
-
 class   Plop_Handler_File
 extends Plop_Handler_Stream
 {

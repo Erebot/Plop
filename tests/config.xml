@@ -12,7 +12,7 @@
         <handler name="stderr">
             <level>ERROR</level>
             <formatter>detailed</formatter>
-            <class>StreamHandler</class>
+            <class>Plop_Handler_Stream</class>
         </handler>
     </handlers>
 

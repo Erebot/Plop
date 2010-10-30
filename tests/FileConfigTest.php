@@ -1,6 +1,7 @@
 <?php
 
 require_once('PHPUnit/Framework.php');
+require_once(dirname(__FILE__).'/../src/Plop/Plop.php');
 
 class FileConfigTest
 extends PHPUnit_Framework_TestCase
@@ -24,7 +25,7 @@ extends PHPUnit_Framework_TestCase
     public function testLoadXMLConfigurationFromFilename()
     {
         $this->logging->fileConfig(
-            __DIR__.'/config.xml',
+            dirname(__FILE__).'/config.xml',
             array(),
             'Plop_Config_Format_XML'
         );
@@ -34,7 +35,7 @@ extends PHPUnit_Framework_TestCase
     public function testLoadINIConfigurationWithFilename()
     {
         $this->logging->fileConfig(
-            __DIR__.'/config.ini',
+            dirname(__FILE__).'/config.ini',
             array(),
             'Plop_Config_Format_INI'
         );
@@ -48,4 +49,3 @@ extends PHPUnit_Framework_TestCase
     }
 }
 
-?>
