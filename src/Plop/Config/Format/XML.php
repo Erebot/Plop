@@ -1,7 +1,7 @@
 <?php
 
-class   PlopConfigXML
-extends APlopConfig
+class   Plop_Config_Format_XML
+extends Plop_Config_AbstractParser
 {
     const XMLNS = 'http://www.erebot.net/xmlns/logging';
 
@@ -33,7 +33,7 @@ extends APlopConfig
                 $dfs = (string) $formatter->children(self::XMLNS)->datefmt;
             else
                 $dfs = NULL;
-            $c = 'PlopFormatter';
+            $c = 'Plop_Formatter';
             if (isset($formatter->children(self::XMLNS)->{'class'}[0]))
                 $c = (string) $formatter->children(self::XMLNS)->{'class'};
             $formatters[$name] = new $c($fs, $dfs);

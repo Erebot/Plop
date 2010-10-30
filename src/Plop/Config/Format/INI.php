@@ -1,7 +1,7 @@
 <?php
 
-class   PlopConfigINI
-extends APlopConfig
+class   Plop_Config_Format_INI
+extends Plop_Config_AbstractParser
 {
     protected function getConfigParserData($fname)
     {
@@ -33,7 +33,7 @@ extends APlopConfig
                 $dfs = $opts['datefmt'];
             else
                 $dfs = NULL;
-            $c = 'PlopFormatter';
+            $c = 'Plop_Formatter';
             if (isset($opts['class']))
                 $c = $opts['class'];
             $formatters[$form] = new $c($fs, $dfs);;
