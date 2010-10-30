@@ -59,7 +59,7 @@ extends Plop_Config_AbstractParser
                 if (is_numeric($level))
                     $level = (int) $level;
                 else
-                    $level = $this->logging->getLevelName($level);
+                    $level = $this->_logging->getLevelName($level);
                 $h->setLevel($level);
             }
             if (isset($handler->children(self::XMLNS)->formatter[0])) {
@@ -80,7 +80,7 @@ extends Plop_Config_AbstractParser
         if (!isset($this->cp->children(self::XMLNS)->loggers[0]))
             return;
 
-        $root       = $this->logging->getLogger();
+        $root       = $this->_logging->getLogger();
         $existing   = array_keys($root::$manager->loggerDict);
         foreach ($this->cp->children(self::XMLNS)->loggers[0]
                     ->children(self::XMLNS)->logger as $logger) {
@@ -93,7 +93,7 @@ extends Plop_Config_AbstractParser
                     if (is_numeric($level))
                         $level = (int) $level;
                     else
-                        $level = $this->logging->getLevelName($level);
+                        $level = $this->_logging->getLevelName($level);
                     $log->setLevel($level);
                 }
                 foreach ($root->handlers as $h)
@@ -112,7 +112,7 @@ extends Plop_Config_AbstractParser
                 $propagate = (int) ((string) $logger->children(self::XMLNS)->propagate);
             else
                 $propagate = 1;
-            $qnLogger = $this->logging->getLogger($qn);
+            $qnLogger = $this->_logging->getLogger($qn);
             $key = array_search($qn, $existing, TRUE);
             if ($key !== FALSE)
                 unset($existing[$key]);
@@ -121,7 +121,7 @@ extends Plop_Config_AbstractParser
                 if (is_numeric($level))
                     $level = (int) $level;
                 else
-                    $level = $this->logging->getLevelName($level);
+                    $level = $this->_logging->getLevelName($level);
                 $qnLogger->setLevel($level);
             }
             foreach ($qnLogger->handlers as &$h)

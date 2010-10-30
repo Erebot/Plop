@@ -2,11 +2,11 @@
 
 abstract class Plop_Config_AbstractParser
 {
-    protected $logging;
+    protected $_logging;
 
     public function __construct(Plop &$logging, $fname)
     {
-        $this->logging  =& $logging;
+        $this->_logging =& $logging;
         $this->cp       =  $this->getConfigParserData($fname);
     }
 

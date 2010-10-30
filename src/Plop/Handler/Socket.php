@@ -29,8 +29,13 @@ extends Plop_Handler
 
     public function makeSocket($timeout=1)
     {
-        return fsockopen('tcp://'.$this->host, $this->port,
-                            $errno, $errstr, $timeout);
+        return fsockopen(
+            'tcp://' . $this->host,
+            $this->port,
+            $errno,
+            $errstr,
+            $timeout
+        );
     }
 
     public function createSocket()

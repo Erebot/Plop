@@ -17,7 +17,7 @@ extends Plop_Handler_BaseRotating
 
     public function doRollover()
     {
-        fclose($this->stream);
+        fclose($this->_stream);
         if ($this->backupCount > 0) {
             for ($i = $this->backupCount - 1; $i > 0; $i--) {
                 $sfn = sprintf("%s.%d", $this->baseFilename, $i);
@@ -34,19 +34,19 @@ extends Plop_Handler_BaseRotating
             rename($this->baseFilename, $dfn);
         }
         $this->mode     = 'w';
-        $this->stream   = $this->_open();
+        $this->_stream  = $this->_open();
     }
 
     public function shouldRollover(Plop_Record &$record)
     {
-        if (!$this->stream)
-            $this->stream = $this->open();
+        if (!$this->_stream)
+            $this->_stream = $this->open();
         if ($this->maxBytes > 0) {
             $msg = $this->format($record)."\n";
             // The python doc states this is due to a non-POSIX-compliant
             // behaviour under Windows.
-            fseek($this->stream, 0, SEEK_END);
-            if (ftell($this->stream) + strlen($msg) >= $this->maxBytes)
+            fseek($this->_stream, 0, SEEK_END);
+            if (ftell($this->_stream) + strlen($msg) >= $this->maxBytes)
                 return TRUE;
         }
         return FALSE;

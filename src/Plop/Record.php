@@ -4,7 +4,7 @@ class Plop_Record
 {
     public $dict;
 
-    public function __construct($name, $level, $pathname, $lineno, $msg, $args, $exc_info, $func = NULL)
+    public function __construct($name, $level, $pathname, $lineno, $msg, $args, $exception, $func = NULL)
     {
         $ct         = microtime(TRUE);
         $logging    = Plop::getInstance();
@@ -22,7 +22,7 @@ class Plop_Record
         $this->dict['pathname']         = $pathname;
         $this->dict['filename']         = $pathname;
         $this->dict['module']           = "Unknown module";
-        $this->dict['exc_info']         = $exc_info;
+        $this->dict['exc_info']         = $exception;
         $this->dict['exc_text']         = NULL;
         $this->dict['lineno']           = $lineno;
         $this->dict['funcName']         = $func;

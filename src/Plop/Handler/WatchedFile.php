@@ -3,19 +3,24 @@
 class   Plop_Handler_WatchedFile
 extends Plop_Handler_File
 {
-    protected $dev;
-    protected $ino;
+    protected $_dev;
+    protected $_ino;
 
-    public function __construct($filename, $mode='a', $encoding=NULL, $delay=0)
+    public function __construct(
+        $filename,
+        $mode       = 'a',
+        $encoding   = NULL,
+        $delay      = 0
+    )
     {
         parent::__construct($filename, $mode, $encoding, $delay);
         if (!file_exists($filename)) {
-            $this->dev = $this->ino = -1;
+            $this->_dev = $this->_ino = -1;
         }
         else {
             $stats = stat($filename);
-            $this->dev = $stats['dev'];
-            $this->ino = $stats['ino'];
+            $this->_dev = $stats['dev'];
+            $this->_ino = $stats['ino'];
         }
     }
 
@@ -27,17 +32,19 @@ extends Plop_Handler_File
         }
         else {
             $stats = stat($this->baseFilename);
-            $changed = (($stat['dev'] != $this->dev) ||
-                        ($stat['ino'] != $this->ino));
+            $changed = (
+                ($stat['dev'] != $this->_dev) ||
+                ($stat['ino'] != $this->_ino)
+            );
         }
-        if ($changed && $this->stream !== FALSE) {
-            fflush($this->stream);
-            fclose($this->stream);
+        if ($changed && $this->_stream !== FALSE) {
+            fflush($this->_stream);
+            fclose($this->_stream);
             $this->open();
             if (!$stats)
                 $stats = stat($this->baseFilename);
-            $this->dev = $stats['dev'];
-            $this->ino = $stats['ino'];
+            $this->_dev = $stats['dev'];
+            $this->_ino = $stats['ino'];
         }
         parent::emit($record);
     }

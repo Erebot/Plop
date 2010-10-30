@@ -9,7 +9,8 @@ class Plop_PlaceHolder
         $this->loggerMap = array($alogger);
     }
 
-    public function append(Plop_Logger &$alogger) {
+    public function append(Plop_Logger &$alogger)
+    {
         $key = array_search($alogger, $this->loggerMap, TRUE);
         if ($key === FALSE)
             $this->loggerMap[] = $alogger;

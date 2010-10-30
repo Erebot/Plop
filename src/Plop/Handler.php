@@ -83,9 +83,9 @@ extends Plop_Filterer
         /// @TODO
     }
 
-    public function handleError(Plop_Record &$record, Exception &$exc_info)
+    public function handleError(Plop_Record &$record, Exception &$exception)
     {
-        fprintf(STDERR, "%s", $exc_info);
+        fprintf(STDERR, "%s", $exception);
     }
 }
 

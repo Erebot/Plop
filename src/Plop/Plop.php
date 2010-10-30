@@ -30,17 +30,17 @@ class Plop
     const ERROR     = PLOP_LEVEL_ERROR;
     const CRITICAL  = PLOP_LEVEL_CRITICAL;
 
-    static protected $instance = NULL;
-    protected $loggers;
-    protected $loggerClass;
-    protected $levelNames;
+    static protected $_instance = NULL;
+    protected $_loggers;
+    protected $_loggerClass;
+    protected $_levelNames;
     public $created;
 
     protected function __construct()
     {
-        $this->loggerClass  = 'Plop_Logger';
-        $this->loggers      = array();
-        $this->levelNames   = array(
+        $this->_loggerClass  = 'Plop_Logger';
+        $this->_loggers      = array();
+        $this->_levelNames   = array(
             PLOP_LEVEL_NOTSET   => 'NOTSET',
             PLOP_LEVEL_DEBUG    => 'DEBUG',
             PLOP_LEVEL_INFO     => 'INFO',
@@ -48,8 +48,8 @@ class Plop
             PLOP_LEVEL_ERROR    => 'ERROR',
             PLOP_LEVEL_CRITICAL => 'CRITICAL',
         );
-        $this->levelNames   = $this->levelNames +
-                                array_flip($this->levelNames);
+        $this->_levelNames   = $this->_levelNames +
+                                array_flip($this->_levelNames);
         $this->created      = microtime(TRUE);
     }
 
@@ -60,11 +60,11 @@ class Plop
 
     static public function & getInstance()
     {
-        if (self::$instance === NULL) {
+        if (self::$_instance === NULL) {
             $c = __CLASS__;
-            self::$instance = new $c();
+            self::$_instance = new $c();
         }
-        return self::$instance;
+        return self::$_instance;
     }
 
     public function getLogger($name = NULL)
@@ -76,54 +76,54 @@ class Plop
 
     public function getLoggerClass()
     {
-        return $this->loggerClass;
+        return $this->_loggerClass;
     }
 
-    public function debug($msg, $args = array(), $exc_info = NULL)
+    public function debug($msg, $args = array(), $exception = NULL)
     {
-        return $this->log(PLOP_LEVEL_DEBUG, $msg, $args, $exc_info);
+        return $this->log(PLOP_LEVEL_DEBUG, $msg, $args, $exception);
     }
 
-    public function info($msg, $args = array(), $exc_info = NULL)
+    public function info($msg, $args = array(), $exception = NULL)
     {
-        return $this->log(PLOP_LEVEL_INFO, $msg, $args, $exc_info);
+        return $this->log(PLOP_LEVEL_INFO, $msg, $args, $exception);
     }
 
-    public function warning($msg, $args = array(), $exc_info = NULL)
+    public function warning($msg, $args = array(), $exception = NULL)
     {
-        return $this->log(PLOP_LEVEL_WARNING, $msg, $args, $exc_info);
+        return $this->log(PLOP_LEVEL_WARNING, $msg, $args, $exception);
     }
 
-    public function warn($msg, $args = array(), $exc_info = NULL)
+    public function warn($msg, $args = array(), $exception = NULL)
     {
-        return $this->log(PLOP_LEVEL_WARNING, $msg, $args, $exc_info);
+        return $this->log(PLOP_LEVEL_WARNING, $msg, $args, $exception);
     }
 
-    public function error($msg, $args = array(), $exc_info = NULL)
+    public function error($msg, $args = array(), $exception = NULL)
     {
-        return $this->log(PLOP_LEVEL_ERROR, $msg, $args, $exc_info);
+        return $this->log(PLOP_LEVEL_ERROR, $msg, $args, $exception);
     }
 
-    public function critical($msg, $args = array(), $exc_info = NULL)
+    public function critical($msg, $args = array(), $exception = NULL)
     {
-        return $this->log(PLOP_LEVEL_CRITICAL, $msg, $args, $exc_info);
+        return $this->log(PLOP_LEVEL_CRITICAL, $msg, $args, $exception);
     }
 
-    public function fatal($msg, $args = array(), $exc_info = NULL)
+    public function fatal($msg, $args = array(), $exception = NULL)
     {
-        return $this->log(PLOP_LEVEL_CRITICAL, $msg, $args, $exc_info);
+        return $this->log(PLOP_LEVEL_CRITICAL, $msg, $args, $exception);
     }
 
-    public function exception($msg, $exc_info, $args = array())
+    public function exception($msg, $exception, $args = array())
     {
-        return $this->log(PLOP_LEVEL_ERROR, $msg, $args, $exc_info);
+        return $this->log(PLOP_LEVEL_ERROR, $msg, $args, $exception);
     }
 
-    public function log($lvl, $msg, $args = array(), $exc_info = NULL)
+    public function log($lvl, $msg, $args = array(), $exception = NULL)
     {
         $this->basicConfig();
         $root = $this->getLogger();
-        return $root->log($lvl, $msg, $args, $exc_info);
+        return $root->log($lvl, $msg, $args, $exception);
     }
 
     public function disable($level)
@@ -133,16 +133,16 @@ class Plop
 
     public function addLevelName($lvl, $lvlName)
     {
-        $this->levelNames[$lvl] = $lvlName;
-        $this->levelNames[$lvlName] = $lvl;
+        $this->_levelNames[$lvl] = $lvlName;
+        $this->_levelNames[$lvlName] = $lvl;
     }
 
     public function getLevelName($lvl)
     {
-        if (!isset($this->levelNames[$lvl]))
+        if (!isset($this->_levelNames[$lvl]))
             return "Level ".$lvl;
 
-        return $this->levelNames[$lvl];
+        return $this->_levelNames[$lvl];
     }
 
     public function makeLogRecord($attrs)
@@ -192,7 +192,7 @@ class Plop
             !is_subclass_of($class, 'Plop_Logger'))
             throw new Exception($class);
 
-        $this->loggerClass = $class;
+        $this->_loggerClass = $class;
     }
 
     public function fileConfig(
@@ -204,16 +204,17 @@ class Plop
         $configParser = new $class($this, $fname);
         $configParser->doWork();
     }
+
+    static function plop_autoloader($class)
+    {
+        $fname = dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.
+            str_replace(array('_', '\\'), DIRECTORY_SEPARATOR, $class).'.php';
+        if (!file_exists($fname))
+            return FALSE;
+        require_once($fname);
+        return (class_exists($class, FALSE) || interface_exists($class, FALSE));
+    }
 }
 
-/// Autoloader for Plop's classes.
-function _plop_autoloader($class) {
-    $fname = dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.
-        str_replace(array('_', '\\'), DIRECTORY_SEPARATOR, $class).'.php';
-    if (!file_exists($fname))
-        return FALSE;
-    require_once($fname);
-    return (class_exists($class, FALSE) || interface_exists($class, FALSE));
-}
-spl_autoload_register('_plop_autoloader');
+spl_autoload_register(array('Plop', 'plop_autoloader'));
 

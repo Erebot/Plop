@@ -62,7 +62,7 @@ extends Plop_Config_AbstractParser
             if (isset($opts['level'])) {
                 $level = $opts['level'];
                 if (is_string($level))
-                    $level = $this->logging->getLevelName($level);
+                    $level = $this->_logging->getLevelName($level);
                 $h->setLevel($level);
             }
             if (isset($opts['formatter'])) {
@@ -90,7 +90,7 @@ extends Plop_Config_AbstractParser
             unset($llist[$key]);
 
         $sectname   =   "logger_root";
-        $root       =   $this->logging->getLogger();
+        $root       =   $this->_logging->getLogger();
         $log        =&  $root;
 
         if (isset($this->cp[$sectname])) {
@@ -98,7 +98,7 @@ extends Plop_Config_AbstractParser
             if (isset($opts['level'])) {
                 $level = $opts['level'];
                 if (is_string($level))
-                    $level = $this->logging->getLevelName($level);
+                    $level = $this->_logging->getLevelName($level);
                 $log->setLevel($level);
             }
             foreach ($root->handlers as $h)
@@ -121,7 +121,7 @@ extends Plop_Config_AbstractParser
                 $propagate = (int) $opts['propagate'];
             else
                 $propagate = 1;
-            $logger = $this->logging->getLogger($qn);
+            $logger = $this->_logging->getLogger($qn);
             if (isset($existing[$qn])) {
                 $key = array_search($qn, $existing);
                 if ($key !== FALSE)
@@ -130,7 +130,7 @@ extends Plop_Config_AbstractParser
             if (isset($opts['level'])) {
                 $level = $opts['level'];
                 if (is_string($level))
-                    $level = $this->logging->getLevelName($level);
+                    $level = $this->_logging->getLevelName($level);
                 $logger->setLevel($level);
             }
             foreach ($logger->handlers as &$h)

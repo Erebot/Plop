@@ -3,26 +3,26 @@
 class   Plop_Handler_Stream
 extends Plop_Handler
 {
-    protected $stream;
+    protected $_stream;
 
     public function __construct(&$stream = NULL)
     {
         parent::__construct();
         if ($stream === NULL)
             $stream = fopen('php://stderr', 'at');
-        $this->stream       =&  $stream;
+        $this->_stream       =&  $stream;
         $this->formatter    =   NULL;
     }
 
     public function flush()
     {
-        fflush($this->stream);
+        fflush($this->_stream);
     }
 
     public function emit(Plop_Record &$record)
     {
         $msg = $this->format($record);
-        fprintf($this->stream, "%s\n", $msg);
+        fprintf($this->_stream, "%s\n", $msg);
         $this->flush();
     }
 }

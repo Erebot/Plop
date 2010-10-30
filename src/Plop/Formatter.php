@@ -20,12 +20,14 @@ class Plop_Formatter
         $record->dict['message'] = $record->getMessage();
         if (strpos($this->fmt, '%(asctime)') !== FALSE)
             $record->dict['asctime'] = $this->formatTime(
-                                        $record, $this->datefmt);
+                $record, $this->datefmt
+            );
         $s = $record->formatPercent($this->fmt, $record->dict);
         if ($record->dict['exc_info'])
             if (!$record->dict['exc_text'])
                 $record->dict['exc_text'] = $this->formatException(
-                                                $record->dict['exc_info']);
+                    $record->dict['exc_info']
+                );
         if ($record->dict['exc_text']) {
             if (substr($s, -1) != "\n")
                 $s .= "\n";
@@ -45,10 +47,10 @@ class Plop_Formatter
         return $s;
     }
 
-    public function formatException(Exception $exc_info)
+    public function formatException(Exception $exception)
     {
         $s  = "Traceback (most recent call last):\n";
-        foreach ($exc_info->getTrace() as $trace) {
+        foreach ($exception->getTrace() as $trace) {
             $origin = '';
             if (isset($trace['class']))
                 $origin = $trace['class'].$trace['type'];
@@ -61,7 +63,7 @@ class Plop_Formatter
         }
         array_reverse($traces);
         $s .= implode("\n", $traces)."\n";
-        $s .= (string) $exc_info;
+        $s .= (string) $exception;
         if (substr($s, -1) == "\n")
             $s = substr($s, 0, -1);
         return $s;

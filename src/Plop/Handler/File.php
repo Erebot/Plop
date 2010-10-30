@@ -13,7 +13,7 @@ extends Plop_Handler_Stream
         $this->encoding     = $encoding;
         if ($delay) {
             Plop_Handler::__construct();
-            $this->stream = FALSE;
+            $this->_stream = FALSE;
         }
         else
             parent::__construct($this->open());
@@ -30,9 +30,9 @@ extends Plop_Handler_Stream
 
     public function close()
     {
-        if ($this->stream) {
+        if ($this->_stream) {
             $this->flush();
-            fclose($this->stream);
+            fclose($this->_stream);
             parent::close();
         }
     }

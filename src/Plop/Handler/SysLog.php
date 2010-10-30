@@ -5,7 +5,7 @@ extends Plop_Handler
 {
     const LOG_FORMAT_STRING = "<%d>%s\000";
 
-    static public $priority_names = array(
+    static public $priorityNames = array(
         'alert'     => LOG_ALERT,
         'crit'      => LOG_CRIT,
         'critical'  => LOG_CRIT,
@@ -20,7 +20,7 @@ extends Plop_Handler
         'warning'   => LOG_WARNING,
     );
 
-    static public $facility_names = array(
+    static public $facilityNames = array(
         'auth'      => LOG_AUTH,
         'authpriv'  => LOG_AUTHPRIV,
         'cron'      => LOG_CRON,
@@ -49,7 +49,7 @@ extends Plop_Handler
         gives unexpected results. See SF #1524081: in the Turkish locale,
         "INFO".lower() != "info"
      */
-    static public $priority_map = array(
+    static public $priorityMap = array(
         'DEBUG'     => 'debug',
         'INFO'      => 'info',
         'WARNING'   => 'warning',
@@ -75,9 +75,9 @@ extends Plop_Handler
     public function encodePriority($facility, $priority)
     {
         if (is_string($facility))
-            $facility = self::$facility_names[$facility];
+            $facility = self::$facilityNames[$facility];
         if (is_string($priority))
-            $priority = self::$priority_names[$priority];
+            $priority = self::$priorityNames[$priority];
         return ($facility << 3) | $priority;
     }
 
@@ -89,17 +89,20 @@ extends Plop_Handler
 
     public function mapPriority($levelName)
     {
-        if (isset(self::$priority_map[$levelName]))
-            return self::$priority_map[$levelName];
+        if (isset(self::$priorityMap[$levelName]))
+            return self::$priorityMap[$levelName];
         return "warning";
     }
 
     public function emit(Plop_Record &$record)
     {
         $msg = $this->format($record);
-        $msg = sprintf(self::LOG_FORMAT_STRING,
-            $this->encodePriority($this->facility,
-                $this->mapPriority($record->dict['levelname'])),
+        $msg = sprintf(
+            self::LOG_FORMAT_STRING,
+            $this->encodePriority(
+                $this->facility,
+                $this->mapPriority($record->dict['levelname'])
+            ),
             $msg
         );
 

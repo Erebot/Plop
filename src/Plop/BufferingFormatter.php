@@ -3,14 +3,14 @@
 class Plop_BufferingFormatter
 {
     static public $defaultFormatter = NULL;
-    protected $lineFmt;
+    protected $_lineFmt;
 
     public function __construct($linefmt = NULL)
     {
         if ($lineFmt)
-            $this->lineFmt = $lineFmt;
+            $this->_lineFmt = $lineFmt;
         else
-            $this->lineFmt = self::$defaultFormatter;
+            $this->_lineFmt = self::$defaultFormatter;
     }
 
     public function formatHeader($records)
@@ -29,7 +29,7 @@ class Plop_BufferingFormatter
         if (count($records)) {
             $rv .= $this->formatHeader($records);
             foreach ($records as &$record) {
-                $rv .= $this->lineFmt->format($record);
+                $rv .= $this->_lineFmt->format($record);
             }
             unset($record);
             $rv .= $this->formatFooter($records);

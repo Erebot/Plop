@@ -12,12 +12,25 @@ extends Plop_Handler_BaseRotating
     public $dayOfWeek;
     public $rolloverAt;
 
-    static protected $dayNames = array( 'Monday',       'Tuesday',
-                                        'Wednesday',    'Thursday',
-                                        'Friday',       'Saturday',
-                                        'Sunday');
+    static protected $_dayNames = array(
+        'Monday',
+        'Tuesday',
+        'Wednesday',
+        'Thursday',
+        'Friday',
+        'Saturday',
+        'Sunday'
+    );
 
-    public function __construct($filename, $when='h', $interval=1, $backupCount=0, $encoding=NULL, $delay=0, $utc=0)
+    public function __construct(
+        $filename,
+        $when           = 'h',
+        $interval       = 1,
+        $backupCount    = 0,
+        $encoding       = NULL,
+        $delay          = 0,
+        $utc            = 0
+    )
     {
         parent::__construct($filename, 'a', $encoding, $delay);
         $this->when         = strtoupper($when);
@@ -50,20 +63,26 @@ extends Plop_Handler_BaseRotating
         else if (substr($this->when, 0, 1) == 'W') {
             $this->interval = 60 * 60 * 24 * 7;
             if (strlen($this->when) != 2)
-                throw new Exception(sprintf('You must specify a day for '.
-                    'weekly rollover from 0 to 6 (0 is Monday): %s',
-                    $this->when));
+                throw new Exception(sprintf(
+                    'You must specify a day for weekly rollover '.
+                    'from 0 to 6 (0 is Monday): %s',
+                    $this->when
+                ));
             $ord = ord($this->when[1]);
             if ($ord < ord('0') || $ord > ord('6'))
-                throw new Exception(sprintf('Invalid day specified for '.
-                    'weekly rollover: %s', $this->when));
+                throw new Exception(sprintf(
+                    'Invalid day specified for weekly rollover: %s',
+                    $this->when
+                ));
             $this->dayOfWeek = (int) $this->when[1];
             $this->suffix = '%Y-%m-%d';
             $this->extMatch = '^\\d{4}-\\d{2}-\\d{2}$';
         }
         else
-            throw new Exception(sprintf('Invalid rollover interval '.
-                                'specified: %s', $this->when));
+            throw new Exception(sprintf(
+                'Invalid rollover interval specified: %s',
+                $this->when
+            ));
         $this->interval     = $this->interval * $interval;
         $this->rolloverAt   = $this->compuleRollover(time());
     }
@@ -73,7 +92,10 @@ extends Plop_Handler_BaseRotating
         if ($this->when == 'MIDNIGHT')
             return strtotime("midnight + 1 day", $currentTime);
         if (substr($this->when, 0, 1) == 'W')
-            return strtotime("next ".self::$dayNames[$this->dayOfWeek], $currentTime);
+            return strtotime(
+                "next " . self::$_dayNames[$this->dayOfWeek],
+                $currentTime
+            );
         return $currentTime + $this->interval;
     }
 
@@ -113,8 +135,8 @@ extends Plop_Handler_BaseRotating
 
     public function doRollover()
     {
-        if ($this->stream)
-            fclose($this->stream);
+        if ($this->_stream)
+            fclose($this->_stream);
         $t      = $this->rolloverAt - $this->interval;
         if ($this->utc)
             $formatFunc = 'gmstrftime';
@@ -129,7 +151,7 @@ extends Plop_Handler_BaseRotating
                 @unlink($s);
         }
         $this->mode     = 'w';
-        $this->stream   = $this->open();
+        $this->_stream  = $this->open();
         $currentTime    = time();
         $newRolloverAt  = $this->compuleRollover($currentTime);
         while ($newRolloverAt <= $currentTime)

@@ -29,53 +29,60 @@ extends Plop_Filterer
         $this->level = $level;
     }
 
-    public function debug($msg, $args = array(), $exc_info = NULL)
+    public function debug($msg, $args = array(), $exception = NULL)
     {
-        return $this->log(PLOP_LEVEL_DEBUG, $msg, $args, $exc_info);
+        return $this->log(PLOP_LEVEL_DEBUG, $msg, $args, $exception);
     }
 
-    public function info($msg, $args = array(), $exc_info = NULL)
+    public function info($msg, $args = array(), $exception = NULL)
     {
-        return $this->log(PLOP_LEVEL_INFO, $msg, $args, $exc_info);
+        return $this->log(PLOP_LEVEL_INFO, $msg, $args, $exception);
     }
 
-    public function warning($msg, $args = array(), $exc_info = NULL)
+    public function warning($msg, $args = array(), $exception = NULL)
     {
-        return $this->log(PLOP_LEVEL_WARNING, $msg, $args, $exc_info);
+        return $this->log(PLOP_LEVEL_WARNING, $msg, $args, $exception);
     }
 
-    public function warn($msg, $args = array(), $exc_info = NULL)
+    public function warn($msg, $args = array(), $exception = NULL)
     {
-        return $this->log(PLOP_LEVEL_WARNING, $msg, $args, $exc_info);
+        return $this->log(PLOP_LEVEL_WARNING, $msg, $args, $exception);
     }
 
-    public function error($msg, $args = array(), $exc_info = NULL)
+    public function error($msg, $args = array(), $exception = NULL)
     {
-        return $this->log(PLOP_LEVEL_ERROR, $msg, $args, $exc_info);
+        return $this->log(PLOP_LEVEL_ERROR, $msg, $args, $exception);
     }
 
-    public function critical($msg, $args = array(), $exc_info = NULL)
+    public function critical($msg, $args = array(), $exception = NULL)
     {
-        return $this->log(PLOP_LEVEL_CRITICAL, $msg, $args, $exc_info);
+        return $this->log(PLOP_LEVEL_CRITICAL, $msg, $args, $exception);
     }
 
-    public function fatal($msg, $args = array(), $exc_info = NULL)
+    public function fatal($msg, $args = array(), $exception = NULL)
     {
-        return $this->log(PLOP_LEVEL_CRITICAL, $msg, $args, $exc_info);
+        return $this->log(PLOP_LEVEL_CRITICAL, $msg, $args, $exception);
     }
 
-    public function exception($msg, $exc_info, $args = array())
+    public function exception($msg, $exception, $args = array())
     {
-        return $this->log(PLOP_LEVEL_ERROR, $msg, $args, $exc_info);
+        return $this->log(PLOP_LEVEL_ERROR, $msg, $args, $exception);
     }
 
-    public function log($level, $msg, $args = array(), $exc_info = NULL)
+    public function log($level, $msg, $args = array(), $exception = NULL)
     {
         if ($this->isEnabledFor($level)) {
             $caller = $this->findCaller();
-            $record = $this->makeRecord($this->name, $level,
-                            $caller['fn'], $caller['lno'], $msg,
-                            $args, $exc_info, $caller['func']);
+            $record = $this->makeRecord(
+                $this->name,
+                $level,
+                $caller['fn'],
+                $caller['lno'],
+                $msg,
+                $args,
+                $exception,
+                $caller['func']
+            );
             $this->handle($record);
         }
     }
@@ -102,14 +109,38 @@ extends Plop_Filterer
         );
     }
 
-    public function makeRecord($name, $level, $fn, $lno, $msg, $args, $exc_info = NULL, $func = NULL, $extra = NULL)
+    public function makeRecord(
+        $name,
+        $level,
+        $fn,
+        $lno,
+        $msg,
+        $args,
+        $exception  = NULL,
+        $func       = NULL,
+        $extra      = NULL
+    )
     {
-        $rv = new Plop_Record($name, $level, $fn, $lno, $msg, $args, $exc_info, $func);
+        $rv = new Plop_Record(
+            $name,
+            $level,
+            $fn,
+            $lno,
+            $msg,
+            $args,
+            $exception,
+            $func
+        );
+
         if ($extra) {
             foreach ($extra as $k => &$v) {
-                if (in_array($key, array('message', 'asctime')) ||
-                    in_array($key, $rv->dict))
-                    throw new Exception('Attempt to override '.$k.' in LogRecord');
+                if (
+                    in_array($key, array('message', 'asctime')) ||
+                    in_array($key, $rv->dict)
+                )
+                    throw new Exception(
+                        'Attempt to override '.$k.' in record'
+                    );
                 $rv->dict[$k] =& $v;
             }
             unset($v);
@@ -153,8 +184,11 @@ extends Plop_Filterer
                 break;
         }
         if (!$found && !self::$manager->emittedNoHandlerWarning) {
-            fprintf(STDERR, 'No handlers could be found for logger "%s"'."\n",
-                $this->name);
+            fprintf(
+                STDERR,
+                'No handlers could be found for logger "%s"'."\n",
+                $this->name
+            );
             self::$manager->emittedNoHandlerWarning = 1;
         }
     }
