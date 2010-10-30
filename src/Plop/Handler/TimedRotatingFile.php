@@ -1,9 +1,7 @@
 <?php
 
-include_once(dirname(__FILE__).'/BaseRotatingHandler.php');
-
-class   PlopTimedRotatingFileHandler
-extends PlopBaseRotatingHandler
+class   Plop_Handler_TimedRotatingFile
+extends Plop_Handler_BaseRotating
 {
     public $when;
     public $backupCount;
@@ -79,7 +77,7 @@ extends PlopBaseRotatingHandler
         return $currentTime + $this->interval;
     }
 
-    public function shouldRollover(PlopRecord &$record)
+    public function shouldRollover(Plop_Record &$record)
     {
         $t = time();
         if ($t >= $this->rolloverAt)
@@ -140,4 +138,3 @@ extends PlopBaseRotatingHandler
     }
 }
 
-?>

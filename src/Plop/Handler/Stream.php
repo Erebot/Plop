@@ -1,7 +1,7 @@
 <?php
 
-class   PlopStreamHandler
-extends PlopHandler
+class   Plop_Handler_Stream
+extends Plop_Handler
 {
     protected $stream;
 
@@ -19,7 +19,7 @@ extends PlopHandler
         fflush($this->stream);
     }
 
-    public function emit(PlopRecord &$record)
+    public function emit(Plop_Record &$record)
     {
         $msg = $this->format($record);
         fprintf($this->stream, "%s\n", $msg);
@@ -27,4 +27,3 @@ extends PlopHandler
     }
 }
 
-?>

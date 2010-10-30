@@ -1,7 +1,7 @@
 <?php
 
-class   PlopHandler
-extends PlopFilterer
+class   Plop_Handler
+extends Plop_Filterer
 {
     static public $defaultFormatter = NULL;
     public $level;
@@ -38,7 +38,7 @@ extends PlopFilterer
         $this->level = $level;
     }
 
-    public function format(PlopRecord &$record)
+    public function format(Plop_Record &$record)
     {
         if ($this->formatter)
             return $this->formatter->format($record);
@@ -46,13 +46,13 @@ extends PlopFilterer
         return $formatter->format($record);
     }
 
-    public function emit(PlopRecord &$record)
+    public function emit(Plop_Record &$record)
     {
         throw new Exception(
-            'Emit must be implemented by PlopHandler subclasses');
+            'Emit must be implemented by Plop_Handler subclasses');
     }
 
-    public function handle(PlopRecord &$record)
+    public function handle(Plop_Record &$record)
     {
         $rv = $this->format($record);
         if ($rv) {
@@ -69,7 +69,7 @@ extends PlopFilterer
         return $rv;
     }
 
-    public function setFormatter(PlopFormatter &$fmt)
+    public function setFormatter(Plop_Formatter &$fmt)
     {
         $this->formatter =& $fmt;
     }
@@ -83,12 +83,11 @@ extends PlopFilterer
         /// @TODO
     }
 
-    public function handleError(PlopRecord &$record, Exception &$exc_info)
+    public function handleError(Plop_Record &$record, Exception &$exc_info)
     {
         fprintf(STDERR, "%s", $exc_info);
     }
 }
 
-PlopHandler::$defaultFormatter = new PlopFormatter();
+Plop_Handler::$defaultFormatter = new Plop_Formatter();
 
-?>

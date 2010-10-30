@@ -1,6 +1,6 @@
 <?php
 
-class PlopRecord
+class Plop_Record
 {
     public $dict;
 
@@ -61,4 +61,3 @@ class PlopRecord
     }
 }
 
-?>

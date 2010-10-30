@@ -2,8 +2,8 @@
 
 include_once(dirname(__FILE__).'/StreamHandler.php');
 
-class   PlopFileHandler
-extends PlopStreamHandler
+class   Plop_Handler_File
+extends Plop_Handler_Stream
 {
     public $baseFilename;
     public $mode;
@@ -14,7 +14,7 @@ extends PlopStreamHandler
         $this->mode         = $mode;
         $this->encoding     = $encoding;
         if ($delay) {
-            PlopHandler::__construct();
+            Plop_Handler::__construct();
             $this->stream = FALSE;
         }
         else
@@ -40,4 +40,3 @@ extends PlopStreamHandler
     }
 }
 
-?>

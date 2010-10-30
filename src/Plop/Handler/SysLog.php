@@ -1,7 +1,7 @@
 <?php
 
-class   PlopSysLogHandler
-extends PlopHandler
+class   Plop_Handler_SysLog
+extends Plop_Handler
 {
     const LOG_FORMAT_STRING = "<%d>%s\000";
 
@@ -94,7 +94,7 @@ extends PlopHandler
         return "warning";
     }
 
-    public function emit(PlopRecord &$record)
+    public function emit(Plop_Record &$record)
     {
         $msg = $this->format($record);
         $msg = sprintf(self::LOG_FORMAT_STRING,
@@ -112,4 +112,3 @@ extends PlopHandler
     }
 }
 
-?>

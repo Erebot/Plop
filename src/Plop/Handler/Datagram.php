@@ -2,8 +2,8 @@
 
 include_once(dirname(__FILE__).'/SocketHandler.php');
 
-class   PlopDatagramHandler
-extends PlopSocketHandler
+class   Plop_Handler_Datagram
+extends Plop_Handler_Socket
 {
     public function __construct($host, $port)
     {
@@ -27,4 +27,3 @@ extends PlopSocketHandler
     }
 }
 
-?>

@@ -1,6 +1,6 @@
 <?php
 
-class PlopFilterer
+class Plop_Filterer
 {
     public $filters;
     
@@ -9,20 +9,20 @@ class PlopFilterer
         $this->filters = array();
     }
 
-    public function addFilter(PlopFilter &$filter)
+    public function addFilter(Plop_Filter &$filter)
     {
         if (!in_array($filter, $this->filters, TRUE))
             $this->filters[] =& $filter;
     }
 
-    public function removeFilter(PlopFilter &$filter)
+    public function removeFilter(Plop_Filter &$filter)
     {
         $key = array_search($filter, $this->filters, TRUE);
         if ($key !== FALSE)
             unset($this->filters[$key]);
     }
 
-    public function filter(PlopRecord &$record)
+    public function filter(Plop_Record &$record)
     {
         $rv = 1;
         foreach ($this->filters as &$filter) {
@@ -36,4 +36,3 @@ class PlopFilterer
     }
 }
 
-?>

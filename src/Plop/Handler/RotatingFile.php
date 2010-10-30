@@ -1,9 +1,7 @@
 <?php
 
-include_once(dirname(__FILE__).'/BaseRotatingHandler.php');
-
-class   PlopRotatingFileHandler
-extends PlopBaseRotatingHandler
+class   Plop_Handler_RotatingFile
+extends Plop_Handler_BaseRotating
 {
     public $maxBytes;
     public $backupCount;
@@ -39,7 +37,7 @@ extends PlopBaseRotatingHandler
         $this->stream   = $this->_open();
     }
 
-    public function shouldRollover(PlopRecord &$record)
+    public function shouldRollover(Plop_Record &$record)
     {
         if (!$this->stream)
             $this->stream = $this->open();
@@ -55,4 +53,3 @@ extends PlopBaseRotatingHandler
     }
 }
 
-?>

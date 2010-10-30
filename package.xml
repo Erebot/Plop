@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package
+  version="2.1" xmlns="http://pear.php.net/dtd/package-2.1"
+  xmlns:tasks="http://pear.php.net/dtd/tasks-1.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd http://pear.php.net/dtd/package-2.1 http://pear.php.net/dtd/package-2.1.xsd"
+>
+  <name>Plop</name>
+  <channel>pear.erebot.net</channel>
+
+  <summary>Package Plop summary.</summary>
+  <description>
+Package detailed description here (found in README)
+  </description>
+
+  <lead>
+    <name>François Poirotte</name>
+    <user>Clicky</user>
+    <email>clicky@erebot.net</email>
+    <active>yes</active>
+  </lead>
+
+  <date>2010-10-30</date>
+  <time>15:27:43</time>
+
+  <version>
+    <release>0.1.0</release>
+    <api>0.1.0</api>
+  </version>
+
+  <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+  </stability>
+
+  <license
+    filesource="LICENSE"
+    uri="http://www.opensource.org/licenses/gpl-3.0.html"
+    >General Public License, version 3 or later (GPLv3+)</license>
+
+  <notes>
+Package Plop release notes for version 0.1.0.
+
+Package Plop API release notes for version 0.1.0.
+  </notes>
+
+  <contents>
+    <dir name="/">
+      <dir name="src" baseinstalldir="/">
+        <dir name="Plop">
+          <file role="php" name="Main.php"/>
+        </dir>
+      </dir>
+    </dir>
+  </contents>
+
+  <dependencies>
+    <required>
+      <php>
+        <min>5.2.0</min>
+      </php>
+      <pearinstaller>
+        <min>2.0.0a1</min>
+      </pearinstaller>
+    </required>
+  </dependencies>
+
+  <phprelease/>
+</package>

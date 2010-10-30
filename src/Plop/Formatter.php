@@ -1,6 +1,6 @@
 <?php
 
-class PlopFormatter
+class Plop_Formatter
 {
     public $fmt;
     public $datefmt;
@@ -15,7 +15,7 @@ class PlopFormatter
         $this->datefmt = $datefmt;
     }
 
-    public function format(PlopRecord $record)
+    public function format(Plop_Record $record)
     {
         $record->dict['message'] = $record->getMessage();
         if (strpos($this->fmt, '%(asctime)') !== FALSE)
@@ -34,7 +34,7 @@ class PlopFormatter
         return $s;
     }
 
-    public function formatTime(PlopRecord $record, $datefmt = NULL)
+    public function formatTime(Plop_Record $record, $datefmt = NULL)
     {
         $ct = $record->dict['created'];
         if ($datefmt)
@@ -68,45 +68,3 @@ class PlopFormatter
     }
 }
 
-class PlopBufferingFormatter
-{
-    static public $defaultFormatter = NULL;
-    protected $lineFmt;
-
-    public function __construct($linefmt = NULL)
-    {
-        if ($lineFmt)
-            $this->lineFmt = $lineFmt;
-        else
-            $this->lineFmt = self::$defaultFormatter;
-    }
-
-    public function formatHeader($records)
-    {
-        return "";
-    }
-
-    public function formatFooter($records)
-    {
-        return "";
-    }
-
-    public function format($records)
-    {
-        $rv = "";
-        if (count($records)) {
-            $rv .= $this->formatHeader($records);
-            foreach ($records as &$record) {
-                $rv .= $this->lineFmt->format($record);
-            }
-            unset($record);
-            $rv .= $this->formatFooter($records);
-        }
-        return $rv;
-    }
-}
-
-PlopBufferingFormatter::$defaultFormatter =
-    new PlopFormatter();
-
-?>

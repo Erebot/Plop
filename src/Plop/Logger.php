@@ -1,7 +1,7 @@
 <?php
 
-class   PlopLogger
-extends PlopFilterer
+class   Plop_Logger
+extends Plop_Filterer
 {
     static public $root      = NULL;
     static public $manager   = NULL;
@@ -104,7 +104,7 @@ extends PlopFilterer
 
     public function makeRecord($name, $level, $fn, $lno, $msg, $args, $exc_info = NULL, $func = NULL, $extra = NULL)
     {
-        $rv = new PlopRecord($name, $level, $fn, $lno, $msg, $args, $exc_info, $func);
+        $rv = new Plop_Record($name, $level, $fn, $lno, $msg, $args, $exc_info, $func);
         if ($extra) {
             foreach ($extra as $k => &$v) {
                 if (in_array($key, array('message', 'asctime')) ||
@@ -117,19 +117,19 @@ extends PlopFilterer
         return $rv;
     }
 
-    public function handle(PlopRecord &$record)
+    public function handle(Plop_Record &$record)
     {
         if (!$this->disabled && $this->filter($record))
             $this->callHandlers($record);
     }
 
-    public function addHandler(PlopHandler &$handler)
+    public function addHandler(Plop_Handler &$handler)
     {
         if (!in_array($handler, $this->handlers, TRUE))
             $this->handlers[] =& $handler;
     }
 
-    public function removeHandler(PlopHandler &$handler)
+    public function removeHandler(Plop_Handler &$handler)
     {
         $key = array_search($handler, $this->handlers, TRUE);
         if ($key !== FALSE) {
@@ -139,7 +139,7 @@ extends PlopFilterer
         }
     }
 
-    public function callHandlers(PlopRecord &$record)
+    public function callHandlers(Plop_Record &$record)
     {
         $found  =   0;
         for ($c = $this; $c; $c = $c->parent) {
@@ -176,15 +176,6 @@ extends PlopFilterer
     }
 }
 
-class   PlopRootLogger
-extends PlopLogger
-{
-    public function __construct($level)
-    {
-        parent::__construct("root", $level);
-    }
-}
-
-PlopLogger::$root     = new PlopRootLogger(PLOP_LEVEL_WARNING);
-PlopLogger::$manager  = new PlopManager(PlopLogger::$root);
+Plop_Logger::$root     = new Plop_RootLogger(PLOP_LEVEL_WARNING);
+Plop_Logger::$manager  = new Plop_Manager(Plop_Logger::$root);
 

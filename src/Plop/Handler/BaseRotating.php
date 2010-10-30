@@ -2,10 +2,10 @@
 
 include_once(dirname(__FILE__).'/FileHandler.php');
 
-abstract class  PlopBaseRotatingHandler
-extends         PlopFileHandler
+abstract class  Plop_Handler_BaseRotating
+extends         Plop_Handler_File
 {
-    public function emit(PlopRecord &$record)
+    public function emit(Plop_Record &$record)
     {
         try {
             if ($this->shouldRollover($record))
@@ -18,4 +18,3 @@ extends         PlopFileHandler
     }
 }
 
-?>

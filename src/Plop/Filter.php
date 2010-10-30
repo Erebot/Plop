@@ -1,6 +1,6 @@
 <?php
 
-class PlopFilter
+class Plop_Filter
 {
     public $name;
     public $nlen;
@@ -11,7 +11,7 @@ class PlopFilter
         $this->nlen = strlen($name);
     }
 
-    public function filter(PlopRecord $record)
+    public function filter(Plop_Record $record)
     {
         if (!$this->nlen)
             return TRUE;
@@ -26,4 +26,3 @@ class PlopFilter
     }
 }
 
-?>

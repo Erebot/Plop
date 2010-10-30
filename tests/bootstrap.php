@@ -10,6 +10,6 @@ if (!defined('__DIR__')) {
   define('__DIR__', new __FILE_CLASS__);
 } 
 
-include_once(__DIR__.'/../src/logging.php');
+include_once(__DIR__.'/../src/Plop/Plop.php');
 
 ?>

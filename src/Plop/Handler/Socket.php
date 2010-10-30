@@ -1,7 +1,7 @@
 <?php
 
-class   PlopSocketHandler
-extends PlopHandler
+class   Plop_Handler_Socket
+extends Plop_Handler
 {
     public $host;
     public $port;
@@ -74,7 +74,7 @@ extends PlopHandler
         }
     }
 
-    public function makePickle(PlopRecord &$record)
+    public function makePickle(Plop_Record &$record)
     {
         /// @TODO Should we follow Python's pickle here instead ?
         $s      = serialize($record->dict);
@@ -82,7 +82,7 @@ extends PlopHandler
         return $slen.$s;
     }
 
-    public function handleError(PlopRecord &$record, Exception &$exc)
+    public function handleError(Plop_Record &$record, Exception &$exc)
     {
         if ($this->closeOnError && $this->sock) {
             fclose($this->sock);
@@ -92,7 +92,7 @@ extends PlopHandler
             parent::handleError($record, $exc);
     }
 
-    public function emit(PlopRecord &$record)
+    public function emit(Plop_Record &$record)
     {
         try {
             $s = $this->makePickle($record);
@@ -113,4 +113,3 @@ extends PlopHandler
     }
 }
 
-?>

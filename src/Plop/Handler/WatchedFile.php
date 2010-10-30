@@ -1,9 +1,7 @@
 <?php
 
-include_once(dirname(__FILE__).'/FileHandler.php');
-
-class   PlopWatchedFileHandler
-extends PlopFileHandler
+class   Plop_Handler_WatchedFile
+extends Plop_Handler_File
 {
     protected $dev;
     protected $ino;
@@ -21,7 +19,7 @@ extends PlopFileHandler
         }
     }
 
-    public function emit(PlopRecord &$record)
+    public function emit(Plop_Record &$record)
     {
         if (!file_exists($this->baseFilename)) {
             $stats = NULL;
@@ -45,4 +43,3 @@ extends PlopFileHandler
     }
 }
 
-?>

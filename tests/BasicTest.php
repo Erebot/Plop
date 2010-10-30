@@ -8,8 +8,8 @@ extends PHPUnit_Extensions_OutputTestCase
 {
     public function setUp()
     {
-        PlopLogger::$root     = new PlopRootLogger(PLOP_LEVEL_WARNING);
-        PlopLogger::$manager  = new PlopManager(PlopLogger::$root);
+        Plop_Logger::$root     = new Plop_RootLogger(PLOP_LEVEL_WARNING);
+        Plop_Logger::$manager  = new Plop_Manager(Plop_Logger::$root);
         $this->logging =& Plop::getInstance();
         $this->logging->basicConfig(array(
             'stream'    => fopen("php://output", "a+"),

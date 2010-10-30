@@ -1,29 +1,13 @@
 <?php
 
-class PlopPlaceHolder
-{
-    public $loggerMap;
-
-    public function __construct(PlopLogger &$alogger)
-    {
-        $this->loggerMap = array($alogger);
-    }
-
-    public function append(PlopLogger &$alogger) {
-        $key = array_search($alogger, $this->loggerMap, TRUE);
-        if ($key === FALSE)
-            $this->loggerMap[] = $alogger;
-    }
-}
-
-class PlopManager
+class Plop_Manager
 {
     public $root;
     public $disable;
     public $emittedNoHandlerWarning;
     public $loggerDict;
 
-    public function __construct(PlopLogger &$rootnode)
+    public function __construct(Plop_Logger &$rootnode)
     {
         $this->root                     =&  $rootnode;
         $this->disable                  =   0;
@@ -38,7 +22,7 @@ class PlopManager
         $rv = NULL;
         if (isset($this->loggerDict[$name])) {
             $rv =& $this->loggerDict[$name];
-            if ($rv instanceof PlopPlaceHolder) {
+            if ($rv instanceof Plop_PlaceHolder) {
                 $ph =   $rv;
                 $rv =   new $cls($name);
                 $this->loggerDict[$name] =& $rv;
@@ -54,7 +38,7 @@ class PlopManager
         return $rv;
     }
 
-    protected function fixupParents(PlopLogger &$alogger)
+    protected function fixupParents(Plop_Logger &$alogger)
     {
         $name = $alogger->name;
         $i = strrpos($name, DIRECTORY_SEPARATOR);
@@ -62,13 +46,13 @@ class PlopManager
         while ($i && $rv === NULL) {
             $substr = substr($name, 0, $i);
             if (!isset($this->loggerDict[$substr]))
-                $this->loggerDict[$substr] = new PlopPlaceHolder($alogger);
+                $this->loggerDict[$substr] = new Plop_PlaceHolder($alogger);
             else {
                 $obj =& $this->loggerDict[$substr];
-                if ($obj instanceof PlopLogger)
+                if ($obj instanceof Plop_Logger)
                     $rv =& $obj;
                 else {
-                    assert($obj instanceof PlopPlaceHolder);
+                    assert($obj instanceof Plop_PlaceHolder);
                     $obj->append($alogger);
                 }
             }
@@ -79,7 +63,7 @@ class PlopManager
         $alogger->parent =& $rv;
     }
 
-    protected function fixupChildren($ph, PlopLogger &$alogger)
+    protected function fixupChildren($ph, Plop_Logger &$alogger)
     {
         $name       = $alogger->name;
         $namelen    = strlen($name);
