@@ -1,0 +1,13 @@
+Release notes for Plop version 0.2.0
+------------------------------------
+
+Plop is now structured using PEAR2's standard directory layout.
+This way, it can be packaged as a PEAR2 package.
+
+The latest (packaged) version of Plop will be available on Erebot's
+pear repository (pear.erebot.net).
+Follow the instructions at http://pear.erebot.net/ to install it.
+
+Nothing else was changed in this release, but due to the numerous
+compatibility breaks this caused, there was a need for a new minor
+release.

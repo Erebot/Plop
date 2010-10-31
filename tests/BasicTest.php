@@ -2,19 +2,20 @@
 
 require_once('PHPUnit/Framework.php');
 require_once('PHPUnit/Extensions/OutputTestCase.php');
-require_once(dirname(__FILE__).'/../src/Plop/Plop.php');
+
+use PEAR2\Plop;
 
 class LevelCheckingTest
 extends PHPUnit_Extensions_OutputTestCase
 {
     public function setUp()
     {
-        Plop_Logger::$root     = new Plop_RootLogger(PLOP_LEVEL_WARNING);
-        Plop_Logger::$manager  = new Plop_Manager(Plop_Logger::$root);
-        $this->logging =& Plop::getInstance();
+        Plop\Logger::$root     = new Plop\RootLogger(Plop\Plop::WARNING);
+        Plop\Logger::$manager  = new Plop\Manager(Plop\Logger::$root);
+        $this->logging =& Plop\Plop::getInstance();
         $this->logging->basicConfig(array(
             'stream'    => fopen("php://output", "a+"),
-            'level'     => PLOP_LEVEL_INFO,
+            'level'     => Plop\Plop::INFO,
         ));
     }
 
@@ -27,11 +28,11 @@ extends PHPUnit_Extensions_OutputTestCase
     public function testLevelChecking()
     {
         $messages = array(
-            array(PLOP_LEVEL_DEBUG,     'This is a debug message'),
-            array(PLOP_LEVEL_INFO,      'This is an info message'),
-            array(PLOP_LEVEL_WARNING,   'This is a warning message'),
-            array(PLOP_LEVEL_ERROR,     'This is an error message'),
-            array(PLOP_LEVEL_CRITICAL,  'This is a critical error message'),
+            array(Plop\Plop::DEBUG,     'This is a debug message'),
+            array(Plop\Plop::INFO,      'This is an info message'),
+            array(Plop\Plop::WARNING,   'This is a warning message'),
+            array(Plop\Plop::ERROR,     'This is an error message'),
+            array(Plop\Plop::CRITICAL,  'This is a critical error message'),
         );
 
         foreach ($messages as $tuple) {

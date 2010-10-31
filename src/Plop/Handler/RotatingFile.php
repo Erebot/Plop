@@ -1,12 +1,22 @@
 <?php
 
-class   Plop_Handler_RotatingFile
-extends Plop_Handler_BaseRotating
+namespace PEAR2\Plop\Handler;
+use \PEAR2\Plop\Record;
+
+class   RotatingFile
+extends BaseRotating
 {
     public $maxBytes;
     public $backupCount;
 
-    public function __construct($filename, $mode='a', $maxBytes=0, $backupCount=0, $encoding=NULL, $delay=0)
+    public function __construct(
+        $filename,
+        $mode           = 'a',
+        $maxBytes       = 0,
+        $backupCount    = 0,
+        $encoding       = NULL,
+        $delay          = 0
+    )
     {
         if ($maxBytes > 0)
             $mode = 'a';
@@ -37,7 +47,7 @@ extends Plop_Handler_BaseRotating
         $this->_stream  = $this->_open();
     }
 
-    public function shouldRollover(Plop_Record &$record)
+    public function shouldRollover(Record &$record)
     {
         if (!$this->_stream)
             $this->_stream = $this->open();

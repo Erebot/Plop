@@ -1,13 +1,15 @@
 <?php
 
-class Plop_Manager
+namespace PEAR2\Plop;
+
+class Manager
 {
     public $root;
     public $disable;
     public $emittedNoHandlerWarning;
     public $loggerDict;
 
-    public function __construct(Plop_Logger &$rootnode)
+    public function __construct(Logger &$rootnode)
     {
         $this->root                     =&  $rootnode;
         $this->disable                  =   0;
@@ -22,7 +24,7 @@ class Plop_Manager
         $rv = NULL;
         if (isset($this->loggerDict[$name])) {
             $rv =& $this->loggerDict[$name];
-            if ($rv instanceof Plop_PlaceHolder) {
+            if ($rv instanceof PlaceHolder) {
                 $ph =   $rv;
                 $rv =   new $cls($name);
                 $this->loggerDict[$name] =& $rv;
@@ -38,7 +40,7 @@ class Plop_Manager
         return $rv;
     }
 
-    protected function fixupParents(Plop_Logger &$alogger)
+    protected function fixupParents(Logger &$alogger)
     {
         $name = $alogger->name;
         $i = strrpos($name, DIRECTORY_SEPARATOR);
@@ -46,13 +48,13 @@ class Plop_Manager
         while ($i && $rv === NULL) {
             $substr = substr($name, 0, $i);
             if (!isset($this->loggerDict[$substr]))
-                $this->loggerDict[$substr] = new Plop_PlaceHolder($alogger);
+                $this->loggerDict[$substr] = new PlaceHolder($alogger);
             else {
                 $obj =& $this->loggerDict[$substr];
-                if ($obj instanceof Plop_Logger)
+                if ($obj instanceof Logger)
                     $rv =& $obj;
                 else {
-                    assert($obj instanceof Plop_PlaceHolder);
+                    assert($obj instanceof PlaceHolder);
                     $obj->append($alogger);
                 }
             }
@@ -63,7 +65,7 @@ class Plop_Manager
         $alogger->parent =& $rv;
     }
 
-    protected function fixupChildren($ph, Plop_Logger &$alogger)
+    protected function fixupChildren($ph, Logger &$alogger)
     {
         $name       = $alogger->name;
         $namelen    = strlen($name);

@@ -1,6 +1,8 @@
 <?php
 
-class Plop_Filter
+namespace PEAR2\Plop;
+
+class Filter
 {
     public $name;
     public $nlen;
@@ -11,7 +13,7 @@ class Plop_Filter
         $this->nlen = strlen($name);
     }
 
-    public function filter(Plop_Record $record)
+    public function filter(Record $record)
     {
         if (!$this->nlen)
             return TRUE;

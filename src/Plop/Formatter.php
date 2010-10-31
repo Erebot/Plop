@@ -1,6 +1,8 @@
 <?php
 
-class Plop_Formatter
+namespace PEAR2\Plop;
+
+class Formatter
 {
     public $fmt;
     public $datefmt;
@@ -15,7 +17,7 @@ class Plop_Formatter
         $this->datefmt = $datefmt;
     }
 
-    public function format(Plop_Record $record)
+    public function format(Record $record)
     {
         $record->dict['message'] = $record->getMessage();
         if (strpos($this->fmt, '%(asctime)') !== FALSE)
@@ -36,7 +38,7 @@ class Plop_Formatter
         return $s;
     }
 
-    public function formatTime(Plop_Record $record, $datefmt = NULL)
+    public function formatTime(Record $record, $datefmt = NULL)
     {
         $ct = $record->dict['created'];
         if ($datefmt)
@@ -47,7 +49,7 @@ class Plop_Formatter
         return $s;
     }
 
-    public function formatException(Exception $exception)
+    public function formatException(\Exception $exception)
     {
         $s  = "Traceback (most recent call last):\n";
         foreach ($exception->getTrace() as $trace) {

@@ -1,7 +1,9 @@
 <?php
 
-class   Plop_Handler_Datagram
-extends Plop_Handler_Socket
+namespace PEAR2\Plop\Handler;
+
+class   Datagram
+extends Socket
 {
     public function __construct($host, $port)
     {

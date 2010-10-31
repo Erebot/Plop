@@ -1,34 +1,23 @@
 <?php
 
+namespace PEAR2\Plop;
+
 /**
  * A logging module, similar to the one provided by Python.
  * It uses the concepts of loggers, handlers & formatters
  * to offer customizable logs.
  */
-
-// Prevent multiple inclusions.
-if (defined('PLOP_LEVEL_CRITICAL'))
-    return;
-
-define('PLOP_LEVEL_CRITICAL',   50);
-define('PLOP_LEVEL_ERROR',      40);
-define('PLOP_LEVEL_WARNING',    30);
-define('PLOP_LEVEL_WARN',       PLOP_LEVEL_WARNING);
-define('PLOP_LEVEL_INFO',       20);
-define('PLOP_LEVEL_DEBUG',      10);
-define('PLOP_LEVEL_NOTSET',     0);
-
 class Plop
 {
     const BASIC_FORMAT  = "%(levelname)s:%(name)s:%(message)s";
 
-    const NOTSET    = PLOP_LEVEL_NOTSET;
-    const DEBUG     = PLOP_LEVEL_DEBUG;
-    const INFO      = PLOP_LEVEL_INFO;
-    const WARNING   = PLOP_LEVEL_WARNING;
-    const WARN      = PLOP_LEVEL_WARNING;
-    const ERROR     = PLOP_LEVEL_ERROR;
-    const CRITICAL  = PLOP_LEVEL_CRITICAL;
+    const NOTSET    = 0;
+    const DEBUG     = 10;
+    const INFO      = 20;
+    const WARNING   = 30;
+    const WARN      = 30;
+    const ERROR     = 40;
+    const CRITICAL  = 50;
 
     static protected $_instance = NULL;
     protected $_loggers;
@@ -38,15 +27,15 @@ class Plop
 
     protected function __construct()
     {
-        $this->_loggerClass  = 'Plop_Logger';
+        $this->_loggerClass  = '\\PEAR2\\Plop\\Logger';
         $this->_loggers      = array();
         $this->_levelNames   = array(
-            PLOP_LEVEL_NOTSET   => 'NOTSET',
-            PLOP_LEVEL_DEBUG    => 'DEBUG',
-            PLOP_LEVEL_INFO     => 'INFO',
-            PLOP_LEVEL_WARNING  => 'WARNING',
-            PLOP_LEVEL_ERROR    => 'ERROR',
-            PLOP_LEVEL_CRITICAL => 'CRITICAL',
+            self::NOTSET    => 'NOTSET',
+            self::DEBUG     => 'DEBUG',
+            self::INFO      => 'INFO',
+            self::WARNING   => 'WARNING',
+            self::ERROR     => 'ERROR',
+            self::CRITICAL  => 'CRITICAL',
         );
         $this->_levelNames   = $this->_levelNames +
                                 array_flip($this->_levelNames);
@@ -70,8 +59,8 @@ class Plop
     public function getLogger($name = NULL)
     {
         if ($name === NULL)
-            return Plop_Logger::$root;
-        return Plop_Logger::$manager->getLogger($name);
+            return Logger::$root;
+        return Logger::$manager->getLogger($name);
     }
 
     public function getLoggerClass()
@@ -81,42 +70,42 @@ class Plop
 
     public function debug($msg, $args = array(), $exception = NULL)
     {
-        return $this->log(PLOP_LEVEL_DEBUG, $msg, $args, $exception);
+        return $this->log(self::DEBUG, $msg, $args, $exception);
     }
 
     public function info($msg, $args = array(), $exception = NULL)
     {
-        return $this->log(PLOP_LEVEL_INFO, $msg, $args, $exception);
+        return $this->log(self::INFO, $msg, $args, $exception);
     }
 
     public function warning($msg, $args = array(), $exception = NULL)
     {
-        return $this->log(PLOP_LEVEL_WARNING, $msg, $args, $exception);
+        return $this->log(self::WARNING, $msg, $args, $exception);
     }
 
     public function warn($msg, $args = array(), $exception = NULL)
     {
-        return $this->log(PLOP_LEVEL_WARNING, $msg, $args, $exception);
+        return $this->log(self::WARNING, $msg, $args, $exception);
     }
 
     public function error($msg, $args = array(), $exception = NULL)
     {
-        return $this->log(PLOP_LEVEL_ERROR, $msg, $args, $exception);
+        return $this->log(self::ERROR, $msg, $args, $exception);
     }
 
     public function critical($msg, $args = array(), $exception = NULL)
     {
-        return $this->log(PLOP_LEVEL_CRITICAL, $msg, $args, $exception);
+        return $this->log(self::CRITICAL, $msg, $args, $exception);
     }
 
     public function fatal($msg, $args = array(), $exception = NULL)
     {
-        return $this->log(PLOP_LEVEL_CRITICAL, $msg, $args, $exception);
+        return $this->log(self::CRITICAL, $msg, $args, $exception);
     }
 
     public function exception($msg, $exception, $args = array())
     {
-        return $this->log(PLOP_LEVEL_ERROR, $msg, $args, $exception);
+        return $this->log(self::ERROR, $msg, $args, $exception);
     }
 
     public function log($lvl, $msg, $args = array(), $exception = NULL)
@@ -128,7 +117,7 @@ class Plop
 
     public function disable($level)
     {
-        Plop_Logger::$manager->disable = $level;
+        Logger::$manager->disable = $level;
     }
 
     public function addLevelName($lvl, $lvlName)
@@ -147,7 +136,7 @@ class Plop
 
     public function makeLogRecord($attrs)
     {
-        $rv = Plop_Record(NULL, NULL, "", 0, "", array(), NULL, NULL);
+        $rv = Record(NULL, NULL, "", 0, "", array(), NULL, NULL);
         $rv->dict = array_merge($rv->dict, $attrs);
         return $rv;
     }
@@ -159,15 +148,15 @@ class Plop
             $filename = isset($args['filename']) ? $args['filename'] : NULL;
             if ($filename !== NULL) {
                 $mode = isset($args['filemode']) ? $args['filemode'] : 'a';
-                $hdlr = new Plop_Handler_File($filename, $mode);
+                $hdlr = new Handler\File($filename, $mode);
             }
             else {
                 $stream = isset($args['stream']) ? $args['stream'] : NULL;
-                $hdlr = new Plop_Handler_Stream($stream);
+                $hdlr = new Handler\Stream($stream);
             }
             $fs = isset($args['format']) ? $args['format'] : self::BASIC_FORMAT;
             $dfs = isset($args['datefmt']) ? $args['datefmt'] : NULL;
-            $fmt = new Plop_Formatter($fs, $dfs);
+            $fmt = new Formatter($fs, $dfs);
             $hdlr->setFormatter($fmt);
             $root->addHandler($hdlr);
             if (isset($args['level'])) {
@@ -189,7 +178,7 @@ class Plop
     public function setLoggerClass($class)
     {
         if (!class_exists($class) ||
-            !is_subclass_of($class, 'Plop_Logger'))
+            !is_subclass_of($class, '\\PEAR2\\Plop\\Logger'))
             throw new Exception($class);
 
         $this->_loggerClass = $class;
@@ -198,23 +187,11 @@ class Plop
     public function fileConfig(
         $fname,
         $defaults   = array(),
-        $class     = 'Plop_Config_Format_INI'
+        $class     = '\\PEAR2\\Plop\\Config\\Format\\INI'
     )
     {
         $configParser = new $class($this, $fname);
         $configParser->doWork();
     }
-
-    static function plop_autoloader($class)
-    {
-        $fname = dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.
-            str_replace(array('_', '\\'), DIRECTORY_SEPARATOR, $class).'.php';
-        if (!file_exists($fname))
-            return FALSE;
-        require_once($fname);
-        return (class_exists($class, FALSE) || interface_exists($class, FALSE));
-    }
 }
-
-spl_autoload_register(array('Plop', 'plop_autoloader'));
 

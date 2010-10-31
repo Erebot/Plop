@@ -1,7 +1,11 @@
 <?php
 
-class   Plop_Handler_SysLog
-extends Plop_Handler
+namespace PEAR2\Plop\Handler;
+use \PEAR2\Plop\Handler,
+    \PEAR2\Plop\Record;
+
+class   SysLog
+extends Handler
 {
     const LOG_FORMAT_STRING = "<%d>%s\000";
 
@@ -61,14 +65,17 @@ extends Plop_Handler
     public $facility;
     public $socket;
 
-    public function __construct($address='udg:///dev/log', $facility=LOG_USER)
+    public function __construct(
+        $address    = 'udg:///dev/log',
+        $facility   = LOG_USER
+    )
     {
         parent::__construct();
         $this->address      = $address;
         $this->facility     = $facility;
         $this->socket       = stream_socket_client($address);
         if ($this->socket === FALSE)
-            throw new Exception('Unable to connect to the syslog');
+            throw new \Exception('Unable to connect to the syslog');
         $this->formatter    = NULL;
     }
 
@@ -94,7 +101,7 @@ extends Plop_Handler
         return "warning";
     }
 
-    public function emit(Plop_Record &$record)
+    public function emit(Record &$record)
     {
         $msg = $this->format($record);
         $msg = sprintf(
@@ -109,7 +116,7 @@ extends Plop_Handler
         try {
             fwrite($this->socket, $msg, strlen($msg));
         }
-        catch (Exception $e) {
+        catch (\Exception $e) {
             $this->handleError($record, $e);
         }
     }

@@ -1,7 +1,11 @@
 <?php
 
-class   Plop_Handler_Stream
-extends Plop_Handler
+namespace PEAR2\Plop\Handler;
+use \PEAR2\Plop\Handler,
+    \PEAR2\Plop\Record;
+
+class   Stream
+extends Handler
 {
     protected $_stream;
 
@@ -19,7 +23,7 @@ extends Plop_Handler
         fflush($this->_stream);
     }
 
-    public function emit(Plop_Record &$record)
+    public function emit(Record &$record)
     {
         $msg = $this->format($record);
         fprintf($this->_stream, "%s\n", $msg);

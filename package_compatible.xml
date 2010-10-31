@@ -2,33 +2,586 @@
 <package version="2.1" xmlns="http://pear.php.net/dtd/package-2.1" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0     http://pear.php.net/dtd/tasks-1.0.xsd     http://pear.php.net/dtd/package-2.1     http://pear.php.net/dtd/package-2.1.xsd">
  <name>Plop</name>
  <channel>pear.erebot.net</channel>
- <summary>Package Plop summary.
+ <summary>Python Logging On PHP
 </summary>
  <description>
-Package detailed description here (found in README)</description>
+PLOP is a port of Python's logging module to PHP.
+</description>
  <lead>
-  <name>Your Name</name>
-  <user>handle</user>
-  <email>handle@php.net</email>
+  <name>François Poirotte</name>
+  <user>Clicky</user>
+  <email>clicky@erebot.net</email>
   <active>yes</active>
  </lead>
- <date>2010-10-30</date>
- <time>15:27:43</time>
+ <date>2010-10-31</date>
+ <time>02:24:14</time>
  <version>
-  <release>0.1.0</release>
-  <api>0.1.0</api>
+  <release>0.2.0</release>
+  <api>0.2.0</api>
  </version>
  <stability>
   <release>alpha</release>
   <api>alpha</api>
  </stability>
  <license uri="http://www.opensource.org/licenses/bsd-license.php">New BSD License</license>
- <notes>Package Plop release notes for version 0.1.0.
+ <notes>Release notes for Plop version 0.2.0
+------------------------------------
 
-Package Plop API release notes for version 0.1.0.</notes>
+Plop is now structured using PEAR2's standard directory layout.
+This way, it can be packaged as a PEAR2 package.
+
+The latest (packaged) version of Plop will be available on Erebot's
+pear repository (pear.erebot.net).
+Follow the instructions at http://pear.erebot.net/ to install it.
+
+Nothing else was changed in this release, but due to the numerous
+compatibility breaks this caused, there was a need for a new minor
+release.
+
+
+API release notes for Plop version 0.2.0
+----------------------------------------
+
+This version of Plop breaks backward compatibility as it uses
+a PEAR2-oriented directory layout.
+You'll need to adapt
+
+An auto-loader was added so that you don't need to worry about
+where the classes are.
+
+The classes have been renamed to (somewhat) follow PEAR's naming
+conventions. For example, the stream handler class is now called
+Plop_Handler_Stream.
+Also, the classes for configuration parsers were also renamed
+(Plop_Config_Format_INI and Plop_Config_Format_XML).
+As a result, 
+
+This affects configuration files a little as the class names need
+to be updated. Other than that, usage has not really changed, even
+though the main file was renamed to.
+
+To sum it up, the snippets below show how Plop was used and how it
+must be used from now on.
+
+Old usage:
+1.  Include &quot;logging.php&quot; from Plop's sources.
+2.  Use $logging =&amp; Plop::getInstance(); to retrieve an instance
+    of the logging subsystem.
+3.  Configure logging, eg. with:
+    $logging-&gt;fileConfig(
+        $configPath,
+        array(),
+        'XML'
+    );
+4.  Use $logger = $logging-&gt;getLogger(__FILE__); to retrieve
+    a logger for the current file.
+5.  Log whatever you want with eg. $logger-&gt;error('Ouch!'); 
+
+New usage:
+1.  Include &quot;Plop.php&quot; from Plop's sources.
+2.  Use $logging =&amp; Plop::getInstance(); to retrieve an instance
+    of the logging subsystem.
+3.  Configure logging, eg. with:
+    $logging-&gt;fileConfig(
+        $configPath,
+        array(),
+        'Plop_Config_Format_XML'
+    );
+4.  Use $logger = $logging-&gt;getLogger(__FILE__); to retrieve
+    a logger for the current file.
+5.  Log whatever you want with eg. $logger-&gt;error('Ouch!'); 
+
+So, as you can see, only the include statement and the 3rd argument
+to Plop::fileConfig() have been modified.
+</notes>
  <contents>
   <dir name="/">
-   <file role="php" name="php/Plop/Main.php"/>
+   <file role="test" name="test/Plop/pear.erebot.net/StreamHandlerTest.php"/>
+   <file role="test" name="test/Plop/pear.erebot.net/FileHandlerTest.php"/>
+   <file role="test" name="test/Plop/pear.erebot.net/FileConfigTest.php"/>
+   <file role="test" name="test/Plop/pear.erebot.net/config.xml"/>
+   <file role="test" name="test/Plop/pear.erebot.net/config.ini"/>
+   <file role="test" name="test/Plop/pear.erebot.net/BasicTest.php"/>
+   <file role="php" name="php/Plop/RootLogger.php"/>
+   <file role="php" name="php/Plop/Record.php"/>
+   <file role="php" name="php/Plop/Plop.php"/>
+   <file role="php" name="php/Plop/PlaceHolder.php"/>
+   <file role="php" name="php/Plop/Manager.php"/>
+   <file role="php" name="php/Plop/Logger.php"/>
+   <file role="php" name="php/Plop/Handler/WatchedFile.php"/>
+   <file role="php" name="php/Plop/Handler/TimedRotatingFile.php"/>
+   <file role="php" name="php/Plop/Handler/SysLog.php"/>
+   <file role="php" name="php/Plop/Handler/Stream.php"/>
+   <file role="php" name="php/Plop/Handler/Socket.php"/>
+   <file role="php" name="php/Plop/Handler/RotatingFile.php"/>
+   <file role="php" name="php/Plop/Handler/File.php"/>
+   <file role="php" name="php/Plop/Handler/Datagram.php"/>
+   <file role="php" name="php/Plop/Handler/BaseRotating.php"/>
+   <file role="php" name="php/Plop/Handler.php"/>
+   <file role="php" name="php/Plop/Formatter.php"/>
+   <file role="php" name="php/Plop/Filterer.php"/>
+   <file role="php" name="php/Plop/Filter.php"/>
+   <file role="php" name="php/Plop/Config/Format/XML.php"/>
+   <file role="php" name="php/Plop/Config/Format/INI.php"/>
+   <file role="php" name="php/Plop/Config/AbstractParser.php"/>
+   <file role="php" name="php/Plop/BufferingFormatter.php"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/XML_8php.tex"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/WatchedFile_8php.tex"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/TimedRotatingFile_8php.tex"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/SysLog_8php.tex"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/Stream_8php.tex"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/Socket_8php.tex"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/RotatingFile_8php.tex"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/RootLogger_8php.tex"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/refman.toc"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/refman.tex"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/refman.pdf"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/refman.out"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/refman.log"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/refman.idx"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/refman.aux"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/Record_8php.tex"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/Plop_8php.tex"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/PlaceHolder_8php.tex"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/Manager_8php.tex"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/Makefile"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/Logger_8php.tex"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/INI_8php.tex"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/hierarchy.tex"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/Handler_8php.tex"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/Formatter_8php.tex"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/Filter_8php.tex"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/Filterer_8php.tex"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/File_8php.tex"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/files.tex"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/doxygen.sty"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/dir_c3b96502ded34ffad383143a2b8e3830_dep.pdf"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/dir_c3b96502ded34ffad383143a2b8e3830_dep.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/dir_c3b96502ded34ffad383143a2b8e3830.tex"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/dir_7292273b9c4093a036f945a9588891eb_dep.pdf"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/dir_7292273b9c4093a036f945a9588891eb_dep.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/dir_7292273b9c4093a036f945a9588891eb.tex"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/dir_74bf3daadee3f5140829e6be5f14e45d_dep.pdf"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/dir_74bf3daadee3f5140829e6be5f14e45d_dep.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/dir_74bf3daadee3f5140829e6be5f14e45d.tex"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/dir_6e0cd5abe8b7b1b091bdf764a396d741_dep.pdf"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/dir_6e0cd5abe8b7b1b091bdf764a396d741_dep.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/dir_6e0cd5abe8b7b1b091bdf764a396d741.tex"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/dir_2f1181bf8fe3aaf68c4bce96b978dc67_dep.pdf"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/dir_2f1181bf8fe3aaf68c4bce96b978dc67_dep.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/dir_2f1181bf8fe3aaf68c4bce96b978dc67.tex"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/dirs.tex"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/Datagram_8php.tex"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__RootLogger__inherit__graph.pdf"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__RootLogger__inherit__graph.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__RootLogger__coll__graph.pdf"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__RootLogger__coll__graph.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__RootLogger.tex"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Record.tex"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__PlaceHolder.tex"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Manager.tex"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Logger__inherit__graph.pdf"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Logger__inherit__graph.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Logger__coll__graph.pdf"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Logger__coll__graph.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Logger.tex"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__WatchedFile__inherit__graph.pdf"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__WatchedFile__inherit__graph.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__WatchedFile__coll__graph.pdf"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__WatchedFile__coll__graph.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__WatchedFile.tex"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__TimedRotatingFile__inherit__graph.pdf"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__TimedRotatingFile__inherit__graph.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__TimedRotatingFile__coll__graph.pdf"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__TimedRotatingFile__coll__graph.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__TimedRotatingFile.tex"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__SysLog__inherit__graph.pdf"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__SysLog__inherit__graph.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__SysLog__coll__graph.pdf"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__SysLog__coll__graph.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__SysLog.tex"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__Stream__inherit__graph.pdf"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__Stream__inherit__graph.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__Stream__coll__graph.pdf"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__Stream__coll__graph.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__Stream.tex"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__Socket__inherit__graph.pdf"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__Socket__inherit__graph.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__Socket__coll__graph.pdf"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__Socket__coll__graph.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__Socket.tex"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__RotatingFile__inherit__graph.pdf"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__RotatingFile__inherit__graph.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__RotatingFile__coll__graph.pdf"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__RotatingFile__coll__graph.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__RotatingFile.tex"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__inherit__graph.pdf"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__inherit__graph.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__File__inherit__graph.pdf"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__File__inherit__graph.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__File__coll__graph.pdf"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__File__coll__graph.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__File.tex"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__Datagram__inherit__graph.pdf"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__Datagram__inherit__graph.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__Datagram__coll__graph.pdf"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__Datagram__coll__graph.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__Datagram.tex"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__coll__graph.pdf"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__coll__graph.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__BaseRotating__inherit__graph.pdf"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__BaseRotating__inherit__graph.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__BaseRotating__coll__graph.pdf"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__BaseRotating__coll__graph.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__BaseRotating.tex"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler.tex"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Formatter.tex"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Filterer__inherit__graph.pdf"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Filterer__inherit__graph.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Filterer.tex"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Filter.tex"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Config__Format__XML__inherit__graph.pdf"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Config__Format__XML__inherit__graph.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Config__Format__XML__coll__graph.pdf"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Config__Format__XML__coll__graph.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Config__Format__XML.tex"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Config__Format__INI__inherit__graph.pdf"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Config__Format__INI__inherit__graph.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Config__Format__INI__coll__graph.pdf"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Config__Format__INI__coll__graph.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Config__Format__INI.tex"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Config__AbstractParser__inherit__graph.pdf"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Config__AbstractParser__inherit__graph.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Config__AbstractParser.tex"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop__BufferingFormatter.tex"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/classPlop.tex"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/BufferingFormatter_8php.tex"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/BaseRotating_8php.tex"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/annotated.tex"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/latex/latex/AbstractParser_8php.tex"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/XML_8php_source.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/XML_8php.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/WatchedFile_8php_source.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/WatchedFile_8php.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/tree.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/TimedRotatingFile_8php_source.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/TimedRotatingFile_8php.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/tab_s.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/tab_h.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/tab_b.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/tab_a.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/tabs.css"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/SysLog_8php_source.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/SysLog_8php.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/Stream_8php_source.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/Stream_8php.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/Socket_8php_source.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/Socket_8php.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/RotatingFile_8php_source.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/RotatingFile_8php.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/RootLogger_8php_source.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/RootLogger_8php.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/Record_8php_source.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/Record_8php.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/Plop_8php_source.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/Plop_8php.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/PlaceHolder_8php_source.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/PlaceHolder_8php.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/open.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/nav_h.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/nav_f.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/Manager_8php_source.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/Manager_8php.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/main.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/Logger_8php_source.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/Logger_8php.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/INI_8php_source.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/INI_8php.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/inherit__graph__8.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/inherit__graph__8.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/inherit__graph__8.map"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/inherit__graph__7.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/inherit__graph__7.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/inherit__graph__7.map"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/inherit__graph__6.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/inherit__graph__6.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/inherit__graph__6.map"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/inherit__graph__5.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/inherit__graph__5.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/inherit__graph__5.map"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/inherit__graph__4.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/inherit__graph__4.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/inherit__graph__4.map"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/inherit__graph__3.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/inherit__graph__3.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/inherit__graph__3.map"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/inherit__graph__2.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/inherit__graph__2.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/inherit__graph__2.map"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/inherit__graph__1.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/inherit__graph__1.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/inherit__graph__1.map"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/inherit__graph__0.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/inherit__graph__0.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/inherit__graph__0.map"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/inherits.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/index.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/hierarchy.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/Handler_8php_source.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/Handler_8php.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/graph_legend.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/graph_legend.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/graph_legend.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/globals_enum.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/globals.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/functions_vars.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/functions_func.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/functions.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/ftv2vertline.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/ftv2pnode.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/ftv2plastnode.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/ftv2node.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/ftv2mnode.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/ftv2mlastnode.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/ftv2link.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/ftv2lastnode.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/ftv2folderopen.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/ftv2folderclosed.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/ftv2doc.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/ftv2blank.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/Formatter_8php_source.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/Formatter_8php.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/Filter_8php_source.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/Filter_8php.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/Filterer_8php_source.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/Filterer_8php.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/File_8php_source.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/File_8php.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/files.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/doxygen.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/doxygen.css"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/dir_c3b96502ded34ffad383143a2b8e3830_dep.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/dir_c3b96502ded34ffad383143a2b8e3830_dep.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/dir_c3b96502ded34ffad383143a2b8e3830_dep.map"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/dir_c3b96502ded34ffad383143a2b8e3830.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/dir_7292273b9c4093a036f945a9588891eb_dep.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/dir_7292273b9c4093a036f945a9588891eb_dep.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/dir_7292273b9c4093a036f945a9588891eb_dep.map"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/dir_7292273b9c4093a036f945a9588891eb.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/dir_74bf3daadee3f5140829e6be5f14e45d_dep.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/dir_74bf3daadee3f5140829e6be5f14e45d_dep.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/dir_74bf3daadee3f5140829e6be5f14e45d_dep.map"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/dir_74bf3daadee3f5140829e6be5f14e45d.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/dir_6e0cd5abe8b7b1b091bdf764a396d741_dep.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/dir_6e0cd5abe8b7b1b091bdf764a396d741_dep.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/dir_6e0cd5abe8b7b1b091bdf764a396d741_dep.map"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/dir_6e0cd5abe8b7b1b091bdf764a396d741.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/dir_2f1181bf8fe3aaf68c4bce96b978dc67_dep.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/dir_2f1181bf8fe3aaf68c4bce96b978dc67_dep.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/dir_2f1181bf8fe3aaf68c4bce96b978dc67_dep.map"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/dir_2f1181bf8fe3aaf68c4bce96b978dc67.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/dirs.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/Datagram_8php_source.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/Datagram_8php.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/closed.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__RootLogger__inherit__graph.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__RootLogger__inherit__graph.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__RootLogger__inherit__graph.map"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__RootLogger__coll__graph.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__RootLogger__coll__graph.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__RootLogger__coll__graph.map"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__RootLogger.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__RootLogger-members.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Record.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Record-members.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__PlaceHolder.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__PlaceHolder-members.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Manager.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Manager-members.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Logger__inherit__graph.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Logger__inherit__graph.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Logger__inherit__graph.map"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Logger__coll__graph.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Logger__coll__graph.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Logger__coll__graph.map"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Logger.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Logger-members.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__WatchedFile__inherit__graph.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__WatchedFile__inherit__graph.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__WatchedFile__inherit__graph.map"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__WatchedFile__coll__graph.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__WatchedFile__coll__graph.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__WatchedFile__coll__graph.map"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__WatchedFile.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__WatchedFile-members.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__TimedRotatingFile__inherit__graph.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__TimedRotatingFile__inherit__graph.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__TimedRotatingFile__inherit__graph.map"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__TimedRotatingFile__coll__graph.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__TimedRotatingFile__coll__graph.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__TimedRotatingFile__coll__graph.map"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__TimedRotatingFile.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__TimedRotatingFile-members.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__SysLog__inherit__graph.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__SysLog__inherit__graph.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__SysLog__inherit__graph.map"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__SysLog__coll__graph.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__SysLog__coll__graph.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__SysLog__coll__graph.map"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__SysLog.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__SysLog-members.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__Stream__inherit__graph.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__Stream__inherit__graph.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__Stream__inherit__graph.map"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__Stream__coll__graph.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__Stream__coll__graph.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__Stream__coll__graph.map"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__Stream.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__Stream-members.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__Socket__inherit__graph.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__Socket__inherit__graph.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__Socket__inherit__graph.map"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__Socket__coll__graph.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__Socket__coll__graph.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__Socket__coll__graph.map"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__Socket.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__Socket-members.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__RotatingFile__inherit__graph.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__RotatingFile__inherit__graph.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__RotatingFile__inherit__graph.map"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__RotatingFile__coll__graph.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__RotatingFile__coll__graph.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__RotatingFile__coll__graph.map"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__RotatingFile.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__RotatingFile-members.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__inherit__graph.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__inherit__graph.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__inherit__graph.map"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__File__inherit__graph.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__File__inherit__graph.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__File__inherit__graph.map"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__File__coll__graph.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__File__coll__graph.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__File__coll__graph.map"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__File.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__File-members.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__Datagram__inherit__graph.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__Datagram__inherit__graph.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__Datagram__inherit__graph.map"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__Datagram__coll__graph.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__Datagram__coll__graph.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__Datagram__coll__graph.map"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__Datagram.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__Datagram-members.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__coll__graph.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__coll__graph.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__coll__graph.map"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__BaseRotating__inherit__graph.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__BaseRotating__inherit__graph.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__BaseRotating__inherit__graph.map"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__BaseRotating__coll__graph.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__BaseRotating__coll__graph.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__BaseRotating__coll__graph.map"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__BaseRotating.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__BaseRotating-members.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler-members.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Formatter.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Formatter-members.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Filterer__inherit__graph.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Filterer__inherit__graph.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Filterer__inherit__graph.map"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Filterer.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Filterer-members.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Filter.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Filter-members.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Config__Format__XML__inherit__graph.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Config__Format__XML__inherit__graph.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Config__Format__XML__inherit__graph.map"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Config__Format__XML__coll__graph.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Config__Format__XML__coll__graph.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Config__Format__XML__coll__graph.map"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Config__Format__XML.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Config__Format__XML-members.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Config__Format__INI__inherit__graph.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Config__Format__INI__inherit__graph.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Config__Format__INI__inherit__graph.map"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Config__Format__INI__coll__graph.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Config__Format__INI__coll__graph.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Config__Format__INI__coll__graph.map"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Config__Format__INI.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Config__Format__INI-members.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Config__AbstractParser__inherit__graph.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Config__AbstractParser__inherit__graph.md5"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Config__AbstractParser__inherit__graph.map"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Config__AbstractParser.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__Config__AbstractParser-members.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__BufferingFormatter.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop__BufferingFormatter-members.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classPlop-members.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/classes.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/BufferingFormatter_8php_source.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/BufferingFormatter_8php.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/bc_s.png"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/BaseRotating_8php_source.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/BaseRotating_8php.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/annotated.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/AbstractParser_8php_source.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/html/html/AbstractParser_8php.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/Plop_RootLogger.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/Plop_Record.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/Plop_PlaceHolder.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/Plop_Manager.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/Plop_Logger.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/Plop_Handler_WatchedFile.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/Plop_Handler_TimedRotatingFile.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/Plop_Handler_SysLog.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/Plop_Handler_Stream.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/Plop_Handler_Socket.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/Plop_Handler_RotatingFile.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/Plop_Handler_File.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/Plop_Handler_Datagram.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/Plop_Handler_BaseRotating.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/Plop_Handler.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/Plop_Formatter.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/Plop_Filterer.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/Plop_Filter.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/Plop_Config_Format_XML.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/Plop_Config_Format_INI.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/Plop_Config_AbstractParser.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/Plop_BufferingFormatter.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/PlopWatchedFileHandler.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/PlopTimedRotatingFileHandler.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/PlopSysLogHandler.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/PlopStreamHandler.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/PlopSocketHandler.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/PlopRotatingFileHandler.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/PlopRootLogger.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/PlopRecord.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/PlopPlaceHolder.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/PlopManager.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/PlopLogger.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/PlopHandler.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/PlopFormatter.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/PlopFilterer.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/PlopFilter.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/PlopFileHandler.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/PlopDatagramHandler.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/PlopConfigXML.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/PlopConfigINI.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/PlopBufferingFormatter.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/PlopBaseRotatingHandler.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/Plop.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/package-summary.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/package-frame.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/APlopConfig.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/coverage/coverage/stylesheet.css"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/coverage/coverage/overview-summary.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/coverage/coverage/overview-frame.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/coverage/coverage/index.html"/>
+   <file role="doc" name="doc/Plop/pear.erebot.net/coverage/coverage/allclasses-frame.html"/>
+   <file role="data" name="data/Plop/pear.erebot.net/config.rng"/>
   </dir>
  </contents>
  <dependencies>
@@ -43,7 +596,492 @@ Package Plop API release notes for version 0.1.0.</notes>
  </dependencies>
  <phprelease>
   <filelist>
-   <install name="php/Plop/Main.php" as="Plop/Main.php"/>
+   <install name="data/Plop/pear.erebot.net/config.rng" as="pear.erebot.net/config.rng"/>
+   <install name="doc/Plop/pear.erebot.net/coverage/coverage/allclasses-frame.html" as="pear.erebot.net/coverage/coverage/allclasses-frame.html"/>
+   <install name="doc/Plop/pear.erebot.net/coverage/coverage/index.html" as="pear.erebot.net/coverage/coverage/index.html"/>
+   <install name="doc/Plop/pear.erebot.net/coverage/coverage/overview-frame.html" as="pear.erebot.net/coverage/coverage/overview-frame.html"/>
+   <install name="doc/Plop/pear.erebot.net/coverage/coverage/overview-summary.html" as="pear.erebot.net/coverage/coverage/overview-summary.html"/>
+   <install name="doc/Plop/pear.erebot.net/coverage/coverage/stylesheet.css" as="pear.erebot.net/coverage/coverage/stylesheet.css"/>
+   <install name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/APlopConfig.html" as="pear.erebot.net/coverage/default/coverage/default/APlopConfig.html"/>
+   <install name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/package-frame.html" as="pear.erebot.net/coverage/default/coverage/default/package-frame.html"/>
+   <install name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/package-summary.html" as="pear.erebot.net/coverage/default/coverage/default/package-summary.html"/>
+   <install name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/Plop.html" as="pear.erebot.net/coverage/default/coverage/default/Plop.html"/>
+   <install name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/PlopBaseRotatingHandler.html" as="pear.erebot.net/coverage/default/coverage/default/PlopBaseRotatingHandler.html"/>
+   <install name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/PlopBufferingFormatter.html" as="pear.erebot.net/coverage/default/coverage/default/PlopBufferingFormatter.html"/>
+   <install name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/PlopConfigINI.html" as="pear.erebot.net/coverage/default/coverage/default/PlopConfigINI.html"/>
+   <install name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/PlopConfigXML.html" as="pear.erebot.net/coverage/default/coverage/default/PlopConfigXML.html"/>
+   <install name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/PlopDatagramHandler.html" as="pear.erebot.net/coverage/default/coverage/default/PlopDatagramHandler.html"/>
+   <install name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/PlopFileHandler.html" as="pear.erebot.net/coverage/default/coverage/default/PlopFileHandler.html"/>
+   <install name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/PlopFilter.html" as="pear.erebot.net/coverage/default/coverage/default/PlopFilter.html"/>
+   <install name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/PlopFilterer.html" as="pear.erebot.net/coverage/default/coverage/default/PlopFilterer.html"/>
+   <install name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/PlopFormatter.html" as="pear.erebot.net/coverage/default/coverage/default/PlopFormatter.html"/>
+   <install name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/PlopHandler.html" as="pear.erebot.net/coverage/default/coverage/default/PlopHandler.html"/>
+   <install name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/PlopLogger.html" as="pear.erebot.net/coverage/default/coverage/default/PlopLogger.html"/>
+   <install name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/PlopManager.html" as="pear.erebot.net/coverage/default/coverage/default/PlopManager.html"/>
+   <install name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/PlopPlaceHolder.html" as="pear.erebot.net/coverage/default/coverage/default/PlopPlaceHolder.html"/>
+   <install name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/PlopRecord.html" as="pear.erebot.net/coverage/default/coverage/default/PlopRecord.html"/>
+   <install name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/PlopRootLogger.html" as="pear.erebot.net/coverage/default/coverage/default/PlopRootLogger.html"/>
+   <install name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/PlopRotatingFileHandler.html" as="pear.erebot.net/coverage/default/coverage/default/PlopRotatingFileHandler.html"/>
+   <install name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/PlopSocketHandler.html" as="pear.erebot.net/coverage/default/coverage/default/PlopSocketHandler.html"/>
+   <install name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/PlopStreamHandler.html" as="pear.erebot.net/coverage/default/coverage/default/PlopStreamHandler.html"/>
+   <install name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/PlopSysLogHandler.html" as="pear.erebot.net/coverage/default/coverage/default/PlopSysLogHandler.html"/>
+   <install name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/PlopTimedRotatingFileHandler.html" as="pear.erebot.net/coverage/default/coverage/default/PlopTimedRotatingFileHandler.html"/>
+   <install name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/PlopWatchedFileHandler.html" as="pear.erebot.net/coverage/default/coverage/default/PlopWatchedFileHandler.html"/>
+   <install name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/Plop_BufferingFormatter.html" as="pear.erebot.net/coverage/default/coverage/default/Plop_BufferingFormatter.html"/>
+   <install name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/Plop_Config_AbstractParser.html" as="pear.erebot.net/coverage/default/coverage/default/Plop_Config_AbstractParser.html"/>
+   <install name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/Plop_Config_Format_INI.html" as="pear.erebot.net/coverage/default/coverage/default/Plop_Config_Format_INI.html"/>
+   <install name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/Plop_Config_Format_XML.html" as="pear.erebot.net/coverage/default/coverage/default/Plop_Config_Format_XML.html"/>
+   <install name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/Plop_Filter.html" as="pear.erebot.net/coverage/default/coverage/default/Plop_Filter.html"/>
+   <install name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/Plop_Filterer.html" as="pear.erebot.net/coverage/default/coverage/default/Plop_Filterer.html"/>
+   <install name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/Plop_Formatter.html" as="pear.erebot.net/coverage/default/coverage/default/Plop_Formatter.html"/>
+   <install name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/Plop_Handler.html" as="pear.erebot.net/coverage/default/coverage/default/Plop_Handler.html"/>
+   <install name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/Plop_Handler_BaseRotating.html" as="pear.erebot.net/coverage/default/coverage/default/Plop_Handler_BaseRotating.html"/>
+   <install name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/Plop_Handler_Datagram.html" as="pear.erebot.net/coverage/default/coverage/default/Plop_Handler_Datagram.html"/>
+   <install name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/Plop_Handler_File.html" as="pear.erebot.net/coverage/default/coverage/default/Plop_Handler_File.html"/>
+   <install name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/Plop_Handler_RotatingFile.html" as="pear.erebot.net/coverage/default/coverage/default/Plop_Handler_RotatingFile.html"/>
+   <install name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/Plop_Handler_Socket.html" as="pear.erebot.net/coverage/default/coverage/default/Plop_Handler_Socket.html"/>
+   <install name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/Plop_Handler_Stream.html" as="pear.erebot.net/coverage/default/coverage/default/Plop_Handler_Stream.html"/>
+   <install name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/Plop_Handler_SysLog.html" as="pear.erebot.net/coverage/default/coverage/default/Plop_Handler_SysLog.html"/>
+   <install name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/Plop_Handler_TimedRotatingFile.html" as="pear.erebot.net/coverage/default/coverage/default/Plop_Handler_TimedRotatingFile.html"/>
+   <install name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/Plop_Handler_WatchedFile.html" as="pear.erebot.net/coverage/default/coverage/default/Plop_Handler_WatchedFile.html"/>
+   <install name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/Plop_Logger.html" as="pear.erebot.net/coverage/default/coverage/default/Plop_Logger.html"/>
+   <install name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/Plop_Manager.html" as="pear.erebot.net/coverage/default/coverage/default/Plop_Manager.html"/>
+   <install name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/Plop_PlaceHolder.html" as="pear.erebot.net/coverage/default/coverage/default/Plop_PlaceHolder.html"/>
+   <install name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/Plop_Record.html" as="pear.erebot.net/coverage/default/coverage/default/Plop_Record.html"/>
+   <install name="doc/Plop/pear.erebot.net/coverage/default/coverage/default/Plop_RootLogger.html" as="pear.erebot.net/coverage/default/coverage/default/Plop_RootLogger.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/AbstractParser_8php.html" as="pear.erebot.net/html/html/AbstractParser_8php.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/AbstractParser_8php_source.html" as="pear.erebot.net/html/html/AbstractParser_8php_source.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/annotated.html" as="pear.erebot.net/html/html/annotated.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/BaseRotating_8php.html" as="pear.erebot.net/html/html/BaseRotating_8php.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/BaseRotating_8php_source.html" as="pear.erebot.net/html/html/BaseRotating_8php_source.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/bc_s.png" as="pear.erebot.net/html/html/bc_s.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/BufferingFormatter_8php.html" as="pear.erebot.net/html/html/BufferingFormatter_8php.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/BufferingFormatter_8php_source.html" as="pear.erebot.net/html/html/BufferingFormatter_8php_source.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classes.html" as="pear.erebot.net/html/html/classes.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop-members.html" as="pear.erebot.net/html/html/classPlop-members.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop.html" as="pear.erebot.net/html/html/classPlop.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__BufferingFormatter-members.html" as="pear.erebot.net/html/html/classPlop__BufferingFormatter-members.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__BufferingFormatter.html" as="pear.erebot.net/html/html/classPlop__BufferingFormatter.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Config__AbstractParser-members.html" as="pear.erebot.net/html/html/classPlop__Config__AbstractParser-members.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Config__AbstractParser.html" as="pear.erebot.net/html/html/classPlop__Config__AbstractParser.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Config__AbstractParser__inherit__graph.map" as="pear.erebot.net/html/html/classPlop__Config__AbstractParser__inherit__graph.map"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Config__AbstractParser__inherit__graph.md5" as="pear.erebot.net/html/html/classPlop__Config__AbstractParser__inherit__graph.md5"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Config__AbstractParser__inherit__graph.png" as="pear.erebot.net/html/html/classPlop__Config__AbstractParser__inherit__graph.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Config__Format__INI-members.html" as="pear.erebot.net/html/html/classPlop__Config__Format__INI-members.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Config__Format__INI.html" as="pear.erebot.net/html/html/classPlop__Config__Format__INI.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Config__Format__INI__coll__graph.map" as="pear.erebot.net/html/html/classPlop__Config__Format__INI__coll__graph.map"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Config__Format__INI__coll__graph.md5" as="pear.erebot.net/html/html/classPlop__Config__Format__INI__coll__graph.md5"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Config__Format__INI__coll__graph.png" as="pear.erebot.net/html/html/classPlop__Config__Format__INI__coll__graph.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Config__Format__INI__inherit__graph.map" as="pear.erebot.net/html/html/classPlop__Config__Format__INI__inherit__graph.map"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Config__Format__INI__inherit__graph.md5" as="pear.erebot.net/html/html/classPlop__Config__Format__INI__inherit__graph.md5"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Config__Format__INI__inherit__graph.png" as="pear.erebot.net/html/html/classPlop__Config__Format__INI__inherit__graph.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Config__Format__XML-members.html" as="pear.erebot.net/html/html/classPlop__Config__Format__XML-members.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Config__Format__XML.html" as="pear.erebot.net/html/html/classPlop__Config__Format__XML.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Config__Format__XML__coll__graph.map" as="pear.erebot.net/html/html/classPlop__Config__Format__XML__coll__graph.map"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Config__Format__XML__coll__graph.md5" as="pear.erebot.net/html/html/classPlop__Config__Format__XML__coll__graph.md5"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Config__Format__XML__coll__graph.png" as="pear.erebot.net/html/html/classPlop__Config__Format__XML__coll__graph.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Config__Format__XML__inherit__graph.map" as="pear.erebot.net/html/html/classPlop__Config__Format__XML__inherit__graph.map"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Config__Format__XML__inherit__graph.md5" as="pear.erebot.net/html/html/classPlop__Config__Format__XML__inherit__graph.md5"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Config__Format__XML__inherit__graph.png" as="pear.erebot.net/html/html/classPlop__Config__Format__XML__inherit__graph.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Filter-members.html" as="pear.erebot.net/html/html/classPlop__Filter-members.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Filter.html" as="pear.erebot.net/html/html/classPlop__Filter.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Filterer-members.html" as="pear.erebot.net/html/html/classPlop__Filterer-members.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Filterer.html" as="pear.erebot.net/html/html/classPlop__Filterer.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Filterer__inherit__graph.map" as="pear.erebot.net/html/html/classPlop__Filterer__inherit__graph.map"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Filterer__inherit__graph.md5" as="pear.erebot.net/html/html/classPlop__Filterer__inherit__graph.md5"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Filterer__inherit__graph.png" as="pear.erebot.net/html/html/classPlop__Filterer__inherit__graph.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Formatter-members.html" as="pear.erebot.net/html/html/classPlop__Formatter-members.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Formatter.html" as="pear.erebot.net/html/html/classPlop__Formatter.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler-members.html" as="pear.erebot.net/html/html/classPlop__Handler-members.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler.html" as="pear.erebot.net/html/html/classPlop__Handler.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__BaseRotating-members.html" as="pear.erebot.net/html/html/classPlop__Handler__BaseRotating-members.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__BaseRotating.html" as="pear.erebot.net/html/html/classPlop__Handler__BaseRotating.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__BaseRotating__coll__graph.map" as="pear.erebot.net/html/html/classPlop__Handler__BaseRotating__coll__graph.map"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__BaseRotating__coll__graph.md5" as="pear.erebot.net/html/html/classPlop__Handler__BaseRotating__coll__graph.md5"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__BaseRotating__coll__graph.png" as="pear.erebot.net/html/html/classPlop__Handler__BaseRotating__coll__graph.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__BaseRotating__inherit__graph.map" as="pear.erebot.net/html/html/classPlop__Handler__BaseRotating__inherit__graph.map"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__BaseRotating__inherit__graph.md5" as="pear.erebot.net/html/html/classPlop__Handler__BaseRotating__inherit__graph.md5"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__BaseRotating__inherit__graph.png" as="pear.erebot.net/html/html/classPlop__Handler__BaseRotating__inherit__graph.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__coll__graph.map" as="pear.erebot.net/html/html/classPlop__Handler__coll__graph.map"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__coll__graph.md5" as="pear.erebot.net/html/html/classPlop__Handler__coll__graph.md5"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__coll__graph.png" as="pear.erebot.net/html/html/classPlop__Handler__coll__graph.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__Datagram-members.html" as="pear.erebot.net/html/html/classPlop__Handler__Datagram-members.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__Datagram.html" as="pear.erebot.net/html/html/classPlop__Handler__Datagram.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__Datagram__coll__graph.map" as="pear.erebot.net/html/html/classPlop__Handler__Datagram__coll__graph.map"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__Datagram__coll__graph.md5" as="pear.erebot.net/html/html/classPlop__Handler__Datagram__coll__graph.md5"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__Datagram__coll__graph.png" as="pear.erebot.net/html/html/classPlop__Handler__Datagram__coll__graph.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__Datagram__inherit__graph.map" as="pear.erebot.net/html/html/classPlop__Handler__Datagram__inherit__graph.map"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__Datagram__inherit__graph.md5" as="pear.erebot.net/html/html/classPlop__Handler__Datagram__inherit__graph.md5"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__Datagram__inherit__graph.png" as="pear.erebot.net/html/html/classPlop__Handler__Datagram__inherit__graph.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__File-members.html" as="pear.erebot.net/html/html/classPlop__Handler__File-members.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__File.html" as="pear.erebot.net/html/html/classPlop__Handler__File.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__File__coll__graph.map" as="pear.erebot.net/html/html/classPlop__Handler__File__coll__graph.map"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__File__coll__graph.md5" as="pear.erebot.net/html/html/classPlop__Handler__File__coll__graph.md5"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__File__coll__graph.png" as="pear.erebot.net/html/html/classPlop__Handler__File__coll__graph.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__File__inherit__graph.map" as="pear.erebot.net/html/html/classPlop__Handler__File__inherit__graph.map"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__File__inherit__graph.md5" as="pear.erebot.net/html/html/classPlop__Handler__File__inherit__graph.md5"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__File__inherit__graph.png" as="pear.erebot.net/html/html/classPlop__Handler__File__inherit__graph.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__inherit__graph.map" as="pear.erebot.net/html/html/classPlop__Handler__inherit__graph.map"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__inherit__graph.md5" as="pear.erebot.net/html/html/classPlop__Handler__inherit__graph.md5"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__inherit__graph.png" as="pear.erebot.net/html/html/classPlop__Handler__inherit__graph.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__RotatingFile-members.html" as="pear.erebot.net/html/html/classPlop__Handler__RotatingFile-members.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__RotatingFile.html" as="pear.erebot.net/html/html/classPlop__Handler__RotatingFile.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__RotatingFile__coll__graph.map" as="pear.erebot.net/html/html/classPlop__Handler__RotatingFile__coll__graph.map"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__RotatingFile__coll__graph.md5" as="pear.erebot.net/html/html/classPlop__Handler__RotatingFile__coll__graph.md5"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__RotatingFile__coll__graph.png" as="pear.erebot.net/html/html/classPlop__Handler__RotatingFile__coll__graph.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__RotatingFile__inherit__graph.map" as="pear.erebot.net/html/html/classPlop__Handler__RotatingFile__inherit__graph.map"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__RotatingFile__inherit__graph.md5" as="pear.erebot.net/html/html/classPlop__Handler__RotatingFile__inherit__graph.md5"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__RotatingFile__inherit__graph.png" as="pear.erebot.net/html/html/classPlop__Handler__RotatingFile__inherit__graph.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__Socket-members.html" as="pear.erebot.net/html/html/classPlop__Handler__Socket-members.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__Socket.html" as="pear.erebot.net/html/html/classPlop__Handler__Socket.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__Socket__coll__graph.map" as="pear.erebot.net/html/html/classPlop__Handler__Socket__coll__graph.map"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__Socket__coll__graph.md5" as="pear.erebot.net/html/html/classPlop__Handler__Socket__coll__graph.md5"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__Socket__coll__graph.png" as="pear.erebot.net/html/html/classPlop__Handler__Socket__coll__graph.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__Socket__inherit__graph.map" as="pear.erebot.net/html/html/classPlop__Handler__Socket__inherit__graph.map"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__Socket__inherit__graph.md5" as="pear.erebot.net/html/html/classPlop__Handler__Socket__inherit__graph.md5"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__Socket__inherit__graph.png" as="pear.erebot.net/html/html/classPlop__Handler__Socket__inherit__graph.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__Stream-members.html" as="pear.erebot.net/html/html/classPlop__Handler__Stream-members.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__Stream.html" as="pear.erebot.net/html/html/classPlop__Handler__Stream.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__Stream__coll__graph.map" as="pear.erebot.net/html/html/classPlop__Handler__Stream__coll__graph.map"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__Stream__coll__graph.md5" as="pear.erebot.net/html/html/classPlop__Handler__Stream__coll__graph.md5"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__Stream__coll__graph.png" as="pear.erebot.net/html/html/classPlop__Handler__Stream__coll__graph.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__Stream__inherit__graph.map" as="pear.erebot.net/html/html/classPlop__Handler__Stream__inherit__graph.map"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__Stream__inherit__graph.md5" as="pear.erebot.net/html/html/classPlop__Handler__Stream__inherit__graph.md5"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__Stream__inherit__graph.png" as="pear.erebot.net/html/html/classPlop__Handler__Stream__inherit__graph.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__SysLog-members.html" as="pear.erebot.net/html/html/classPlop__Handler__SysLog-members.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__SysLog.html" as="pear.erebot.net/html/html/classPlop__Handler__SysLog.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__SysLog__coll__graph.map" as="pear.erebot.net/html/html/classPlop__Handler__SysLog__coll__graph.map"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__SysLog__coll__graph.md5" as="pear.erebot.net/html/html/classPlop__Handler__SysLog__coll__graph.md5"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__SysLog__coll__graph.png" as="pear.erebot.net/html/html/classPlop__Handler__SysLog__coll__graph.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__SysLog__inherit__graph.map" as="pear.erebot.net/html/html/classPlop__Handler__SysLog__inherit__graph.map"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__SysLog__inherit__graph.md5" as="pear.erebot.net/html/html/classPlop__Handler__SysLog__inherit__graph.md5"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__SysLog__inherit__graph.png" as="pear.erebot.net/html/html/classPlop__Handler__SysLog__inherit__graph.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__TimedRotatingFile-members.html" as="pear.erebot.net/html/html/classPlop__Handler__TimedRotatingFile-members.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__TimedRotatingFile.html" as="pear.erebot.net/html/html/classPlop__Handler__TimedRotatingFile.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__TimedRotatingFile__coll__graph.map" as="pear.erebot.net/html/html/classPlop__Handler__TimedRotatingFile__coll__graph.map"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__TimedRotatingFile__coll__graph.md5" as="pear.erebot.net/html/html/classPlop__Handler__TimedRotatingFile__coll__graph.md5"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__TimedRotatingFile__coll__graph.png" as="pear.erebot.net/html/html/classPlop__Handler__TimedRotatingFile__coll__graph.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__TimedRotatingFile__inherit__graph.map" as="pear.erebot.net/html/html/classPlop__Handler__TimedRotatingFile__inherit__graph.map"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__TimedRotatingFile__inherit__graph.md5" as="pear.erebot.net/html/html/classPlop__Handler__TimedRotatingFile__inherit__graph.md5"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__TimedRotatingFile__inherit__graph.png" as="pear.erebot.net/html/html/classPlop__Handler__TimedRotatingFile__inherit__graph.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__WatchedFile-members.html" as="pear.erebot.net/html/html/classPlop__Handler__WatchedFile-members.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__WatchedFile.html" as="pear.erebot.net/html/html/classPlop__Handler__WatchedFile.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__WatchedFile__coll__graph.map" as="pear.erebot.net/html/html/classPlop__Handler__WatchedFile__coll__graph.map"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__WatchedFile__coll__graph.md5" as="pear.erebot.net/html/html/classPlop__Handler__WatchedFile__coll__graph.md5"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__WatchedFile__coll__graph.png" as="pear.erebot.net/html/html/classPlop__Handler__WatchedFile__coll__graph.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__WatchedFile__inherit__graph.map" as="pear.erebot.net/html/html/classPlop__Handler__WatchedFile__inherit__graph.map"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__WatchedFile__inherit__graph.md5" as="pear.erebot.net/html/html/classPlop__Handler__WatchedFile__inherit__graph.md5"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Handler__WatchedFile__inherit__graph.png" as="pear.erebot.net/html/html/classPlop__Handler__WatchedFile__inherit__graph.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Logger-members.html" as="pear.erebot.net/html/html/classPlop__Logger-members.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Logger.html" as="pear.erebot.net/html/html/classPlop__Logger.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Logger__coll__graph.map" as="pear.erebot.net/html/html/classPlop__Logger__coll__graph.map"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Logger__coll__graph.md5" as="pear.erebot.net/html/html/classPlop__Logger__coll__graph.md5"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Logger__coll__graph.png" as="pear.erebot.net/html/html/classPlop__Logger__coll__graph.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Logger__inherit__graph.map" as="pear.erebot.net/html/html/classPlop__Logger__inherit__graph.map"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Logger__inherit__graph.md5" as="pear.erebot.net/html/html/classPlop__Logger__inherit__graph.md5"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Logger__inherit__graph.png" as="pear.erebot.net/html/html/classPlop__Logger__inherit__graph.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Manager-members.html" as="pear.erebot.net/html/html/classPlop__Manager-members.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Manager.html" as="pear.erebot.net/html/html/classPlop__Manager.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__PlaceHolder-members.html" as="pear.erebot.net/html/html/classPlop__PlaceHolder-members.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__PlaceHolder.html" as="pear.erebot.net/html/html/classPlop__PlaceHolder.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Record-members.html" as="pear.erebot.net/html/html/classPlop__Record-members.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__Record.html" as="pear.erebot.net/html/html/classPlop__Record.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__RootLogger-members.html" as="pear.erebot.net/html/html/classPlop__RootLogger-members.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__RootLogger.html" as="pear.erebot.net/html/html/classPlop__RootLogger.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__RootLogger__coll__graph.map" as="pear.erebot.net/html/html/classPlop__RootLogger__coll__graph.map"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__RootLogger__coll__graph.md5" as="pear.erebot.net/html/html/classPlop__RootLogger__coll__graph.md5"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__RootLogger__coll__graph.png" as="pear.erebot.net/html/html/classPlop__RootLogger__coll__graph.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__RootLogger__inherit__graph.map" as="pear.erebot.net/html/html/classPlop__RootLogger__inherit__graph.map"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__RootLogger__inherit__graph.md5" as="pear.erebot.net/html/html/classPlop__RootLogger__inherit__graph.md5"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/classPlop__RootLogger__inherit__graph.png" as="pear.erebot.net/html/html/classPlop__RootLogger__inherit__graph.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/closed.png" as="pear.erebot.net/html/html/closed.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/Datagram_8php.html" as="pear.erebot.net/html/html/Datagram_8php.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/Datagram_8php_source.html" as="pear.erebot.net/html/html/Datagram_8php_source.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/dirs.html" as="pear.erebot.net/html/html/dirs.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/dir_2f1181bf8fe3aaf68c4bce96b978dc67.html" as="pear.erebot.net/html/html/dir_2f1181bf8fe3aaf68c4bce96b978dc67.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/dir_2f1181bf8fe3aaf68c4bce96b978dc67_dep.map" as="pear.erebot.net/html/html/dir_2f1181bf8fe3aaf68c4bce96b978dc67_dep.map"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/dir_2f1181bf8fe3aaf68c4bce96b978dc67_dep.md5" as="pear.erebot.net/html/html/dir_2f1181bf8fe3aaf68c4bce96b978dc67_dep.md5"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/dir_2f1181bf8fe3aaf68c4bce96b978dc67_dep.png" as="pear.erebot.net/html/html/dir_2f1181bf8fe3aaf68c4bce96b978dc67_dep.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/dir_6e0cd5abe8b7b1b091bdf764a396d741.html" as="pear.erebot.net/html/html/dir_6e0cd5abe8b7b1b091bdf764a396d741.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/dir_6e0cd5abe8b7b1b091bdf764a396d741_dep.map" as="pear.erebot.net/html/html/dir_6e0cd5abe8b7b1b091bdf764a396d741_dep.map"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/dir_6e0cd5abe8b7b1b091bdf764a396d741_dep.md5" as="pear.erebot.net/html/html/dir_6e0cd5abe8b7b1b091bdf764a396d741_dep.md5"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/dir_6e0cd5abe8b7b1b091bdf764a396d741_dep.png" as="pear.erebot.net/html/html/dir_6e0cd5abe8b7b1b091bdf764a396d741_dep.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/dir_74bf3daadee3f5140829e6be5f14e45d.html" as="pear.erebot.net/html/html/dir_74bf3daadee3f5140829e6be5f14e45d.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/dir_74bf3daadee3f5140829e6be5f14e45d_dep.map" as="pear.erebot.net/html/html/dir_74bf3daadee3f5140829e6be5f14e45d_dep.map"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/dir_74bf3daadee3f5140829e6be5f14e45d_dep.md5" as="pear.erebot.net/html/html/dir_74bf3daadee3f5140829e6be5f14e45d_dep.md5"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/dir_74bf3daadee3f5140829e6be5f14e45d_dep.png" as="pear.erebot.net/html/html/dir_74bf3daadee3f5140829e6be5f14e45d_dep.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/dir_7292273b9c4093a036f945a9588891eb.html" as="pear.erebot.net/html/html/dir_7292273b9c4093a036f945a9588891eb.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/dir_7292273b9c4093a036f945a9588891eb_dep.map" as="pear.erebot.net/html/html/dir_7292273b9c4093a036f945a9588891eb_dep.map"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/dir_7292273b9c4093a036f945a9588891eb_dep.md5" as="pear.erebot.net/html/html/dir_7292273b9c4093a036f945a9588891eb_dep.md5"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/dir_7292273b9c4093a036f945a9588891eb_dep.png" as="pear.erebot.net/html/html/dir_7292273b9c4093a036f945a9588891eb_dep.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/dir_c3b96502ded34ffad383143a2b8e3830.html" as="pear.erebot.net/html/html/dir_c3b96502ded34ffad383143a2b8e3830.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/dir_c3b96502ded34ffad383143a2b8e3830_dep.map" as="pear.erebot.net/html/html/dir_c3b96502ded34ffad383143a2b8e3830_dep.map"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/dir_c3b96502ded34ffad383143a2b8e3830_dep.md5" as="pear.erebot.net/html/html/dir_c3b96502ded34ffad383143a2b8e3830_dep.md5"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/dir_c3b96502ded34ffad383143a2b8e3830_dep.png" as="pear.erebot.net/html/html/dir_c3b96502ded34ffad383143a2b8e3830_dep.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/doxygen.css" as="pear.erebot.net/html/html/doxygen.css"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/doxygen.png" as="pear.erebot.net/html/html/doxygen.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/files.html" as="pear.erebot.net/html/html/files.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/File_8php.html" as="pear.erebot.net/html/html/File_8php.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/File_8php_source.html" as="pear.erebot.net/html/html/File_8php_source.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/Filterer_8php.html" as="pear.erebot.net/html/html/Filterer_8php.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/Filterer_8php_source.html" as="pear.erebot.net/html/html/Filterer_8php_source.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/Filter_8php.html" as="pear.erebot.net/html/html/Filter_8php.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/Filter_8php_source.html" as="pear.erebot.net/html/html/Filter_8php_source.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/Formatter_8php.html" as="pear.erebot.net/html/html/Formatter_8php.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/Formatter_8php_source.html" as="pear.erebot.net/html/html/Formatter_8php_source.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/ftv2blank.png" as="pear.erebot.net/html/html/ftv2blank.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/ftv2doc.png" as="pear.erebot.net/html/html/ftv2doc.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/ftv2folderclosed.png" as="pear.erebot.net/html/html/ftv2folderclosed.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/ftv2folderopen.png" as="pear.erebot.net/html/html/ftv2folderopen.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/ftv2lastnode.png" as="pear.erebot.net/html/html/ftv2lastnode.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/ftv2link.png" as="pear.erebot.net/html/html/ftv2link.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/ftv2mlastnode.png" as="pear.erebot.net/html/html/ftv2mlastnode.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/ftv2mnode.png" as="pear.erebot.net/html/html/ftv2mnode.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/ftv2node.png" as="pear.erebot.net/html/html/ftv2node.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/ftv2plastnode.png" as="pear.erebot.net/html/html/ftv2plastnode.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/ftv2pnode.png" as="pear.erebot.net/html/html/ftv2pnode.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/ftv2vertline.png" as="pear.erebot.net/html/html/ftv2vertline.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/functions.html" as="pear.erebot.net/html/html/functions.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/functions_func.html" as="pear.erebot.net/html/html/functions_func.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/functions_vars.html" as="pear.erebot.net/html/html/functions_vars.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/globals.html" as="pear.erebot.net/html/html/globals.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/globals_enum.html" as="pear.erebot.net/html/html/globals_enum.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/graph_legend.html" as="pear.erebot.net/html/html/graph_legend.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/graph_legend.md5" as="pear.erebot.net/html/html/graph_legend.md5"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/graph_legend.png" as="pear.erebot.net/html/html/graph_legend.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/Handler_8php.html" as="pear.erebot.net/html/html/Handler_8php.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/Handler_8php_source.html" as="pear.erebot.net/html/html/Handler_8php_source.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/hierarchy.html" as="pear.erebot.net/html/html/hierarchy.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/index.html" as="pear.erebot.net/html/html/index.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/inherits.html" as="pear.erebot.net/html/html/inherits.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/inherit__graph__0.map" as="pear.erebot.net/html/html/inherit__graph__0.map"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/inherit__graph__0.md5" as="pear.erebot.net/html/html/inherit__graph__0.md5"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/inherit__graph__0.png" as="pear.erebot.net/html/html/inherit__graph__0.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/inherit__graph__1.map" as="pear.erebot.net/html/html/inherit__graph__1.map"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/inherit__graph__1.md5" as="pear.erebot.net/html/html/inherit__graph__1.md5"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/inherit__graph__1.png" as="pear.erebot.net/html/html/inherit__graph__1.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/inherit__graph__2.map" as="pear.erebot.net/html/html/inherit__graph__2.map"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/inherit__graph__2.md5" as="pear.erebot.net/html/html/inherit__graph__2.md5"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/inherit__graph__2.png" as="pear.erebot.net/html/html/inherit__graph__2.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/inherit__graph__3.map" as="pear.erebot.net/html/html/inherit__graph__3.map"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/inherit__graph__3.md5" as="pear.erebot.net/html/html/inherit__graph__3.md5"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/inherit__graph__3.png" as="pear.erebot.net/html/html/inherit__graph__3.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/inherit__graph__4.map" as="pear.erebot.net/html/html/inherit__graph__4.map"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/inherit__graph__4.md5" as="pear.erebot.net/html/html/inherit__graph__4.md5"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/inherit__graph__4.png" as="pear.erebot.net/html/html/inherit__graph__4.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/inherit__graph__5.map" as="pear.erebot.net/html/html/inherit__graph__5.map"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/inherit__graph__5.md5" as="pear.erebot.net/html/html/inherit__graph__5.md5"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/inherit__graph__5.png" as="pear.erebot.net/html/html/inherit__graph__5.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/inherit__graph__6.map" as="pear.erebot.net/html/html/inherit__graph__6.map"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/inherit__graph__6.md5" as="pear.erebot.net/html/html/inherit__graph__6.md5"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/inherit__graph__6.png" as="pear.erebot.net/html/html/inherit__graph__6.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/inherit__graph__7.map" as="pear.erebot.net/html/html/inherit__graph__7.map"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/inherit__graph__7.md5" as="pear.erebot.net/html/html/inherit__graph__7.md5"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/inherit__graph__7.png" as="pear.erebot.net/html/html/inherit__graph__7.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/inherit__graph__8.map" as="pear.erebot.net/html/html/inherit__graph__8.map"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/inherit__graph__8.md5" as="pear.erebot.net/html/html/inherit__graph__8.md5"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/inherit__graph__8.png" as="pear.erebot.net/html/html/inherit__graph__8.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/INI_8php.html" as="pear.erebot.net/html/html/INI_8php.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/INI_8php_source.html" as="pear.erebot.net/html/html/INI_8php_source.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/Logger_8php.html" as="pear.erebot.net/html/html/Logger_8php.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/Logger_8php_source.html" as="pear.erebot.net/html/html/Logger_8php_source.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/main.html" as="pear.erebot.net/html/html/main.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/Manager_8php.html" as="pear.erebot.net/html/html/Manager_8php.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/Manager_8php_source.html" as="pear.erebot.net/html/html/Manager_8php_source.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/nav_f.png" as="pear.erebot.net/html/html/nav_f.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/nav_h.png" as="pear.erebot.net/html/html/nav_h.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/open.png" as="pear.erebot.net/html/html/open.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/PlaceHolder_8php.html" as="pear.erebot.net/html/html/PlaceHolder_8php.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/PlaceHolder_8php_source.html" as="pear.erebot.net/html/html/PlaceHolder_8php_source.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/Plop_8php.html" as="pear.erebot.net/html/html/Plop_8php.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/Plop_8php_source.html" as="pear.erebot.net/html/html/Plop_8php_source.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/Record_8php.html" as="pear.erebot.net/html/html/Record_8php.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/Record_8php_source.html" as="pear.erebot.net/html/html/Record_8php_source.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/RootLogger_8php.html" as="pear.erebot.net/html/html/RootLogger_8php.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/RootLogger_8php_source.html" as="pear.erebot.net/html/html/RootLogger_8php_source.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/RotatingFile_8php.html" as="pear.erebot.net/html/html/RotatingFile_8php.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/RotatingFile_8php_source.html" as="pear.erebot.net/html/html/RotatingFile_8php_source.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/Socket_8php.html" as="pear.erebot.net/html/html/Socket_8php.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/Socket_8php_source.html" as="pear.erebot.net/html/html/Socket_8php_source.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/Stream_8php.html" as="pear.erebot.net/html/html/Stream_8php.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/Stream_8php_source.html" as="pear.erebot.net/html/html/Stream_8php_source.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/SysLog_8php.html" as="pear.erebot.net/html/html/SysLog_8php.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/SysLog_8php_source.html" as="pear.erebot.net/html/html/SysLog_8php_source.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/tabs.css" as="pear.erebot.net/html/html/tabs.css"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/tab_a.png" as="pear.erebot.net/html/html/tab_a.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/tab_b.png" as="pear.erebot.net/html/html/tab_b.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/tab_h.png" as="pear.erebot.net/html/html/tab_h.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/tab_s.png" as="pear.erebot.net/html/html/tab_s.png"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/TimedRotatingFile_8php.html" as="pear.erebot.net/html/html/TimedRotatingFile_8php.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/TimedRotatingFile_8php_source.html" as="pear.erebot.net/html/html/TimedRotatingFile_8php_source.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/tree.html" as="pear.erebot.net/html/html/tree.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/WatchedFile_8php.html" as="pear.erebot.net/html/html/WatchedFile_8php.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/WatchedFile_8php_source.html" as="pear.erebot.net/html/html/WatchedFile_8php_source.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/XML_8php.html" as="pear.erebot.net/html/html/XML_8php.html"/>
+   <install name="doc/Plop/pear.erebot.net/html/html/XML_8php_source.html" as="pear.erebot.net/html/html/XML_8php_source.html"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/AbstractParser_8php.tex" as="pear.erebot.net/latex/latex/AbstractParser_8php.tex"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/annotated.tex" as="pear.erebot.net/latex/latex/annotated.tex"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/BaseRotating_8php.tex" as="pear.erebot.net/latex/latex/BaseRotating_8php.tex"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/BufferingFormatter_8php.tex" as="pear.erebot.net/latex/latex/BufferingFormatter_8php.tex"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop.tex" as="pear.erebot.net/latex/latex/classPlop.tex"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__BufferingFormatter.tex" as="pear.erebot.net/latex/latex/classPlop__BufferingFormatter.tex"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Config__AbstractParser.tex" as="pear.erebot.net/latex/latex/classPlop__Config__AbstractParser.tex"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Config__AbstractParser__inherit__graph.md5" as="pear.erebot.net/latex/latex/classPlop__Config__AbstractParser__inherit__graph.md5"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Config__AbstractParser__inherit__graph.pdf" as="pear.erebot.net/latex/latex/classPlop__Config__AbstractParser__inherit__graph.pdf"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Config__Format__INI.tex" as="pear.erebot.net/latex/latex/classPlop__Config__Format__INI.tex"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Config__Format__INI__coll__graph.md5" as="pear.erebot.net/latex/latex/classPlop__Config__Format__INI__coll__graph.md5"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Config__Format__INI__coll__graph.pdf" as="pear.erebot.net/latex/latex/classPlop__Config__Format__INI__coll__graph.pdf"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Config__Format__INI__inherit__graph.md5" as="pear.erebot.net/latex/latex/classPlop__Config__Format__INI__inherit__graph.md5"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Config__Format__INI__inherit__graph.pdf" as="pear.erebot.net/latex/latex/classPlop__Config__Format__INI__inherit__graph.pdf"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Config__Format__XML.tex" as="pear.erebot.net/latex/latex/classPlop__Config__Format__XML.tex"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Config__Format__XML__coll__graph.md5" as="pear.erebot.net/latex/latex/classPlop__Config__Format__XML__coll__graph.md5"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Config__Format__XML__coll__graph.pdf" as="pear.erebot.net/latex/latex/classPlop__Config__Format__XML__coll__graph.pdf"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Config__Format__XML__inherit__graph.md5" as="pear.erebot.net/latex/latex/classPlop__Config__Format__XML__inherit__graph.md5"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Config__Format__XML__inherit__graph.pdf" as="pear.erebot.net/latex/latex/classPlop__Config__Format__XML__inherit__graph.pdf"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Filter.tex" as="pear.erebot.net/latex/latex/classPlop__Filter.tex"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Filterer.tex" as="pear.erebot.net/latex/latex/classPlop__Filterer.tex"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Filterer__inherit__graph.md5" as="pear.erebot.net/latex/latex/classPlop__Filterer__inherit__graph.md5"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Filterer__inherit__graph.pdf" as="pear.erebot.net/latex/latex/classPlop__Filterer__inherit__graph.pdf"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Formatter.tex" as="pear.erebot.net/latex/latex/classPlop__Formatter.tex"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler.tex" as="pear.erebot.net/latex/latex/classPlop__Handler.tex"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__BaseRotating.tex" as="pear.erebot.net/latex/latex/classPlop__Handler__BaseRotating.tex"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__BaseRotating__coll__graph.md5" as="pear.erebot.net/latex/latex/classPlop__Handler__BaseRotating__coll__graph.md5"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__BaseRotating__coll__graph.pdf" as="pear.erebot.net/latex/latex/classPlop__Handler__BaseRotating__coll__graph.pdf"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__BaseRotating__inherit__graph.md5" as="pear.erebot.net/latex/latex/classPlop__Handler__BaseRotating__inherit__graph.md5"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__BaseRotating__inherit__graph.pdf" as="pear.erebot.net/latex/latex/classPlop__Handler__BaseRotating__inherit__graph.pdf"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__coll__graph.md5" as="pear.erebot.net/latex/latex/classPlop__Handler__coll__graph.md5"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__coll__graph.pdf" as="pear.erebot.net/latex/latex/classPlop__Handler__coll__graph.pdf"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__Datagram.tex" as="pear.erebot.net/latex/latex/classPlop__Handler__Datagram.tex"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__Datagram__coll__graph.md5" as="pear.erebot.net/latex/latex/classPlop__Handler__Datagram__coll__graph.md5"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__Datagram__coll__graph.pdf" as="pear.erebot.net/latex/latex/classPlop__Handler__Datagram__coll__graph.pdf"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__Datagram__inherit__graph.md5" as="pear.erebot.net/latex/latex/classPlop__Handler__Datagram__inherit__graph.md5"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__Datagram__inherit__graph.pdf" as="pear.erebot.net/latex/latex/classPlop__Handler__Datagram__inherit__graph.pdf"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__File.tex" as="pear.erebot.net/latex/latex/classPlop__Handler__File.tex"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__File__coll__graph.md5" as="pear.erebot.net/latex/latex/classPlop__Handler__File__coll__graph.md5"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__File__coll__graph.pdf" as="pear.erebot.net/latex/latex/classPlop__Handler__File__coll__graph.pdf"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__File__inherit__graph.md5" as="pear.erebot.net/latex/latex/classPlop__Handler__File__inherit__graph.md5"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__File__inherit__graph.pdf" as="pear.erebot.net/latex/latex/classPlop__Handler__File__inherit__graph.pdf"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__inherit__graph.md5" as="pear.erebot.net/latex/latex/classPlop__Handler__inherit__graph.md5"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__inherit__graph.pdf" as="pear.erebot.net/latex/latex/classPlop__Handler__inherit__graph.pdf"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__RotatingFile.tex" as="pear.erebot.net/latex/latex/classPlop__Handler__RotatingFile.tex"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__RotatingFile__coll__graph.md5" as="pear.erebot.net/latex/latex/classPlop__Handler__RotatingFile__coll__graph.md5"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__RotatingFile__coll__graph.pdf" as="pear.erebot.net/latex/latex/classPlop__Handler__RotatingFile__coll__graph.pdf"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__RotatingFile__inherit__graph.md5" as="pear.erebot.net/latex/latex/classPlop__Handler__RotatingFile__inherit__graph.md5"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__RotatingFile__inherit__graph.pdf" as="pear.erebot.net/latex/latex/classPlop__Handler__RotatingFile__inherit__graph.pdf"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__Socket.tex" as="pear.erebot.net/latex/latex/classPlop__Handler__Socket.tex"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__Socket__coll__graph.md5" as="pear.erebot.net/latex/latex/classPlop__Handler__Socket__coll__graph.md5"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__Socket__coll__graph.pdf" as="pear.erebot.net/latex/latex/classPlop__Handler__Socket__coll__graph.pdf"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__Socket__inherit__graph.md5" as="pear.erebot.net/latex/latex/classPlop__Handler__Socket__inherit__graph.md5"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__Socket__inherit__graph.pdf" as="pear.erebot.net/latex/latex/classPlop__Handler__Socket__inherit__graph.pdf"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__Stream.tex" as="pear.erebot.net/latex/latex/classPlop__Handler__Stream.tex"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__Stream__coll__graph.md5" as="pear.erebot.net/latex/latex/classPlop__Handler__Stream__coll__graph.md5"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__Stream__coll__graph.pdf" as="pear.erebot.net/latex/latex/classPlop__Handler__Stream__coll__graph.pdf"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__Stream__inherit__graph.md5" as="pear.erebot.net/latex/latex/classPlop__Handler__Stream__inherit__graph.md5"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__Stream__inherit__graph.pdf" as="pear.erebot.net/latex/latex/classPlop__Handler__Stream__inherit__graph.pdf"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__SysLog.tex" as="pear.erebot.net/latex/latex/classPlop__Handler__SysLog.tex"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__SysLog__coll__graph.md5" as="pear.erebot.net/latex/latex/classPlop__Handler__SysLog__coll__graph.md5"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__SysLog__coll__graph.pdf" as="pear.erebot.net/latex/latex/classPlop__Handler__SysLog__coll__graph.pdf"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__SysLog__inherit__graph.md5" as="pear.erebot.net/latex/latex/classPlop__Handler__SysLog__inherit__graph.md5"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__SysLog__inherit__graph.pdf" as="pear.erebot.net/latex/latex/classPlop__Handler__SysLog__inherit__graph.pdf"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__TimedRotatingFile.tex" as="pear.erebot.net/latex/latex/classPlop__Handler__TimedRotatingFile.tex"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__TimedRotatingFile__coll__graph.md5" as="pear.erebot.net/latex/latex/classPlop__Handler__TimedRotatingFile__coll__graph.md5"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__TimedRotatingFile__coll__graph.pdf" as="pear.erebot.net/latex/latex/classPlop__Handler__TimedRotatingFile__coll__graph.pdf"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__TimedRotatingFile__inherit__graph.md5" as="pear.erebot.net/latex/latex/classPlop__Handler__TimedRotatingFile__inherit__graph.md5"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__TimedRotatingFile__inherit__graph.pdf" as="pear.erebot.net/latex/latex/classPlop__Handler__TimedRotatingFile__inherit__graph.pdf"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__WatchedFile.tex" as="pear.erebot.net/latex/latex/classPlop__Handler__WatchedFile.tex"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__WatchedFile__coll__graph.md5" as="pear.erebot.net/latex/latex/classPlop__Handler__WatchedFile__coll__graph.md5"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__WatchedFile__coll__graph.pdf" as="pear.erebot.net/latex/latex/classPlop__Handler__WatchedFile__coll__graph.pdf"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__WatchedFile__inherit__graph.md5" as="pear.erebot.net/latex/latex/classPlop__Handler__WatchedFile__inherit__graph.md5"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Handler__WatchedFile__inherit__graph.pdf" as="pear.erebot.net/latex/latex/classPlop__Handler__WatchedFile__inherit__graph.pdf"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Logger.tex" as="pear.erebot.net/latex/latex/classPlop__Logger.tex"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Logger__coll__graph.md5" as="pear.erebot.net/latex/latex/classPlop__Logger__coll__graph.md5"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Logger__coll__graph.pdf" as="pear.erebot.net/latex/latex/classPlop__Logger__coll__graph.pdf"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Logger__inherit__graph.md5" as="pear.erebot.net/latex/latex/classPlop__Logger__inherit__graph.md5"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Logger__inherit__graph.pdf" as="pear.erebot.net/latex/latex/classPlop__Logger__inherit__graph.pdf"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Manager.tex" as="pear.erebot.net/latex/latex/classPlop__Manager.tex"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__PlaceHolder.tex" as="pear.erebot.net/latex/latex/classPlop__PlaceHolder.tex"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__Record.tex" as="pear.erebot.net/latex/latex/classPlop__Record.tex"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__RootLogger.tex" as="pear.erebot.net/latex/latex/classPlop__RootLogger.tex"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__RootLogger__coll__graph.md5" as="pear.erebot.net/latex/latex/classPlop__RootLogger__coll__graph.md5"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__RootLogger__coll__graph.pdf" as="pear.erebot.net/latex/latex/classPlop__RootLogger__coll__graph.pdf"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__RootLogger__inherit__graph.md5" as="pear.erebot.net/latex/latex/classPlop__RootLogger__inherit__graph.md5"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/classPlop__RootLogger__inherit__graph.pdf" as="pear.erebot.net/latex/latex/classPlop__RootLogger__inherit__graph.pdf"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/Datagram_8php.tex" as="pear.erebot.net/latex/latex/Datagram_8php.tex"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/dirs.tex" as="pear.erebot.net/latex/latex/dirs.tex"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/dir_2f1181bf8fe3aaf68c4bce96b978dc67.tex" as="pear.erebot.net/latex/latex/dir_2f1181bf8fe3aaf68c4bce96b978dc67.tex"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/dir_2f1181bf8fe3aaf68c4bce96b978dc67_dep.md5" as="pear.erebot.net/latex/latex/dir_2f1181bf8fe3aaf68c4bce96b978dc67_dep.md5"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/dir_2f1181bf8fe3aaf68c4bce96b978dc67_dep.pdf" as="pear.erebot.net/latex/latex/dir_2f1181bf8fe3aaf68c4bce96b978dc67_dep.pdf"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/dir_6e0cd5abe8b7b1b091bdf764a396d741.tex" as="pear.erebot.net/latex/latex/dir_6e0cd5abe8b7b1b091bdf764a396d741.tex"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/dir_6e0cd5abe8b7b1b091bdf764a396d741_dep.md5" as="pear.erebot.net/latex/latex/dir_6e0cd5abe8b7b1b091bdf764a396d741_dep.md5"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/dir_6e0cd5abe8b7b1b091bdf764a396d741_dep.pdf" as="pear.erebot.net/latex/latex/dir_6e0cd5abe8b7b1b091bdf764a396d741_dep.pdf"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/dir_74bf3daadee3f5140829e6be5f14e45d.tex" as="pear.erebot.net/latex/latex/dir_74bf3daadee3f5140829e6be5f14e45d.tex"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/dir_74bf3daadee3f5140829e6be5f14e45d_dep.md5" as="pear.erebot.net/latex/latex/dir_74bf3daadee3f5140829e6be5f14e45d_dep.md5"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/dir_74bf3daadee3f5140829e6be5f14e45d_dep.pdf" as="pear.erebot.net/latex/latex/dir_74bf3daadee3f5140829e6be5f14e45d_dep.pdf"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/dir_7292273b9c4093a036f945a9588891eb.tex" as="pear.erebot.net/latex/latex/dir_7292273b9c4093a036f945a9588891eb.tex"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/dir_7292273b9c4093a036f945a9588891eb_dep.md5" as="pear.erebot.net/latex/latex/dir_7292273b9c4093a036f945a9588891eb_dep.md5"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/dir_7292273b9c4093a036f945a9588891eb_dep.pdf" as="pear.erebot.net/latex/latex/dir_7292273b9c4093a036f945a9588891eb_dep.pdf"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/dir_c3b96502ded34ffad383143a2b8e3830.tex" as="pear.erebot.net/latex/latex/dir_c3b96502ded34ffad383143a2b8e3830.tex"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/dir_c3b96502ded34ffad383143a2b8e3830_dep.md5" as="pear.erebot.net/latex/latex/dir_c3b96502ded34ffad383143a2b8e3830_dep.md5"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/dir_c3b96502ded34ffad383143a2b8e3830_dep.pdf" as="pear.erebot.net/latex/latex/dir_c3b96502ded34ffad383143a2b8e3830_dep.pdf"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/doxygen.sty" as="pear.erebot.net/latex/latex/doxygen.sty"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/files.tex" as="pear.erebot.net/latex/latex/files.tex"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/File_8php.tex" as="pear.erebot.net/latex/latex/File_8php.tex"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/Filterer_8php.tex" as="pear.erebot.net/latex/latex/Filterer_8php.tex"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/Filter_8php.tex" as="pear.erebot.net/latex/latex/Filter_8php.tex"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/Formatter_8php.tex" as="pear.erebot.net/latex/latex/Formatter_8php.tex"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/Handler_8php.tex" as="pear.erebot.net/latex/latex/Handler_8php.tex"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/hierarchy.tex" as="pear.erebot.net/latex/latex/hierarchy.tex"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/INI_8php.tex" as="pear.erebot.net/latex/latex/INI_8php.tex"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/Logger_8php.tex" as="pear.erebot.net/latex/latex/Logger_8php.tex"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/Makefile" as="pear.erebot.net/latex/latex/Makefile"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/Manager_8php.tex" as="pear.erebot.net/latex/latex/Manager_8php.tex"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/PlaceHolder_8php.tex" as="pear.erebot.net/latex/latex/PlaceHolder_8php.tex"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/Plop_8php.tex" as="pear.erebot.net/latex/latex/Plop_8php.tex"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/Record_8php.tex" as="pear.erebot.net/latex/latex/Record_8php.tex"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/refman.aux" as="pear.erebot.net/latex/latex/refman.aux"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/refman.idx" as="pear.erebot.net/latex/latex/refman.idx"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/refman.log" as="pear.erebot.net/latex/latex/refman.log"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/refman.out" as="pear.erebot.net/latex/latex/refman.out"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/refman.pdf" as="pear.erebot.net/latex/latex/refman.pdf"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/refman.tex" as="pear.erebot.net/latex/latex/refman.tex"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/refman.toc" as="pear.erebot.net/latex/latex/refman.toc"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/RootLogger_8php.tex" as="pear.erebot.net/latex/latex/RootLogger_8php.tex"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/RotatingFile_8php.tex" as="pear.erebot.net/latex/latex/RotatingFile_8php.tex"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/Socket_8php.tex" as="pear.erebot.net/latex/latex/Socket_8php.tex"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/Stream_8php.tex" as="pear.erebot.net/latex/latex/Stream_8php.tex"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/SysLog_8php.tex" as="pear.erebot.net/latex/latex/SysLog_8php.tex"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/TimedRotatingFile_8php.tex" as="pear.erebot.net/latex/latex/TimedRotatingFile_8php.tex"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/WatchedFile_8php.tex" as="pear.erebot.net/latex/latex/WatchedFile_8php.tex"/>
+   <install name="doc/Plop/pear.erebot.net/latex/latex/XML_8php.tex" as="pear.erebot.net/latex/latex/XML_8php.tex"/>
+   <install name="php/Plop/BufferingFormatter.php" as="Plop/BufferingFormatter.php"/>
+   <install name="php/Plop/Config/AbstractParser.php" as="Plop/Config/AbstractParser.php"/>
+   <install name="php/Plop/Config/Format/INI.php" as="Plop/Config/Format/INI.php"/>
+   <install name="php/Plop/Config/Format/XML.php" as="Plop/Config/Format/XML.php"/>
+   <install name="php/Plop/Filter.php" as="Plop/Filter.php"/>
+   <install name="php/Plop/Filterer.php" as="Plop/Filterer.php"/>
+   <install name="php/Plop/Formatter.php" as="Plop/Formatter.php"/>
+   <install name="php/Plop/Handler.php" as="Plop/Handler.php"/>
+   <install name="php/Plop/Handler/BaseRotating.php" as="Plop/Handler/BaseRotating.php"/>
+   <install name="php/Plop/Handler/Datagram.php" as="Plop/Handler/Datagram.php"/>
+   <install name="php/Plop/Handler/File.php" as="Plop/Handler/File.php"/>
+   <install name="php/Plop/Handler/RotatingFile.php" as="Plop/Handler/RotatingFile.php"/>
+   <install name="php/Plop/Handler/Socket.php" as="Plop/Handler/Socket.php"/>
+   <install name="php/Plop/Handler/Stream.php" as="Plop/Handler/Stream.php"/>
+   <install name="php/Plop/Handler/SysLog.php" as="Plop/Handler/SysLog.php"/>
+   <install name="php/Plop/Handler/TimedRotatingFile.php" as="Plop/Handler/TimedRotatingFile.php"/>
+   <install name="php/Plop/Handler/WatchedFile.php" as="Plop/Handler/WatchedFile.php"/>
+   <install name="php/Plop/Logger.php" as="Plop/Logger.php"/>
+   <install name="php/Plop/Manager.php" as="Plop/Manager.php"/>
+   <install name="php/Plop/PlaceHolder.php" as="Plop/PlaceHolder.php"/>
+   <install name="php/Plop/Plop.php" as="Plop/Plop.php"/>
+   <install name="php/Plop/Record.php" as="Plop/Record.php"/>
+   <install name="php/Plop/RootLogger.php" as="Plop/RootLogger.php"/>
+   <install name="test/Plop/pear.erebot.net/BasicTest.php" as="pear.erebot.net/BasicTest.php"/>
+   <install name="test/Plop/pear.erebot.net/config.ini" as="pear.erebot.net/config.ini"/>
+   <install name="test/Plop/pear.erebot.net/config.xml" as="pear.erebot.net/config.xml"/>
+   <install name="test/Plop/pear.erebot.net/FileConfigTest.php" as="pear.erebot.net/FileConfigTest.php"/>
+   <install name="test/Plop/pear.erebot.net/FileHandlerTest.php" as="pear.erebot.net/FileHandlerTest.php"/>
+   <install name="test/Plop/pear.erebot.net/StreamHandlerTest.php" as="pear.erebot.net/StreamHandlerTest.php"/>
   </filelist>
  </phprelease>
 </package>

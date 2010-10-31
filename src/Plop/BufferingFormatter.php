@@ -1,6 +1,8 @@
 <?php
 
-class Plop_BufferingFormatter
+namespace PEAR2\Plop;
+
+class BufferingFormatter
 {
     static public $defaultFormatter = NULL;
     protected $_lineFmt;
@@ -38,6 +40,5 @@ class Plop_BufferingFormatter
     }
 }
 
-Plop_BufferingFormatter::$defaultFormatter =
-    new Plop_Formatter();
+BufferingFormatter::$defaultFormatter = new Formatter();
 

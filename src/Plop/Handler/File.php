@@ -1,7 +1,9 @@
 <?php
 
-class   Plop_Handler_File
-extends Plop_Handler_Stream
+namespace PEAR2\Plop\Handler;
+
+class   File
+extends Stream
 {
     public $baseFilename;
     public $mode;
@@ -12,7 +14,7 @@ extends Plop_Handler_Stream
         $this->mode         = $mode;
         $this->encoding     = $encoding;
         if ($delay) {
-            Plop_Handler::__construct();
+            Handler::__construct();
             $this->_stream = FALSE;
         }
         else

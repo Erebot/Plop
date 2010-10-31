@@ -1,7 +1,9 @@
 <?php
 
-class   Plop_RootLogger
-extends Plop_Logger
+namespace PEAR2\Plop;
+
+class   RootLogger
+extends Logger
 {
     public function __construct($level)
     {

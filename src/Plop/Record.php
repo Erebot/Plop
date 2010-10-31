@@ -1,6 +1,8 @@
 <?php
 
-class Plop_Record
+namespace PEAR2\Plop;
+
+class Record
 {
     public $dict;
 

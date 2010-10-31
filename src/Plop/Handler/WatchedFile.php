@@ -1,7 +1,10 @@
 <?php
 
-class   Plop_Handler_WatchedFile
-extends Plop_Handler_File
+namespace PEAR2\Plop\Handler;
+use \PEAR2\Plop\Record;
+
+class   WatchedFile
+extends File
 {
     protected $_dev;
     protected $_ino;
@@ -24,7 +27,7 @@ extends Plop_Handler_File
         }
     }
 
-    public function emit(Plop_Record &$record)
+    public function emit(Record &$record)
     {
         if (!file_exists($this->baseFilename)) {
             $stats = NULL;

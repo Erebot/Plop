@@ -61,7 +61,7 @@ and more user-friendly than Apache's log4php.
             exec($command, $output, $return);
 
             if ($return != 0)
-                throw new BuildException("Could not execute Doxygen: " . implode(" ", $output));
+                throw new BuildException("Could not execute xgettext: " . implode(" ", $output));
 
             foreach ($output as $line) {
                 $lowerLine = strtolower($line);
@@ -92,12 +92,21 @@ and more user-friendly than Apache's log4php.
 
     <target name="all" depends="" description=""/>
 
+
+    <!-- Release process -->
+    <target name="release" description="">
+        <exec command="pyrus/pyrus.phar make" passthru="true" checkreturn="true"/>
+        <exec command="pyrus/pyrus.phar package --tgz" passthru="true" checkreturn="true"/>
+        <exec command="pyrus/pyrus.phar package --phar" passthru="true" checkreturn="true"/>
+    </target>
+
+
     <!-- Documentation -->
     <target name="doc" description="" depends="doxygen"/>
 
     <target name="doxygen" description="">
-        <exec command="doxygen" dir="."/>
-        <exec command="make" dir="doc/latex"/>
+        <exec command="doxygen" dir="." passthru="true" checkreturn="true"/>
+        <exec command="make" dir="doc/latex" passthru="true"/>
     </target>
 
 
@@ -170,6 +179,7 @@ Generic_Sniffs_Files_LineEndingsSniff
     <target name="qa_test" description="" depends="qa_pre_coverage">
         <phpunit
             codecoverage="${force-coverage}"
+            bootstrap="tests/bootstrap.php"
             >
             <formatter type="plain" usefile="false"/>
             <batchtest><fileset refid="tests"/></batchtest>

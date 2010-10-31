@@ -1,14 +1,17 @@
 <?php
 
-class   Plop_Handler
-extends Plop_Filterer
+namespace PEAR2\Plop;
+use PEAR2\Plop\Plop;
+
+class   Handler
+extends Filterer
 {
     static public $defaultFormatter = NULL;
     public $level;
     public $formatter;
     public $lock;
 
-    public function __construct($level = PLOP_LEVEL_NOTSET)
+    public function __construct($level = Plop::NOTSET)
     {
         parent::__construct();
         $this->level        = $level;
@@ -38,7 +41,7 @@ extends Plop_Filterer
         $this->level = $level;
     }
 
-    public function format(Plop_Record &$record)
+    public function format(Record &$record)
     {
         if ($this->formatter)
             return $this->formatter->format($record);
@@ -46,13 +49,12 @@ extends Plop_Filterer
         return $formatter->format($record);
     }
 
-    public function emit(Plop_Record &$record)
+    public function emit(Record &$record)
     {
-        throw new Exception(
-            'Emit must be implemented by Plop_Handler subclasses');
+        throw new Exception('Emit must be implemented by subclasses');
     }
 
-    public function handle(Plop_Record &$record)
+    public function handle(Record &$record)
     {
         $rv = $this->format($record);
         if ($rv) {
@@ -69,7 +71,7 @@ extends Plop_Filterer
         return $rv;
     }
 
-    public function setFormatter(Plop_Formatter &$fmt)
+    public function setFormatter(Formatter &$fmt)
     {
         $this->formatter =& $fmt;
     }
@@ -83,11 +85,11 @@ extends Plop_Filterer
         /// @TODO
     }
 
-    public function handleError(Plop_Record &$record, Exception &$exception)
+    public function handleError(Record &$record, \Exception &$exception)
     {
         fprintf(STDERR, "%s", $exception);
     }
 }
 
-Plop_Handler::$defaultFormatter = new Plop_Formatter();
+Handler::$defaultFormatter = new Formatter();
 

@@ -1,6 +1,9 @@
 <?php
 
-abstract class Plop_Config_AbstractParser
+namespace PEAR2\Plop\Config;
+use \PEAR2\Plop\Plop;
+
+abstract class AbstractParser
 {
     protected $_logging;
 
@@ -14,13 +17,16 @@ abstract class Plop_Config_AbstractParser
 
     protected function createHandlerInstance($cls, &$args)
     {
-        if (!class_exists($cls) || !is_subclass_of($cls, 'Plop_Handler'))
-            throw new Exception(sprintf('No such class (%s)', $cls));
+        if (
+            !class_exists($cls) ||
+            !is_subclass_of($cls, '\\PEAR2\\Plop\\Handler')
+            )
+            throw new \Exception(sprintf('No such class (%s)', $cls));
 
         // call_user_func_array doesn't work with constructors.
         // We use the reflection API instead, which allows a ctor
         // to be called with a variable number of args.
-        $reflector = new ReflectionClass($cls);
+        $reflector = new \ReflectionClass($cls);
         return $reflector->newInstanceArgs($args);
     }
 

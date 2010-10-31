@@ -1,16 +1,20 @@
 <?php
 
-abstract class  Plop_Handler_BaseRotating
-extends         Plop_Handler_File
+namespace PEAR2\Plop\Handler;
+use \PEAR2\Plop\Handler,
+    \PEAR2\Plop\Record;
+
+abstract class  BaseRotating
+extends         Handler
 {
-    public function emit(Plop_Record &$record)
+    public function emit(Record &$record)
     {
         try {
             if ($this->shouldRollover($record))
                 $this->doRollover();
             parent::emit($record);
         }
-        catch (Exception $e) {
+        catch (\Exception $e) {
             $this->handleError($record, $e);
         }
     }

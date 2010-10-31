@@ -1,7 +1,10 @@
 <?php
 
-class   Plop_Logger
-extends Plop_Filterer
+namespace PEAR2\Plop;
+use PEAR2\Plop\Plop as Plop;
+
+class   Logger
+extends Filterer
 {
     static public $root      = NULL;
     static public $manager   = NULL;
@@ -13,7 +16,7 @@ extends Plop_Filterer
     public $handlers;
     public $disabled;
 
-    public function __construct($name, $level = PLOP_LEVEL_NOTSET)
+    public function __construct($name, $level = Plop::NOTSET)
     {
         parent::__construct();
         $this->name         = $name;
@@ -31,42 +34,42 @@ extends Plop_Filterer
 
     public function debug($msg, $args = array(), $exception = NULL)
     {
-        return $this->log(PLOP_LEVEL_DEBUG, $msg, $args, $exception);
+        return $this->log(Plop::DEBUG, $msg, $args, $exception);
     }
 
     public function info($msg, $args = array(), $exception = NULL)
     {
-        return $this->log(PLOP_LEVEL_INFO, $msg, $args, $exception);
+        return $this->log(Plop::INFO, $msg, $args, $exception);
     }
 
     public function warning($msg, $args = array(), $exception = NULL)
     {
-        return $this->log(PLOP_LEVEL_WARNING, $msg, $args, $exception);
+        return $this->log(Plop::WARNING, $msg, $args, $exception);
     }
 
     public function warn($msg, $args = array(), $exception = NULL)
     {
-        return $this->log(PLOP_LEVEL_WARNING, $msg, $args, $exception);
+        return $this->log(Plop::WARN, $msg, $args, $exception);
     }
 
     public function error($msg, $args = array(), $exception = NULL)
     {
-        return $this->log(PLOP_LEVEL_ERROR, $msg, $args, $exception);
+        return $this->log(Plop::ERROR, $msg, $args, $exception);
     }
 
     public function critical($msg, $args = array(), $exception = NULL)
     {
-        return $this->log(PLOP_LEVEL_CRITICAL, $msg, $args, $exception);
+        return $this->log(Plop::CRITICAL, $msg, $args, $exception);
     }
 
     public function fatal($msg, $args = array(), $exception = NULL)
     {
-        return $this->log(PLOP_LEVEL_CRITICAL, $msg, $args, $exception);
+        return $this->log(Plop::CRITICAL, $msg, $args, $exception);
     }
 
     public function exception($msg, $exception, $args = array())
     {
-        return $this->log(PLOP_LEVEL_ERROR, $msg, $args, $exception);
+        return $this->log(Plop::ERROR, $msg, $args, $exception);
     }
 
     public function log($level, $msg, $args = array(), $exception = NULL)
@@ -121,7 +124,7 @@ extends Plop_Filterer
         $extra      = NULL
     )
     {
-        $rv = new Plop_Record(
+        $rv = new Record(
             $name,
             $level,
             $fn,
@@ -138,7 +141,7 @@ extends Plop_Filterer
                     in_array($key, array('message', 'asctime')) ||
                     in_array($key, $rv->dict)
                 )
-                    throw new Exception(
+                    throw new \Exception(
                         'Attempt to override '.$k.' in record'
                     );
                 $rv->dict[$k] =& $v;
@@ -148,19 +151,19 @@ extends Plop_Filterer
         return $rv;
     }
 
-    public function handle(Plop_Record &$record)
+    public function handle(Record &$record)
     {
         if (!$this->disabled && $this->filter($record))
             $this->callHandlers($record);
     }
 
-    public function addHandler(Plop_Handler &$handler)
+    public function addHandler(Handler &$handler)
     {
         if (!in_array($handler, $this->handlers, TRUE))
             $this->handlers[] =& $handler;
     }
 
-    public function removeHandler(Plop_Handler &$handler)
+    public function removeHandler(Handler &$handler)
     {
         $key = array_search($handler, $this->handlers, TRUE);
         if ($key !== FALSE) {
@@ -170,7 +173,7 @@ extends Plop_Filterer
         }
     }
 
-    public function callHandlers(Plop_Record &$record)
+    public function callHandlers(Record &$record)
     {
         $found  =   0;
         for ($c = $this; $c; $c = $c->parent) {
@@ -198,7 +201,7 @@ extends Plop_Filterer
         for ($logger = $this; $logger; $logger = $logger->parent)
             if ($logger->level)
                 return $logger->level;
-        return PLOP_LEVEL_NOTSET;
+        return Plop\NOTSET;
     }
 
     public function isEnabledFor($level)
@@ -210,6 +213,6 @@ extends Plop_Filterer
     }
 }
 
-Plop_Logger::$root     = new Plop_RootLogger(PLOP_LEVEL_WARNING);
-Plop_Logger::$manager  = new Plop_Manager(Plop_Logger::$root);
+Logger::$root     = new RootLogger(Plop::WARNING);
+Logger::$manager  = new Manager(Logger::$root);
 

@@ -1,20 +1,21 @@
 <?php
 
 require_once('PHPUnit/Framework.php');
-require_once(dirname(__FILE__).'/../src/Plop/Plop.php');
+
+use PEAR2\Plop;
 
 class StreamHandlerTest
 extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        Plop_Logger::$root     = new Plop_RootLogger(PLOP_LEVEL_WARNING);
-        Plop_Logger::$manager  = new Plop_Manager(Plop_Logger::$root);
+        Plop\Logger::$root     = new Plop\RootLogger(Plop\Plop::WARNING);
+        Plop\Logger::$manager  = new Plop\Manager(Plop\Logger::$root);
         $this->tempfile = tmpfile();
-        $this->logging =& Plop::getInstance();
+        $this->logging =& Plop\Plop::getInstance();
         $this->logging->basicConfig(array(
             'stream'    => $this->tempfile,
-            'level'     => PLOP_LEVEL_DEBUG,
+            'level'     => Plop\Plop::DEBUG,
         ));
     }
 

@@ -1,7 +1,10 @@
 <?php
 
-class   Plop_Config_Format_INI
-extends Plop_Config_AbstractParser
+namespace PEAR2\Plop\Config\Format;
+use PEAR2\Plop\Config\AbstractParser;
+
+class   INI
+extends AbstractParser
 {
     protected function getConfigParserData($fname)
     {
@@ -33,7 +36,7 @@ extends Plop_Config_AbstractParser
                 $dfs = $opts['datefmt'];
             else
                 $dfs = NULL;
-            $c = 'Plop_Formatter';
+            $c = '\\PEAR2\\Plop\\Formatter';
             if (isset($opts['class']))
                 $c = $opts['class'];
             $formatters[$form] = new $c($fs, $dfs);;
