@@ -14,7 +14,7 @@ PLOP is a port of Python's logging module to PHP.
   <active>yes</active>
  </lead>
  <date>2010-10-31</date>
- <time>02:24:13</time>
+ <time>15:11:19</time>
  <version>
   <release>0.2.0</release>
   <api>0.2.0</api>
@@ -44,21 +44,18 @@ API release notes for Plop version 0.2.0
 
 This version of Plop breaks backward compatibility as it uses
 a PEAR2-oriented directory layout.
-You'll need to adapt
+You'll need to adapt your code as a result.
 
-An auto-loader was added so that you don't need to worry about
-where the classes are.
+You should use PEAR2's autoloader to use Plop.
 
-The classes have been renamed to (somewhat) follow PEAR's naming
-conventions. For example, the stream handler class is now called
-Plop_Handler_Stream.
+The classes have been renamed to follow PEAR's naming conventions.
+For example, the ols stream handler class is now called:
+\PEAR2\Plop\Handler\Stream (note the namespace used).
 Also, the classes for configuration parsers were also renamed
-(Plop_Config_Format_INI and Plop_Config_Format_XML).
-As a result, 
-
+(\PEAR2\Plop\Config\Format\INI and \PEAR2\Plop\Config\Format\XML).
+As a result, calls to fileConfig() must be updated.
 This affects configuration files a little as the class names need
-to be updated. Other than that, usage has not really changed, even
-though the main file was renamed to.
+to be updated.
 
 To sum it up, the snippets below show how Plop was used and how it
 must be used from now on.
@@ -78,21 +75,22 @@ Old usage:
 5.  Log whatever you want with eg. $logger-&gt;error('Ouch!'); 
 
 New usage:
-1.  Include &quot;Plop.php&quot; from Plop's sources.
-2.  Use $logging =&amp; Plop::getInstance(); to retrieve an instance
+1.  Include PEAR2's Autoloader or roll your own autoloader
+2.  Include this statement in your code:
+    use \PEAR2\Plop\Plop;
+3.  Use $logging =&amp; Plop::getInstance(); to retrieve an instance
     of the logging subsystem.
-3.  Configure logging, eg. with:
+4.  Configure logging, eg. with:
     $logging-&gt;fileConfig(
         $configPath,
         array(),
-        'Plop_Config_Format_XML'
+        '\\PEAR2\\Plop\\Config\\Format\\XML'
     );
-4.  Use $logger = $logging-&gt;getLogger(__FILE__); to retrieve
+    Note that the backslashes must be escaped.
+5.  Use $logger = $logging-&gt;getLogger(__FILE__); to retrieve
     a logger for the current file.
-5.  Log whatever you want with eg. $logger-&gt;error('Ouch!'); 
+6.  Log whatever you want with eg. $logger-&gt;error('Ouch!'); 
 
-So, as you can see, only the include statement and the 3rd argument
-to Plop::fileConfig() have been modified.
 </notes>
  <contents>
   <dir name="/">
@@ -100,62 +98,6 @@ to Plop::fileConfig() have been modified.
     <file role="data" name="config.rng"/>
    </dir>
    <dir name="doc" baseinstalldir="/">
-    <dir name="coverage">
-     <dir name="default">
-      <file role="doc" name="APlopConfig.html"/>
-      <file role="doc" name="package-frame.html"/>
-      <file role="doc" name="package-summary.html"/>
-      <file role="doc" name="Plop.html"/>
-      <file role="doc" name="PlopBaseRotatingHandler.html"/>
-      <file role="doc" name="PlopBufferingFormatter.html"/>
-      <file role="doc" name="PlopConfigINI.html"/>
-      <file role="doc" name="PlopConfigXML.html"/>
-      <file role="doc" name="PlopDatagramHandler.html"/>
-      <file role="doc" name="PlopFileHandler.html"/>
-      <file role="doc" name="PlopFilter.html"/>
-      <file role="doc" name="PlopFilterer.html"/>
-      <file role="doc" name="PlopFormatter.html"/>
-      <file role="doc" name="PlopHandler.html"/>
-      <file role="doc" name="PlopLogger.html"/>
-      <file role="doc" name="PlopManager.html"/>
-      <file role="doc" name="PlopPlaceHolder.html"/>
-      <file role="doc" name="PlopRecord.html"/>
-      <file role="doc" name="PlopRootLogger.html"/>
-      <file role="doc" name="PlopRotatingFileHandler.html"/>
-      <file role="doc" name="PlopSocketHandler.html"/>
-      <file role="doc" name="PlopStreamHandler.html"/>
-      <file role="doc" name="PlopSysLogHandler.html"/>
-      <file role="doc" name="PlopTimedRotatingFileHandler.html"/>
-      <file role="doc" name="PlopWatchedFileHandler.html"/>
-      <file role="doc" name="Plop_BufferingFormatter.html"/>
-      <file role="doc" name="Plop_Config_AbstractParser.html"/>
-      <file role="doc" name="Plop_Config_Format_INI.html"/>
-      <file role="doc" name="Plop_Config_Format_XML.html"/>
-      <file role="doc" name="Plop_Filter.html"/>
-      <file role="doc" name="Plop_Filterer.html"/>
-      <file role="doc" name="Plop_Formatter.html"/>
-      <file role="doc" name="Plop_Handler.html"/>
-      <file role="doc" name="Plop_Handler_BaseRotating.html"/>
-      <file role="doc" name="Plop_Handler_Datagram.html"/>
-      <file role="doc" name="Plop_Handler_File.html"/>
-      <file role="doc" name="Plop_Handler_RotatingFile.html"/>
-      <file role="doc" name="Plop_Handler_Socket.html"/>
-      <file role="doc" name="Plop_Handler_Stream.html"/>
-      <file role="doc" name="Plop_Handler_SysLog.html"/>
-      <file role="doc" name="Plop_Handler_TimedRotatingFile.html"/>
-      <file role="doc" name="Plop_Handler_WatchedFile.html"/>
-      <file role="doc" name="Plop_Logger.html"/>
-      <file role="doc" name="Plop_Manager.html"/>
-      <file role="doc" name="Plop_PlaceHolder.html"/>
-      <file role="doc" name="Plop_Record.html"/>
-      <file role="doc" name="Plop_RootLogger.html"/>
-     </dir>
-     <file role="doc" name="allclasses-frame.html"/>
-     <file role="doc" name="index.html"/>
-     <file role="doc" name="overview-frame.html"/>
-     <file role="doc" name="overview-summary.html"/>
-     <file role="doc" name="stylesheet.css"/>
-    </dir>
     <dir name="html">
      <file role="doc" name="AbstractParser_8php.html"/>
      <file role="doc" name="AbstractParser_8php_source.html"/>
@@ -166,142 +108,142 @@ to Plop::fileConfig() have been modified.
      <file role="doc" name="BufferingFormatter_8php.html"/>
      <file role="doc" name="BufferingFormatter_8php_source.html"/>
      <file role="doc" name="classes.html"/>
-     <file role="doc" name="classPlop-members.html"/>
-     <file role="doc" name="classPlop.html"/>
-     <file role="doc" name="classPlop__BufferingFormatter-members.html"/>
-     <file role="doc" name="classPlop__BufferingFormatter.html"/>
-     <file role="doc" name="classPlop__Config__AbstractParser-members.html"/>
-     <file role="doc" name="classPlop__Config__AbstractParser.html"/>
-     <file role="doc" name="classPlop__Config__AbstractParser__inherit__graph.map"/>
-     <file role="doc" name="classPlop__Config__AbstractParser__inherit__graph.md5"/>
-     <file role="doc" name="classPlop__Config__AbstractParser__inherit__graph.png"/>
-     <file role="doc" name="classPlop__Config__Format__INI-members.html"/>
-     <file role="doc" name="classPlop__Config__Format__INI.html"/>
-     <file role="doc" name="classPlop__Config__Format__INI__coll__graph.map"/>
-     <file role="doc" name="classPlop__Config__Format__INI__coll__graph.md5"/>
-     <file role="doc" name="classPlop__Config__Format__INI__coll__graph.png"/>
-     <file role="doc" name="classPlop__Config__Format__INI__inherit__graph.map"/>
-     <file role="doc" name="classPlop__Config__Format__INI__inherit__graph.md5"/>
-     <file role="doc" name="classPlop__Config__Format__INI__inherit__graph.png"/>
-     <file role="doc" name="classPlop__Config__Format__XML-members.html"/>
-     <file role="doc" name="classPlop__Config__Format__XML.html"/>
-     <file role="doc" name="classPlop__Config__Format__XML__coll__graph.map"/>
-     <file role="doc" name="classPlop__Config__Format__XML__coll__graph.md5"/>
-     <file role="doc" name="classPlop__Config__Format__XML__coll__graph.png"/>
-     <file role="doc" name="classPlop__Config__Format__XML__inherit__graph.map"/>
-     <file role="doc" name="classPlop__Config__Format__XML__inherit__graph.md5"/>
-     <file role="doc" name="classPlop__Config__Format__XML__inherit__graph.png"/>
-     <file role="doc" name="classPlop__Filter-members.html"/>
-     <file role="doc" name="classPlop__Filter.html"/>
-     <file role="doc" name="classPlop__Filterer-members.html"/>
-     <file role="doc" name="classPlop__Filterer.html"/>
-     <file role="doc" name="classPlop__Filterer__inherit__graph.map"/>
-     <file role="doc" name="classPlop__Filterer__inherit__graph.md5"/>
-     <file role="doc" name="classPlop__Filterer__inherit__graph.png"/>
-     <file role="doc" name="classPlop__Formatter-members.html"/>
-     <file role="doc" name="classPlop__Formatter.html"/>
-     <file role="doc" name="classPlop__Handler-members.html"/>
-     <file role="doc" name="classPlop__Handler.html"/>
-     <file role="doc" name="classPlop__Handler__BaseRotating-members.html"/>
-     <file role="doc" name="classPlop__Handler__BaseRotating.html"/>
-     <file role="doc" name="classPlop__Handler__BaseRotating__coll__graph.map"/>
-     <file role="doc" name="classPlop__Handler__BaseRotating__coll__graph.md5"/>
-     <file role="doc" name="classPlop__Handler__BaseRotating__coll__graph.png"/>
-     <file role="doc" name="classPlop__Handler__BaseRotating__inherit__graph.map"/>
-     <file role="doc" name="classPlop__Handler__BaseRotating__inherit__graph.md5"/>
-     <file role="doc" name="classPlop__Handler__BaseRotating__inherit__graph.png"/>
-     <file role="doc" name="classPlop__Handler__coll__graph.map"/>
-     <file role="doc" name="classPlop__Handler__coll__graph.md5"/>
-     <file role="doc" name="classPlop__Handler__coll__graph.png"/>
-     <file role="doc" name="classPlop__Handler__Datagram-members.html"/>
-     <file role="doc" name="classPlop__Handler__Datagram.html"/>
-     <file role="doc" name="classPlop__Handler__Datagram__coll__graph.map"/>
-     <file role="doc" name="classPlop__Handler__Datagram__coll__graph.md5"/>
-     <file role="doc" name="classPlop__Handler__Datagram__coll__graph.png"/>
-     <file role="doc" name="classPlop__Handler__Datagram__inherit__graph.map"/>
-     <file role="doc" name="classPlop__Handler__Datagram__inherit__graph.md5"/>
-     <file role="doc" name="classPlop__Handler__Datagram__inherit__graph.png"/>
-     <file role="doc" name="classPlop__Handler__File-members.html"/>
-     <file role="doc" name="classPlop__Handler__File.html"/>
-     <file role="doc" name="classPlop__Handler__File__coll__graph.map"/>
-     <file role="doc" name="classPlop__Handler__File__coll__graph.md5"/>
-     <file role="doc" name="classPlop__Handler__File__coll__graph.png"/>
-     <file role="doc" name="classPlop__Handler__File__inherit__graph.map"/>
-     <file role="doc" name="classPlop__Handler__File__inherit__graph.md5"/>
-     <file role="doc" name="classPlop__Handler__File__inherit__graph.png"/>
-     <file role="doc" name="classPlop__Handler__inherit__graph.map"/>
-     <file role="doc" name="classPlop__Handler__inherit__graph.md5"/>
-     <file role="doc" name="classPlop__Handler__inherit__graph.png"/>
-     <file role="doc" name="classPlop__Handler__RotatingFile-members.html"/>
-     <file role="doc" name="classPlop__Handler__RotatingFile.html"/>
-     <file role="doc" name="classPlop__Handler__RotatingFile__coll__graph.map"/>
-     <file role="doc" name="classPlop__Handler__RotatingFile__coll__graph.md5"/>
-     <file role="doc" name="classPlop__Handler__RotatingFile__coll__graph.png"/>
-     <file role="doc" name="classPlop__Handler__RotatingFile__inherit__graph.map"/>
-     <file role="doc" name="classPlop__Handler__RotatingFile__inherit__graph.md5"/>
-     <file role="doc" name="classPlop__Handler__RotatingFile__inherit__graph.png"/>
-     <file role="doc" name="classPlop__Handler__Socket-members.html"/>
-     <file role="doc" name="classPlop__Handler__Socket.html"/>
-     <file role="doc" name="classPlop__Handler__Socket__coll__graph.map"/>
-     <file role="doc" name="classPlop__Handler__Socket__coll__graph.md5"/>
-     <file role="doc" name="classPlop__Handler__Socket__coll__graph.png"/>
-     <file role="doc" name="classPlop__Handler__Socket__inherit__graph.map"/>
-     <file role="doc" name="classPlop__Handler__Socket__inherit__graph.md5"/>
-     <file role="doc" name="classPlop__Handler__Socket__inherit__graph.png"/>
-     <file role="doc" name="classPlop__Handler__Stream-members.html"/>
-     <file role="doc" name="classPlop__Handler__Stream.html"/>
-     <file role="doc" name="classPlop__Handler__Stream__coll__graph.map"/>
-     <file role="doc" name="classPlop__Handler__Stream__coll__graph.md5"/>
-     <file role="doc" name="classPlop__Handler__Stream__coll__graph.png"/>
-     <file role="doc" name="classPlop__Handler__Stream__inherit__graph.map"/>
-     <file role="doc" name="classPlop__Handler__Stream__inherit__graph.md5"/>
-     <file role="doc" name="classPlop__Handler__Stream__inherit__graph.png"/>
-     <file role="doc" name="classPlop__Handler__SysLog-members.html"/>
-     <file role="doc" name="classPlop__Handler__SysLog.html"/>
-     <file role="doc" name="classPlop__Handler__SysLog__coll__graph.map"/>
-     <file role="doc" name="classPlop__Handler__SysLog__coll__graph.md5"/>
-     <file role="doc" name="classPlop__Handler__SysLog__coll__graph.png"/>
-     <file role="doc" name="classPlop__Handler__SysLog__inherit__graph.map"/>
-     <file role="doc" name="classPlop__Handler__SysLog__inherit__graph.md5"/>
-     <file role="doc" name="classPlop__Handler__SysLog__inherit__graph.png"/>
-     <file role="doc" name="classPlop__Handler__TimedRotatingFile-members.html"/>
-     <file role="doc" name="classPlop__Handler__TimedRotatingFile.html"/>
-     <file role="doc" name="classPlop__Handler__TimedRotatingFile__coll__graph.map"/>
-     <file role="doc" name="classPlop__Handler__TimedRotatingFile__coll__graph.md5"/>
-     <file role="doc" name="classPlop__Handler__TimedRotatingFile__coll__graph.png"/>
-     <file role="doc" name="classPlop__Handler__TimedRotatingFile__inherit__graph.map"/>
-     <file role="doc" name="classPlop__Handler__TimedRotatingFile__inherit__graph.md5"/>
-     <file role="doc" name="classPlop__Handler__TimedRotatingFile__inherit__graph.png"/>
-     <file role="doc" name="classPlop__Handler__WatchedFile-members.html"/>
-     <file role="doc" name="classPlop__Handler__WatchedFile.html"/>
-     <file role="doc" name="classPlop__Handler__WatchedFile__coll__graph.map"/>
-     <file role="doc" name="classPlop__Handler__WatchedFile__coll__graph.md5"/>
-     <file role="doc" name="classPlop__Handler__WatchedFile__coll__graph.png"/>
-     <file role="doc" name="classPlop__Handler__WatchedFile__inherit__graph.map"/>
-     <file role="doc" name="classPlop__Handler__WatchedFile__inherit__graph.md5"/>
-     <file role="doc" name="classPlop__Handler__WatchedFile__inherit__graph.png"/>
-     <file role="doc" name="classPlop__Logger-members.html"/>
-     <file role="doc" name="classPlop__Logger.html"/>
-     <file role="doc" name="classPlop__Logger__coll__graph.map"/>
-     <file role="doc" name="classPlop__Logger__coll__graph.md5"/>
-     <file role="doc" name="classPlop__Logger__coll__graph.png"/>
-     <file role="doc" name="classPlop__Logger__inherit__graph.map"/>
-     <file role="doc" name="classPlop__Logger__inherit__graph.md5"/>
-     <file role="doc" name="classPlop__Logger__inherit__graph.png"/>
-     <file role="doc" name="classPlop__Manager-members.html"/>
-     <file role="doc" name="classPlop__Manager.html"/>
-     <file role="doc" name="classPlop__PlaceHolder-members.html"/>
-     <file role="doc" name="classPlop__PlaceHolder.html"/>
-     <file role="doc" name="classPlop__Record-members.html"/>
-     <file role="doc" name="classPlop__Record.html"/>
-     <file role="doc" name="classPlop__RootLogger-members.html"/>
-     <file role="doc" name="classPlop__RootLogger.html"/>
-     <file role="doc" name="classPlop__RootLogger__coll__graph.map"/>
-     <file role="doc" name="classPlop__RootLogger__coll__graph.md5"/>
-     <file role="doc" name="classPlop__RootLogger__coll__graph.png"/>
-     <file role="doc" name="classPlop__RootLogger__inherit__graph.map"/>
-     <file role="doc" name="classPlop__RootLogger__inherit__graph.md5"/>
-     <file role="doc" name="classPlop__RootLogger__inherit__graph.png"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1BufferingFormatter-members.html"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1BufferingFormatter.html"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Config_1_1AbstractParser-members.html"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Config_1_1AbstractParser.html"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Config_1_1AbstractParser__inherit__graph.map"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Config_1_1AbstractParser__inherit__graph.md5"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Config_1_1AbstractParser__inherit__graph.png"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Config_1_1Format_1_1INI-members.html"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Config_1_1Format_1_1INI.html"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Config_1_1Format_1_1INI__coll__graph.map"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Config_1_1Format_1_1INI__coll__graph.md5"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Config_1_1Format_1_1INI__coll__graph.png"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Config_1_1Format_1_1INI__inherit__graph.map"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Config_1_1Format_1_1INI__inherit__graph.md5"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Config_1_1Format_1_1INI__inherit__graph.png"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Config_1_1Format_1_1XML-members.html"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Config_1_1Format_1_1XML.html"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Config_1_1Format_1_1XML__coll__graph.map"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Config_1_1Format_1_1XML__coll__graph.md5"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Config_1_1Format_1_1XML__coll__graph.png"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Config_1_1Format_1_1XML__inherit__graph.map"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Config_1_1Format_1_1XML__inherit__graph.md5"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Config_1_1Format_1_1XML__inherit__graph.png"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Filter-members.html"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Filter.html"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Filterer-members.html"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Filterer.html"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Filterer__inherit__graph.map"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Filterer__inherit__graph.md5"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Filterer__inherit__graph.png"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Formatter-members.html"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Formatter.html"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler-members.html"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler.html"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1BaseRotating-members.html"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1BaseRotating.html"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1BaseRotating__coll__graph.map"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1BaseRotating__coll__graph.md5"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1BaseRotating__coll__graph.png"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1BaseRotating__inherit__graph.map"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1BaseRotating__inherit__graph.md5"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1BaseRotating__inherit__graph.png"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1Datagram-members.html"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1Datagram.html"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1Datagram__coll__graph.map"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1Datagram__coll__graph.md5"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1Datagram__coll__graph.png"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1Datagram__inherit__graph.map"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1Datagram__inherit__graph.md5"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1Datagram__inherit__graph.png"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1File-members.html"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1File.html"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1File__coll__graph.map"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1File__coll__graph.md5"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1File__coll__graph.png"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1File__inherit__graph.map"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1File__inherit__graph.md5"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1File__inherit__graph.png"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1RotatingFile-members.html"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1RotatingFile.html"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1RotatingFile__coll__graph.map"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1RotatingFile__coll__graph.md5"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1RotatingFile__coll__graph.png"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1RotatingFile__inherit__graph.map"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1RotatingFile__inherit__graph.md5"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1RotatingFile__inherit__graph.png"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1Socket-members.html"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1Socket.html"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1Socket__coll__graph.map"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1Socket__coll__graph.md5"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1Socket__coll__graph.png"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1Socket__inherit__graph.map"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1Socket__inherit__graph.md5"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1Socket__inherit__graph.png"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1Stream-members.html"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1Stream.html"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1Stream__coll__graph.map"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1Stream__coll__graph.md5"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1Stream__coll__graph.png"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1Stream__inherit__graph.map"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1Stream__inherit__graph.md5"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1Stream__inherit__graph.png"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1SysLog-members.html"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1SysLog.html"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1SysLog__coll__graph.map"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1SysLog__coll__graph.md5"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1SysLog__coll__graph.png"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1SysLog__inherit__graph.map"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1SysLog__inherit__graph.md5"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1SysLog__inherit__graph.png"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1TimedRotatingFile-members.html"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1TimedRotatingFile.html"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1TimedRotatingFile__coll__graph.map"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1TimedRotatingFile__coll__graph.md5"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1TimedRotatingFile__coll__graph.png"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1TimedRotatingFile__inherit__graph.map"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1TimedRotatingFile__inherit__graph.md5"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1TimedRotatingFile__inherit__graph.png"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1WatchedFile-members.html"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1WatchedFile.html"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1WatchedFile__coll__graph.map"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1WatchedFile__coll__graph.md5"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1WatchedFile__coll__graph.png"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1WatchedFile__inherit__graph.map"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1WatchedFile__inherit__graph.md5"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler_1_1WatchedFile__inherit__graph.png"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler__coll__graph.map"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler__coll__graph.md5"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler__coll__graph.png"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler__inherit__graph.map"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler__inherit__graph.md5"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Handler__inherit__graph.png"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Logger-members.html"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Logger.html"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Logger__coll__graph.map"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Logger__coll__graph.md5"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Logger__coll__graph.png"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Logger__inherit__graph.map"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Logger__inherit__graph.md5"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Logger__inherit__graph.png"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Manager-members.html"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Manager.html"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1PlaceHolder-members.html"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1PlaceHolder.html"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Plop-members.html"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Plop.html"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Record-members.html"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1Record.html"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1RootLogger-members.html"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1RootLogger.html"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1RootLogger__coll__graph.map"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1RootLogger__coll__graph.md5"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1RootLogger__coll__graph.png"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1RootLogger__inherit__graph.map"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1RootLogger__inherit__graph.md5"/>
+     <file role="doc" name="classPEAR2_1_1Plop_1_1RootLogger__inherit__graph.png"/>
      <file role="doc" name="closed.png"/>
      <file role="doc" name="Datagram_8php.html"/>
      <file role="doc" name="Datagram_8php_source.html"/>
@@ -328,6 +270,8 @@ to Plop::fileConfig() have been modified.
      <file role="doc" name="dir_c3b96502ded34ffad383143a2b8e3830_dep.png"/>
      <file role="doc" name="doxygen.css"/>
      <file role="doc" name="doxygen.png"/>
+     <file role="doc" name="Exception_8php.html"/>
+     <file role="doc" name="Exception_8php_source.html"/>
      <file role="doc" name="files.html"/>
      <file role="doc" name="File_8php.html"/>
      <file role="doc" name="File_8php_source.html"/>
@@ -352,8 +296,6 @@ to Plop::fileConfig() have been modified.
      <file role="doc" name="functions.html"/>
      <file role="doc" name="functions_func.html"/>
      <file role="doc" name="functions_vars.html"/>
-     <file role="doc" name="globals.html"/>
-     <file role="doc" name="globals_enum.html"/>
      <file role="doc" name="graph_legend.html"/>
      <file role="doc" name="graph_legend.md5"/>
      <file role="doc" name="graph_legend.png"/>
@@ -389,13 +331,23 @@ to Plop::fileConfig() have been modified.
      <file role="doc" name="inherit__graph__8.map"/>
      <file role="doc" name="inherit__graph__8.md5"/>
      <file role="doc" name="inherit__graph__8.png"/>
+     <file role="doc" name="inherit__graph__9.map"/>
+     <file role="doc" name="inherit__graph__9.md5"/>
+     <file role="doc" name="inherit__graph__9.png"/>
      <file role="doc" name="INI_8php.html"/>
      <file role="doc" name="INI_8php_source.html"/>
+     <file role="doc" name="interfacePEAR2_1_1Plop_1_1Exception.html"/>
      <file role="doc" name="Logger_8php.html"/>
      <file role="doc" name="Logger_8php_source.html"/>
      <file role="doc" name="main.html"/>
      <file role="doc" name="Manager_8php.html"/>
      <file role="doc" name="Manager_8php_source.html"/>
+     <file role="doc" name="namespacePEAR2.html"/>
+     <file role="doc" name="namespacePEAR2_1_1Plop.html"/>
+     <file role="doc" name="namespacePEAR2_1_1Plop_1_1Config.html"/>
+     <file role="doc" name="namespacePEAR2_1_1Plop_1_1Config_1_1Format.html"/>
+     <file role="doc" name="namespacePEAR2_1_1Plop_1_1Handler.html"/>
+     <file role="doc" name="namespaces.html"/>
      <file role="doc" name="nav_f.png"/>
      <file role="doc" name="nav_h.png"/>
      <file role="doc" name="open.png"/>
@@ -428,142 +380,6 @@ to Plop::fileConfig() have been modified.
      <file role="doc" name="XML_8php.html"/>
      <file role="doc" name="XML_8php_source.html"/>
     </dir>
-    <dir name="latex">
-     <file role="doc" name="AbstractParser_8php.tex"/>
-     <file role="doc" name="annotated.tex"/>
-     <file role="doc" name="BaseRotating_8php.tex"/>
-     <file role="doc" name="BufferingFormatter_8php.tex"/>
-     <file role="doc" name="classPlop.tex"/>
-     <file role="doc" name="classPlop__BufferingFormatter.tex"/>
-     <file role="doc" name="classPlop__Config__AbstractParser.tex"/>
-     <file role="doc" name="classPlop__Config__AbstractParser__inherit__graph.md5"/>
-     <file role="doc" name="classPlop__Config__AbstractParser__inherit__graph.pdf"/>
-     <file role="doc" name="classPlop__Config__Format__INI.tex"/>
-     <file role="doc" name="classPlop__Config__Format__INI__coll__graph.md5"/>
-     <file role="doc" name="classPlop__Config__Format__INI__coll__graph.pdf"/>
-     <file role="doc" name="classPlop__Config__Format__INI__inherit__graph.md5"/>
-     <file role="doc" name="classPlop__Config__Format__INI__inherit__graph.pdf"/>
-     <file role="doc" name="classPlop__Config__Format__XML.tex"/>
-     <file role="doc" name="classPlop__Config__Format__XML__coll__graph.md5"/>
-     <file role="doc" name="classPlop__Config__Format__XML__coll__graph.pdf"/>
-     <file role="doc" name="classPlop__Config__Format__XML__inherit__graph.md5"/>
-     <file role="doc" name="classPlop__Config__Format__XML__inherit__graph.pdf"/>
-     <file role="doc" name="classPlop__Filter.tex"/>
-     <file role="doc" name="classPlop__Filterer.tex"/>
-     <file role="doc" name="classPlop__Filterer__inherit__graph.md5"/>
-     <file role="doc" name="classPlop__Filterer__inherit__graph.pdf"/>
-     <file role="doc" name="classPlop__Formatter.tex"/>
-     <file role="doc" name="classPlop__Handler.tex"/>
-     <file role="doc" name="classPlop__Handler__BaseRotating.tex"/>
-     <file role="doc" name="classPlop__Handler__BaseRotating__coll__graph.md5"/>
-     <file role="doc" name="classPlop__Handler__BaseRotating__coll__graph.pdf"/>
-     <file role="doc" name="classPlop__Handler__BaseRotating__inherit__graph.md5"/>
-     <file role="doc" name="classPlop__Handler__BaseRotating__inherit__graph.pdf"/>
-     <file role="doc" name="classPlop__Handler__coll__graph.md5"/>
-     <file role="doc" name="classPlop__Handler__coll__graph.pdf"/>
-     <file role="doc" name="classPlop__Handler__Datagram.tex"/>
-     <file role="doc" name="classPlop__Handler__Datagram__coll__graph.md5"/>
-     <file role="doc" name="classPlop__Handler__Datagram__coll__graph.pdf"/>
-     <file role="doc" name="classPlop__Handler__Datagram__inherit__graph.md5"/>
-     <file role="doc" name="classPlop__Handler__Datagram__inherit__graph.pdf"/>
-     <file role="doc" name="classPlop__Handler__File.tex"/>
-     <file role="doc" name="classPlop__Handler__File__coll__graph.md5"/>
-     <file role="doc" name="classPlop__Handler__File__coll__graph.pdf"/>
-     <file role="doc" name="classPlop__Handler__File__inherit__graph.md5"/>
-     <file role="doc" name="classPlop__Handler__File__inherit__graph.pdf"/>
-     <file role="doc" name="classPlop__Handler__inherit__graph.md5"/>
-     <file role="doc" name="classPlop__Handler__inherit__graph.pdf"/>
-     <file role="doc" name="classPlop__Handler__RotatingFile.tex"/>
-     <file role="doc" name="classPlop__Handler__RotatingFile__coll__graph.md5"/>
-     <file role="doc" name="classPlop__Handler__RotatingFile__coll__graph.pdf"/>
-     <file role="doc" name="classPlop__Handler__RotatingFile__inherit__graph.md5"/>
-     <file role="doc" name="classPlop__Handler__RotatingFile__inherit__graph.pdf"/>
-     <file role="doc" name="classPlop__Handler__Socket.tex"/>
-     <file role="doc" name="classPlop__Handler__Socket__coll__graph.md5"/>
-     <file role="doc" name="classPlop__Handler__Socket__coll__graph.pdf"/>
-     <file role="doc" name="classPlop__Handler__Socket__inherit__graph.md5"/>
-     <file role="doc" name="classPlop__Handler__Socket__inherit__graph.pdf"/>
-     <file role="doc" name="classPlop__Handler__Stream.tex"/>
-     <file role="doc" name="classPlop__Handler__Stream__coll__graph.md5"/>
-     <file role="doc" name="classPlop__Handler__Stream__coll__graph.pdf"/>
-     <file role="doc" name="classPlop__Handler__Stream__inherit__graph.md5"/>
-     <file role="doc" name="classPlop__Handler__Stream__inherit__graph.pdf"/>
-     <file role="doc" name="classPlop__Handler__SysLog.tex"/>
-     <file role="doc" name="classPlop__Handler__SysLog__coll__graph.md5"/>
-     <file role="doc" name="classPlop__Handler__SysLog__coll__graph.pdf"/>
-     <file role="doc" name="classPlop__Handler__SysLog__inherit__graph.md5"/>
-     <file role="doc" name="classPlop__Handler__SysLog__inherit__graph.pdf"/>
-     <file role="doc" name="classPlop__Handler__TimedRotatingFile.tex"/>
-     <file role="doc" name="classPlop__Handler__TimedRotatingFile__coll__graph.md5"/>
-     <file role="doc" name="classPlop__Handler__TimedRotatingFile__coll__graph.pdf"/>
-     <file role="doc" name="classPlop__Handler__TimedRotatingFile__inherit__graph.md5"/>
-     <file role="doc" name="classPlop__Handler__TimedRotatingFile__inherit__graph.pdf"/>
-     <file role="doc" name="classPlop__Handler__WatchedFile.tex"/>
-     <file role="doc" name="classPlop__Handler__WatchedFile__coll__graph.md5"/>
-     <file role="doc" name="classPlop__Handler__WatchedFile__coll__graph.pdf"/>
-     <file role="doc" name="classPlop__Handler__WatchedFile__inherit__graph.md5"/>
-     <file role="doc" name="classPlop__Handler__WatchedFile__inherit__graph.pdf"/>
-     <file role="doc" name="classPlop__Logger.tex"/>
-     <file role="doc" name="classPlop__Logger__coll__graph.md5"/>
-     <file role="doc" name="classPlop__Logger__coll__graph.pdf"/>
-     <file role="doc" name="classPlop__Logger__inherit__graph.md5"/>
-     <file role="doc" name="classPlop__Logger__inherit__graph.pdf"/>
-     <file role="doc" name="classPlop__Manager.tex"/>
-     <file role="doc" name="classPlop__PlaceHolder.tex"/>
-     <file role="doc" name="classPlop__Record.tex"/>
-     <file role="doc" name="classPlop__RootLogger.tex"/>
-     <file role="doc" name="classPlop__RootLogger__coll__graph.md5"/>
-     <file role="doc" name="classPlop__RootLogger__coll__graph.pdf"/>
-     <file role="doc" name="classPlop__RootLogger__inherit__graph.md5"/>
-     <file role="doc" name="classPlop__RootLogger__inherit__graph.pdf"/>
-     <file role="doc" name="Datagram_8php.tex"/>
-     <file role="doc" name="dirs.tex"/>
-     <file role="doc" name="dir_2f1181bf8fe3aaf68c4bce96b978dc67.tex"/>
-     <file role="doc" name="dir_2f1181bf8fe3aaf68c4bce96b978dc67_dep.md5"/>
-     <file role="doc" name="dir_2f1181bf8fe3aaf68c4bce96b978dc67_dep.pdf"/>
-     <file role="doc" name="dir_6e0cd5abe8b7b1b091bdf764a396d741.tex"/>
-     <file role="doc" name="dir_6e0cd5abe8b7b1b091bdf764a396d741_dep.md5"/>
-     <file role="doc" name="dir_6e0cd5abe8b7b1b091bdf764a396d741_dep.pdf"/>
-     <file role="doc" name="dir_74bf3daadee3f5140829e6be5f14e45d.tex"/>
-     <file role="doc" name="dir_74bf3daadee3f5140829e6be5f14e45d_dep.md5"/>
-     <file role="doc" name="dir_74bf3daadee3f5140829e6be5f14e45d_dep.pdf"/>
-     <file role="doc" name="dir_7292273b9c4093a036f945a9588891eb.tex"/>
-     <file role="doc" name="dir_7292273b9c4093a036f945a9588891eb_dep.md5"/>
-     <file role="doc" name="dir_7292273b9c4093a036f945a9588891eb_dep.pdf"/>
-     <file role="doc" name="dir_c3b96502ded34ffad383143a2b8e3830.tex"/>
-     <file role="doc" name="dir_c3b96502ded34ffad383143a2b8e3830_dep.md5"/>
-     <file role="doc" name="dir_c3b96502ded34ffad383143a2b8e3830_dep.pdf"/>
-     <file role="doc" name="doxygen.sty"/>
-     <file role="doc" name="files.tex"/>
-     <file role="doc" name="File_8php.tex"/>
-     <file role="doc" name="Filterer_8php.tex"/>
-     <file role="doc" name="Filter_8php.tex"/>
-     <file role="doc" name="Formatter_8php.tex"/>
-     <file role="doc" name="Handler_8php.tex"/>
-     <file role="doc" name="hierarchy.tex"/>
-     <file role="doc" name="INI_8php.tex"/>
-     <file role="doc" name="Logger_8php.tex"/>
-     <file role="doc" name="Makefile"/>
-     <file role="doc" name="Manager_8php.tex"/>
-     <file role="doc" name="PlaceHolder_8php.tex"/>
-     <file role="doc" name="Plop_8php.tex"/>
-     <file role="doc" name="Record_8php.tex"/>
-     <file role="doc" name="refman.aux"/>
-     <file role="doc" name="refman.idx"/>
-     <file role="doc" name="refman.log"/>
-     <file role="doc" name="refman.out"/>
-     <file role="doc" name="refman.pdf"/>
-     <file role="doc" name="refman.tex"/>
-     <file role="doc" name="refman.toc"/>
-     <file role="doc" name="RootLogger_8php.tex"/>
-     <file role="doc" name="RotatingFile_8php.tex"/>
-     <file role="doc" name="Socket_8php.tex"/>
-     <file role="doc" name="Stream_8php.tex"/>
-     <file role="doc" name="SysLog_8php.tex"/>
-     <file role="doc" name="TimedRotatingFile_8php.tex"/>
-     <file role="doc" name="WatchedFile_8php.tex"/>
-     <file role="doc" name="XML_8php.tex"/>
-    </dir>
    </dir>
    <dir name="src" baseinstalldir="/">
     <dir name="Plop">
@@ -586,6 +402,7 @@ to Plop::fileConfig() have been modified.
       <file role="php" name="WatchedFile.php"/>
      </dir>
      <file role="php" name="BufferingFormatter.php"/>
+     <file role="php" name="Exception.php"/>
      <file role="php" name="Filter.php"/>
      <file role="php" name="Filterer.php"/>
      <file role="php" name="Formatter.php"/>
@@ -600,6 +417,7 @@ to Plop::fileConfig() have been modified.
    </dir>
    <dir name="tests" baseinstalldir="/">
     <file role="test" name="BasicTest.php"/>
+    <file role="test" name="bootstrap.php"/>
     <file role="test" name="config.ini"/>
     <file role="test" name="config.xml"/>
     <file role="test" name="FileConfigTest.php"/>
@@ -611,7 +429,7 @@ to Plop::fileConfig() have been modified.
  <dependencies>
   <required>
    <php>
-    <min>5.2.0</min>
+    <min>5.3.0</min>
    </php>
    <pearinstaller>
     <min>2.0.0a1</min>

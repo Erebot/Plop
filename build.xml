@@ -102,10 +102,16 @@ and more user-friendly than Apache's log4php.
 
 
     <!-- Documentation -->
-    <target name="doc" description="" depends="doxygen"/>
+    <target name="doc" description="" depends="doc_html,doc_pdf"/>
 
-    <target name="doxygen" description="">
+    <!-- @XXX: Add an alias for now, to keep the API consistent. -->
+    <target name="doxygen" description="" depends="doc_html"/>
+    <target name="doc_html" description="">
         <exec command="doxygen" dir="." passthru="true" checkreturn="true"/>
+    </target>
+
+    <target name="doc_pdf" description="">
+        <exec command="doxygen Doxyfile_latex" dir="." passthru="true" checkreturn="true"/>
         <exec command="make" dir="doc/latex" passthru="true"/>
     </target>
 

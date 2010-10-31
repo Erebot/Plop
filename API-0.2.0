@@ -3,21 +3,18 @@ API release notes for Plop version 0.2.0
 
 This version of Plop breaks backward compatibility as it uses
 a PEAR2-oriented directory layout.
-You'll need to adapt
+You'll need to adapt your code as a result.
 
-An auto-loader was added so that you don't need to worry about
-where the classes are.
+You should use PEAR2's autoloader to use Plop.
 
-The classes have been renamed to (somewhat) follow PEAR's naming
-conventions. For example, the stream handler class is now called
-Plop_Handler_Stream.
+The classes have been renamed to follow PEAR's naming conventions.
+For example, the ols stream handler class is now called:
+\PEAR2\Plop\Handler\Stream (note the namespace used).
 Also, the classes for configuration parsers were also renamed
-(Plop_Config_Format_INI and Plop_Config_Format_XML).
-As a result, 
-
+(\PEAR2\Plop\Config\Format\INI and \PEAR2\Plop\Config\Format\XML).
+As a result, calls to fileConfig() must be updated.
 This affects configuration files a little as the class names need
-to be updated. Other than that, usage has not really changed, even
-though the main file was renamed to.
+to be updated.
 
 To sum it up, the snippets below show how Plop was used and how it
 must be used from now on.
@@ -37,18 +34,19 @@ Old usage:
 5.  Log whatever you want with eg. $logger->error('Ouch!'); 
 
 New usage:
-1.  Include "Plop.php" from Plop's sources.
-2.  Use $logging =& Plop::getInstance(); to retrieve an instance
+1.  Include PEAR2's Autoloader or roll your own autoloader
+2.  Include this statement in your code:
+    use \PEAR2\Plop\Plop;
+3.  Use $logging =& Plop::getInstance(); to retrieve an instance
     of the logging subsystem.
-3.  Configure logging, eg. with:
+4.  Configure logging, eg. with:
     $logging->fileConfig(
         $configPath,
         array(),
-        'Plop_Config_Format_XML'
+        '\\PEAR2\\Plop\\Config\\Format\\XML'
     );
-4.  Use $logger = $logging->getLogger(__FILE__); to retrieve
+    Note that the backslashes must be escaped.
+5.  Use $logger = $logging->getLogger(__FILE__); to retrieve
     a logger for the current file.
-5.  Log whatever you want with eg. $logger->error('Ouch!'); 
+6.  Log whatever you want with eg. $logger->error('Ouch!'); 
 
-So, as you can see, only the include statement and the 3rd argument
-to Plop::fileConfig() have been modified.
