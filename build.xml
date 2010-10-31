@@ -195,17 +195,21 @@ Generic_Sniffs_Files_LineEndingsSniff
     <target name="qa_coverage" description="" depends="qa_test">
         <mkdir dir="doc"/>
         <mkdir dir="doc/coverage"/>
-        <coverage-report outfile="${qa.coverage-tmp}">
-            <report todir="doc/coverage" styledir="/usr/share/php/data/phing/etc/"/>
+        <coverage-report
+            outfile="${qa.coverage-tmp}"
+            >
+<!--            geshipath="/usr/share/php-geshi"-->
+<!--            geshilanguagespath="/usr/share/php-geshi/geshi"-->
+            <report todir="doc/coverage" styledir="data/"/>
         </coverage-report>
         <if>
             <istrue value="${force-coverage}"/>
             <then>
                 <coverage-threshold
                     database="${qa.coverage-db}"
-                    perProject="75"
-                    perClass="75"
-                    perMethod="50"
+                    perProject="0"
+                    perClass="0"
+                    perMethod="0"
                     verbose="true"
                     />
             </then>
