@@ -1,19 +1,10 @@
 <?xml version="1.0"?>
 <project name="PLOP" description="" default="all">
-    <!--
-        @TODO: Add descriptions for the targets so that they provide
-        useful information when listed using "phing -l".
-    -->
-
-    <property name="force-coverage" value="true"/>
-    <property name="build-phar"     value="false"/>
-    <property name="version"        value="0.1.2"/>
-    <property name="email"          value="clicky@erebot.net"/>
+    <property name="version"            value="0.1.2"/>
+    <property name="email"              value="clicky@erebot.net"/>
     <property name="qa.coverage-db"     value="/tmp/plop.db"/>
     <property name="qa.coverage-tmp"    value="/tmp/plop.xml"/>
-    <property name="qa.coverage.min.project" value="0"/>
-    <property name="qa.coverage.min.class"   value="0"/>
-    <property name="qa.coverage.min.method"  value="0"/>
+    <property name="qa.coverage.force"  value="false"/>
 
     <fileset dir="src/" id="sources">
         <include name="**/*.php"/>
