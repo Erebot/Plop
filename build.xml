@@ -7,23 +7,13 @@
 
     <property name="force-coverage" value="true"/>
     <property name="build-phar"     value="false"/>
-
     <property name="version"        value="0.1.2"/>
     <property name="email"          value="clicky@erebot.net"/>
-    <property name="summary"        value="Python Logging On PHP"/>
-    <!-- @TODO: Use real values here. -->
-    <property name="description"><![CDATA[
-PLOP is a rewrite of Python's logging API using PHP.
-It aims at keeping compatibility with Python's API
-while being more feature-complete than PEAR's Log package
-and more user-friendly than Apache's log4php.
-]]></property>
-    <property name="notes"><![CDATA[
-@TODO
-]]></property>
-
     <property name="qa.coverage-db"     value="/tmp/plop.db"/>
     <property name="qa.coverage-tmp"    value="/tmp/plop.xml"/>
+    <property name="qa.coverage.min.project" value="0"/>
+    <property name="qa.coverage.min.class"   value="0"/>
+    <property name="qa.coverage.min.method"  value="0"/>
 
     <fileset dir="src/" id="sources">
         <include name="**/*.php"/>

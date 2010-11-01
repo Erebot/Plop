@@ -1,3 +1,7 @@
 Python Logging On PHP
 
-PLOP is a port of Python's logging module to PHP.
+PLOP is a rewrite of Python's logging API using PHP.
+It aims at keeping compatibility with Python's API
+while being more feature-complete than PEAR's Log package
+and more user-friendly than Apache's log4php.
+
