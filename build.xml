@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project name="PLOP" description="" default="all">
+<project name="Plop" description="" default="all">
     <property name="version"            value="0.1.2"/>
     <property name="email"              value="clicky@erebot.net"/>
     <property name="qa.coverage.force"  value="false"/>
