@@ -2,8 +2,6 @@
 <project name="PLOP" description="" default="all">
     <property name="version"            value="0.1.2"/>
     <property name="email"              value="clicky@erebot.net"/>
-    <property name="qa.coverage-db"     value="/tmp/plop.db"/>
-    <property name="qa.coverage-tmp"    value="/tmp/plop.xml"/>
     <property name="qa.coverage.force"  value="false"/>
 
     <fileset dir="src/" id="sources">
