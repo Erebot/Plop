@@ -18,20 +18,18 @@
 
 require_once('PHPUnit/Framework.php');
 
-use PEAR2\Plop;
-
 class FileHandlerTest
 extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        Plop\Logger::$root     = new Plop\RootLogger(Plop\Plop::WARNING);
-        Plop\Logger::$manager  = new Plop\Manager(Plop\Logger::$root);
+        Plop_Logger::$root     = new Plop_RootLogger(Plop_Plop::WARNING);
+        Plop_Logger::$manager  = new Plop_Manager(Plop_Logger::$root);
         $this->tempfile = tempnam(sys_get_temp_dir(), 'PLOP');
-        $this->logging =& Plop\Plop::getInstance();
+        $this->logging =& Plop_Plop::getInstance();
         $this->logging->basicConfig(array(
             'filename'  => $this->tempfile,
-            'level'     => Plop\Plop::DEBUG,
+            'level'     => Plop_Plop::DEBUG,
         ));
     }
 

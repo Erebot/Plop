@@ -16,10 +16,8 @@
     along with Plop.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace PEAR2\Plop\Handler;
-
-class   File
-extends Stream
+class   Plop_Handler_File
+extends Plop_Handler_Stream
 {
     public $baseFilename;
     public $mode;
@@ -30,7 +28,7 @@ extends Stream
         $this->mode         = $mode;
         $this->encoding     = $encoding;
         if ($delay) {
-            Handler::__construct();
+            Plop_Handler::__construct();
             $this->_stream = FALSE;
         }
         else

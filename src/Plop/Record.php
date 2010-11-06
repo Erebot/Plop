@@ -16,16 +16,23 @@
     along with Plop.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace PEAR2\Plop;
-
-class Record
+class Plop_Record
 {
     public $dict;
 
-    public function __construct($name, $level, $pathname, $lineno, $msg, $args, $exception, $func = NULL)
+    public function __construct(
+        $name,
+        $level,
+        $pathname,
+        $lineno,
+        $msg,
+        $args,
+        $exception,
+        $func = NULL
+    )
     {
         $ct         = microtime(TRUE);
-        $logging    = Plop::getInstance();
+        $logging    = Plop_Plop::getInstance();
 
         if (isset($_SERVER['argv'][0]))
             $processName = basename($_SERVER['argv'][0]);

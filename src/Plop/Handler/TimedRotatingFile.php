@@ -16,11 +16,8 @@
     along with Plop.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace PEAR2\Plop\Handler;
-use \PEAR2\Plop\Record;
-
-class   TimedRotatingFile
-extends BaseRotating
+class   Plop_Handler_TimedRotatingFile
+extends Plop_Handler_RotatingAbstract
 {
     public $when;
     public $backupCount;
@@ -82,14 +79,14 @@ extends BaseRotating
         else if (substr($this->when, 0, 1) == 'W') {
             $this->interval = 60 * 60 * 24 * 7;
             if (strlen($this->when) != 2)
-                throw new \Exception(sprintf(
+                throw new Exception(sprintf(
                     'You must specify a day for weekly rollover '.
                     'from 0 to 6 (0 is Monday): %s',
                     $this->when
                 ));
             $ord = ord($this->when[1]);
             if ($ord < ord('0') || $ord > ord('6'))
-                throw new \Exception(sprintf(
+                throw new Exception(sprintf(
                     'Invalid day specified for weekly rollover: %s',
                     $this->when
                 ));
@@ -98,7 +95,7 @@ extends BaseRotating
             $this->extMatch = '^\\d{4}-\\d{2}-\\d{2}$';
         }
         else
-            throw new \Exception(sprintf(
+            throw new Exception(sprintf(
                 'Invalid rollover interval specified: %s',
                 $this->when
             ));
@@ -118,7 +115,7 @@ extends BaseRotating
         return $currentTime + $this->interval;
     }
 
-    public function shouldRollover(Record &$record)
+    public function shouldRollover(Plop_Record &$record)
     {
         $t = time();
         if ($t >= $this->rolloverAt)

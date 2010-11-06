@@ -28,7 +28,7 @@
         <handler name="stderr">
             <level>ERROR</level>
             <formatter>detailed</formatter>
-            <class>\PEAR2\Plop\Handler\Stream</class>
+            <class>Plop_Handler_Stream</class>
         </handler>
     </handlers>
 

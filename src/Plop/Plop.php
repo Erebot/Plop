@@ -16,14 +16,12 @@
     along with Plop.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace PEAR2\Plop;
-
 /**
  * A logging module, similar to the one provided by Python.
  * It uses the concepts of loggers, handlers & formatters
  * to offer customizable logs.
  */
-class Plop
+class Plop_Plop
 {
     const BASIC_FORMAT  = "%(levelname)s:%(name)s:%(message)s";
 
@@ -43,7 +41,7 @@ class Plop
 
     protected function __construct()
     {
-        $this->_loggerClass  = '\\PEAR2\\Plop\\Logger';
+        $this->_loggerClass  = 'Plop_Logger';
         $this->_loggers      = array();
         $this->_levelNames   = array(
             self::NOTSET    => 'NOTSET',
@@ -75,8 +73,8 @@ class Plop
     public function getLogger($name = NULL)
     {
         if ($name === NULL)
-            return Logger::$root;
-        return Logger::$manager->getLogger($name);
+            return Plop_Logger::$root;
+        return Plop_Logger::$manager->getLogger($name);
     }
 
     public function getLoggerClass()
@@ -152,7 +150,7 @@ class Plop
 
     public function makeLogRecord($attrs)
     {
-        $rv = Record(NULL, NULL, "", 0, "", array(), NULL, NULL);
+        $rv = Plop_Record(NULL, NULL, "", 0, "", array(), NULL, NULL);
         $rv->dict = array_merge($rv->dict, $attrs);
         return $rv;
     }
@@ -164,15 +162,15 @@ class Plop
             $filename = isset($args['filename']) ? $args['filename'] : NULL;
             if ($filename !== NULL) {
                 $mode = isset($args['filemode']) ? $args['filemode'] : 'a';
-                $hdlr = new Handler\File($filename, $mode);
+                $hdlr = new Plop_Handler_File($filename, $mode);
             }
             else {
                 $stream = isset($args['stream']) ? $args['stream'] : NULL;
-                $hdlr = new Handler\Stream($stream);
+                $hdlr = new Plop_Handler_Stream($stream);
             }
             $fs = isset($args['format']) ? $args['format'] : self::BASIC_FORMAT;
             $dfs = isset($args['datefmt']) ? $args['datefmt'] : NULL;
-            $fmt = new Formatter($fs, $dfs);
+            $fmt = new Plop_Formatter($fs, $dfs);
             $hdlr->setFormatter($fmt);
             $root->addHandler($hdlr);
             if (isset($args['level'])) {
@@ -194,7 +192,7 @@ class Plop
     public function setLoggerClass($class)
     {
         if (!class_exists($class) ||
-            !is_subclass_of($class, '\\PEAR2\\Plop\\Logger'))
+            !is_subclass_of($class, 'Plop_Logger'))
             throw new Exception($class);
 
         $this->_loggerClass = $class;
@@ -203,7 +201,7 @@ class Plop
     public function fileConfig(
         $fname,
         $defaults   = array(),
-        $class     = '\\PEAR2\\Plop\\Config\\Format\\INI'
+        $class     = 'Plop_Config_Format_INI'
     )
     {
         $configParser = new $class($this, $fname);

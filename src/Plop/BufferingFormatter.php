@@ -16,9 +16,7 @@
     along with Plop.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace PEAR2\Plop;
-
-class BufferingFormatter
+class Plop_BufferingFormatter
 {
     static public $defaultFormatter = NULL;
     protected $_lineFmt;
@@ -56,5 +54,5 @@ class BufferingFormatter
     }
 }
 
-BufferingFormatter::$defaultFormatter = new Formatter();
+Plop_BufferingFormatter::$defaultFormatter = new Plop_Formatter();
 

@@ -16,21 +16,17 @@
     along with Plop.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace PEAR2\Plop\Handler;
-use \PEAR2\Plop\Handler,
-    \PEAR2\Plop\Record;
-
-abstract class  BaseRotating
-extends         Handler
+abstract class  Plop_Handler_RotatingAbstract
+extends         Plop_Handler
 {
-    public function emit(Record &$record)
+    public function emit(Plop_Record &$record)
     {
         try {
             if ($this->shouldRollover($record))
                 $this->doRollover();
             parent::emit($record);
         }
-        catch (\Exception $e) {
+        catch (Exception $e) {
             $this->handleError($record, $e);
         }
     }

@@ -16,9 +16,7 @@
     along with Plop.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace PEAR2\Plop;
-
-class Formatter
+class Plop_Formatter
 {
     public $fmt;
     public $datefmt;
@@ -33,7 +31,7 @@ class Formatter
         $this->datefmt = $datefmt;
     }
 
-    public function format(Record $record)
+    public function format(Plop_Record $record)
     {
         $record->dict['message'] = $record->getMessage();
         if (strpos($this->fmt, '%(asctime)') !== FALSE)
@@ -54,7 +52,7 @@ class Formatter
         return $s;
     }
 
-    public function formatTime(Record $record, $datefmt = NULL)
+    public function formatTime(Plop_Record $record, $datefmt = NULL)
     {
         $ct = $record->dict['created'];
         if ($datefmt)
@@ -65,7 +63,7 @@ class Formatter
         return $s;
     }
 
-    public function formatException(\Exception $exception)
+    public function formatException(Exception $exception)
     {
         $s  = "Traceback (most recent call last):\n";
         foreach ($exception->getTrace() as $trace) {

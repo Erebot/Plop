@@ -16,18 +16,16 @@
     along with Plop.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace PEAR2\Plop;
-
-class PlaceHolder
+class Plop_PlaceHolder
 {
     public $loggerMap;
 
-    public function __construct(Logger &$alogger)
+    public function __construct(Plop_Logger &$alogger)
     {
         $this->loggerMap = array($alogger);
     }
 
-    public function append(Logger &$alogger)
+    public function append(Plop_Logger &$alogger)
     {
         $key = array_search($alogger, $this->loggerMap, TRUE);
         if ($key === FALSE)

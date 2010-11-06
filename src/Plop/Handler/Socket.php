@@ -16,12 +16,8 @@
     along with Plop.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace PEAR2\Plop\Handler;
-use \PEAR2\Plop\Handler,
-    \PEAR2\Plop\Record;
-
-class   Socket
-extends Handler
+class   Plop_Handler_Socket
+extends Plop_Handler
 {
     public $host;
     public $port;
@@ -99,7 +95,7 @@ extends Handler
         }
     }
 
-    public function makePickle(Record &$record)
+    public function makePickle(Plop_Record &$record)
     {
         /// @TODO Should we follow Python's pickle here instead ?
         $s      = serialize($record->dict);
@@ -107,7 +103,7 @@ extends Handler
         return $slen.$s;
     }
 
-    public function handleError(Record &$record, \Exception &$exc)
+    public function handleError(Plop_Record &$record, Exception &$exc)
     {
         if ($this->closeOnError && $this->sock) {
             fclose($this->sock);
@@ -117,13 +113,13 @@ extends Handler
             parent::handleError($record, $exc);
     }
 
-    public function emit(Record &$record)
+    public function emit(Plop_Record &$record)
     {
         try {
             $s = $this->makePickle($record);
             $this->send($s);
         }
-        catch (\Exception $e) {
+        catch (Exception $e) {
             $this->handleError($record, $e);
         }
     }

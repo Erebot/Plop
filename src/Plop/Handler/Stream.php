@@ -16,12 +16,8 @@
     along with Plop.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace PEAR2\Plop\Handler;
-use \PEAR2\Plop\Handler,
-    \PEAR2\Plop\Record;
-
-class   Stream
-extends Handler
+class   Plop_Handler_Stream
+extends Plop_Handler
 {
     protected $_stream;
 
@@ -39,7 +35,7 @@ extends Handler
         fflush($this->_stream);
     }
 
-    public function emit(Record &$record)
+    public function emit(Plop_Record &$record)
     {
         $msg = $this->format($record);
         fprintf($this->_stream, "%s\n", $msg);

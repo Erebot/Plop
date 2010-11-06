@@ -16,11 +16,8 @@
     along with Plop.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace PEAR2\Plop\Handler;
-use \PEAR2\Plop\Record;
-
-class   WatchedFile
-extends File
+class   Plop_Handler_WatchedFile
+extends Plop_Handler_File
 {
     protected $_dev;
     protected $_ino;
@@ -43,7 +40,7 @@ extends File
         }
     }
 
-    public function emit(Record &$record)
+    public function emit(Plop_Record &$record)
     {
         if (!file_exists($this->baseFilename)) {
             $stats = NULL;

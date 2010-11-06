@@ -16,9 +16,7 @@
     along with Plop.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace PEAR2\Plop;
-
-class Filter
+class Plop_Filter
 {
     public $name;
     public $nlen;
@@ -29,7 +27,7 @@ class Filter
         $this->nlen = strlen($name);
     }
 
-    public function filter(Record $record)
+    public function filter(Plop_Record $record)
     {
         if (!$this->nlen)
             return TRUE;

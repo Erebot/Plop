@@ -16,16 +16,14 @@
     along with Plop.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace PEAR2\Plop;
-
-class Manager
+class Plop_Manager
 {
     public $root;
     public $disable;
     public $emittedNoHandlerWarning;
     public $loggerDict;
 
-    public function __construct(Logger &$rootnode)
+    public function __construct(Plop_Logger &$rootnode)
     {
         $this->root                     =&  $rootnode;
         $this->disable                  =   0;
@@ -35,12 +33,12 @@ class Manager
 
     public function getLogger($name)
     {
-        $logging =& Plop::getInstance();
+        $logging =& Plop_Plop::getInstance();
         $cls = $logging->getLoggerClass();
         $rv = NULL;
         if (isset($this->loggerDict[$name])) {
             $rv =& $this->loggerDict[$name];
-            if ($rv instanceof PlaceHolder) {
+            if ($rv instanceof Plop_PlaceHolder) {
                 $ph =   $rv;
                 $rv =   new $cls($name);
                 $this->loggerDict[$name] =& $rv;
@@ -56,7 +54,7 @@ class Manager
         return $rv;
     }
 
-    protected function fixupParents(Logger &$alogger)
+    protected function fixupParents(Plop_Logger &$alogger)
     {
         $name = $alogger->name;
         $i = strrpos($name, DIRECTORY_SEPARATOR);
@@ -64,13 +62,13 @@ class Manager
         while ($i && $rv === NULL) {
             $substr = substr($name, 0, $i);
             if (!isset($this->loggerDict[$substr]))
-                $this->loggerDict[$substr] = new PlaceHolder($alogger);
+                $this->loggerDict[$substr] = new Plop_PlaceHolder($alogger);
             else {
                 $obj =& $this->loggerDict[$substr];
-                if ($obj instanceof Logger)
+                if ($obj instanceof Plop_Logger)
                     $rv =& $obj;
                 else {
-                    assert($obj instanceof PlaceHolder);
+                    assert($obj instanceof Plop_PlaceHolder);
                     $obj->append($alogger);
                 }
             }
@@ -81,7 +79,7 @@ class Manager
         $alogger->parent =& $rv;
     }
 
-    protected function fixupChildren($ph, Logger &$alogger)
+    protected function fixupChildren($ph, Plop_Logger &$alogger)
     {
         $name       = $alogger->name;
         $namelen    = strlen($name);

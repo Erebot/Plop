@@ -16,11 +16,8 @@
     along with Plop.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace PEAR2\Plop\Handler;
-use \PEAR2\Plop\Record;
-
-class   RotatingFile
-extends BaseRotating
+class   Plop_Handler_RotatingFile
+extends Plop_Handler_RotatingAbstract
 {
     public $maxBytes;
     public $backupCount;
@@ -63,7 +60,7 @@ extends BaseRotating
         $this->_stream  = $this->_open();
     }
 
-    public function shouldRollover(Record &$record)
+    public function shouldRollover(Plop_Record &$record)
     {
         if (!$this->_stream)
             $this->_stream = $this->open();

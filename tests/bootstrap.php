@@ -34,10 +34,7 @@ set_include_path(
 function autoload_plop($class)
 {
     $class = ltrim($class, '\\');
-    if (strncasecmp($class, 'pear2\\', 6))
-        return FALSE;
-    $className = substr($class, 6);
-    $fname = str_replace(array('\\', '_'), DIRECTORY_SEPARATOR, $className) . '.php';
+    $fname = str_replace(array('\\', '_'), DIRECTORY_SEPARATOR, $class) . '.php';
     include($fname);
     return (class_exists($class) || interface_exists($class));
 }

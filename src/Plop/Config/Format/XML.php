@@ -16,11 +16,8 @@
     along with Plop.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace PEAR2\Plop\Config\Format;
-use PEAR2\Plop\Config\AbstractParser;
-
-class   XML
-extends AbstractParser
+class   Plop_Config_Format_XML
+extends Plop_Config_ParserAbstract
 {
     const XMLNS = 'http://www.erebot.net/xmlns/logging';
 
@@ -52,7 +49,7 @@ extends AbstractParser
                 $dfs = (string) $formatter->children(self::XMLNS)->datefmt;
             else
                 $dfs = NULL;
-            $c = '\\PEAR2\\Plop\\Formatter';
+            $c = 'Plop_Formatter';
             if (isset($formatter->children(self::XMLNS)->{'class'}[0]))
                 $c = (string) $formatter->children(self::XMLNS)->{'class'};
             $formatters[$name] = new $c($fs, $dfs);

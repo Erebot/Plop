@@ -18,25 +18,23 @@
 
 require_once('PHPUnit/Framework.php');
 
-use PEAR2\Plop;
-
 class FileConfigTest
 extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        Plop\Logger::$root     = new Plop\RootLogger(Plop\Plop::WARNING);
-        Plop\Logger::$manager  = new Plop\Manager(Plop\Logger::$root);
-        $this->logging =& Plop\Plop::getInstance();
+        Plop_Logger::$root     = new Plop_RootLogger(Plop_Plop::WARNING);
+        Plop_Logger::$manager  = new Plop_Manager(Plop_Logger::$root);
+        $this->logging =& Plop_Plop::getInstance();
     }
 
     protected function checkLoggingSettings()
     {
         $root = $this->logging->getLogger();
-        $this->assertSame(Plop\Plop::DEBUG, $root->level);
+        $this->assertSame(Plop_Plop::DEBUG, $root->level);
         $this->assertSame(1, count($root->handlers));
-        $this->assertTrue($root->handlers[0] instanceof Plop\Handler\Stream);
-        $this->assertSame(Plop\Plop::ERROR, $root->handlers[0]->level);
+        $this->assertTrue($root->handlers[0] instanceof Plop_Handler_Stream);
+        $this->assertSame(Plop_Plop::ERROR, $root->handlers[0]->level);
     }
 
     public function testLoadXMLConfigurationFromFilename()
@@ -44,7 +42,7 @@ extends PHPUnit_Framework_TestCase
         $this->logging->fileConfig(
             dirname(__FILE__).'/config.xml',
             array(),
-            '\\PEAR2\\Plop\\Config\\Format\\XML'
+            'Plop_Config_Format_XML'
         );
         $this->checkLoggingSettings();
     }
@@ -54,7 +52,7 @@ extends PHPUnit_Framework_TestCase
         $this->logging->fileConfig(
             dirname(__FILE__).'/config.ini',
             array(),
-            '\\PEAR2\\Plop\\Config\\Format\\INI'
+            'Plop_Config_Format_INI'
         );
         $this->checkLoggingSettings();
     }

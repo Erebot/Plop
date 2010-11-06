@@ -16,9 +16,7 @@
     along with Plop.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace PEAR2\Plop;
-
-class Filterer
+class Plop_Filterer
 {
     public $filters;
     
@@ -27,20 +25,20 @@ class Filterer
         $this->filters = array();
     }
 
-    public function addFilter(Filter &$filter)
+    public function addFilter(Plop_Filter &$filter)
     {
         if (!in_array($filter, $this->filters, TRUE))
             $this->filters[] =& $filter;
     }
 
-    public function removeFilter(Filter &$filter)
+    public function removeFilter(Plop_Filter &$filter)
     {
         $key = array_search($filter, $this->filters, TRUE);
         if ($key !== FALSE)
             unset($this->filters[$key]);
     }
 
-    public function filter(Record &$record)
+    public function filter(Plop_Record &$record)
     {
         $rv = 1;
         foreach ($this->filters as &$filter) {

@@ -16,11 +16,8 @@
     along with Plop.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace PEAR2\Plop\Config\Format;
-use PEAR2\Plop\Config\AbstractParser;
-
-class   INI
-extends AbstractParser
+class   Plop_Config_Format_INI
+extends Plop_Config_ParserAbstract
 {
     protected function getConfigParserData($fname)
     {
@@ -52,7 +49,7 @@ extends AbstractParser
                 $dfs = $opts['datefmt'];
             else
                 $dfs = NULL;
-            $c = '\\PEAR2\\Plop\\Formatter';
+            $c = 'Plop_Formatter';
             if (isset($opts['class']))
                 $c = $opts['class'];
             $formatters[$form] = new $c($fs, $dfs);;

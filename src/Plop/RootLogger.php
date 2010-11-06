@@ -16,10 +16,8 @@
     along with Plop.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace PEAR2\Plop;
-
-class   RootLogger
-extends Logger
+class   Plop_RootLogger
+extends Plop_Logger
 {
     public function __construct($level)
     {

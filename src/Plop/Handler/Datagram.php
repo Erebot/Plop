@@ -16,10 +16,8 @@
     along with Plop.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace PEAR2\Plop\Handler;
-
-class   Datagram
-extends Socket
+class   Plop_Handler_Datagram
+extends Plop_Handler_Socket
 {
     public function __construct($host, $port)
     {

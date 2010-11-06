@@ -16,14 +16,11 @@
     along with Plop.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-namespace PEAR2\Plop\Config;
-use \PEAR2\Plop\Plop;
-
-abstract class AbstractParser
+abstract class Plop_Config_ParserAbstract
 {
     protected $_logging;
 
-    public function __construct(Plop &$logging, $fname)
+    public function __construct(Plop_Plop &$logging, $fname)
     {
         $this->_logging =& $logging;
         $this->cp       =  $this->getConfigParserData($fname);
@@ -35,14 +32,14 @@ abstract class AbstractParser
     {
         if (
             !class_exists($cls) ||
-            !is_subclass_of($cls, '\\PEAR2\\Plop\\Handler')
+            !is_subclass_of($cls, 'Plop_Handler')
             )
-            throw new \Exception(sprintf('No such class (%s)', $cls));
+            throw new Exception(sprintf('No such class (%s)', $cls));
 
         // call_user_func_array doesn't work with constructors.
         // We use the reflection API instead, which allows a ctor
         // to be called with a variable number of args.
-        $reflector = new \ReflectionClass($cls);
+        $reflector = new ReflectionClass($cls);
         return $reflector->newInstanceArgs($args);
     }
 
