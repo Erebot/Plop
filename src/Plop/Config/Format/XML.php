@@ -68,7 +68,7 @@ extends Plop_Config_ParserAbstract
                     ->children(self::XMLNS)->handler as $handler) {
             $name   = (string) $handler->attributes('')->name;
             $klass  = (string) $handler->children(self::XMLNS)->{'class'};
-            $args   = array(); # @TODO: parse args from config file.
+            $args   = array(); /// @TODO: parse args from config file.
             $h = $this->createHandlerInstance($klass, $args);
             if (isset($handler->children(self::XMLNS)->level[0])) {
                 $level = (string) $handler->children(self::XMLNS)->level;

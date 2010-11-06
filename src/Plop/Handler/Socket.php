@@ -97,7 +97,10 @@ extends Plop_Handler
 
     public function makePickle(Plop_Record &$record)
     {
-        /// @TODO Should we follow Python's pickle here instead ?
+        // To maintain full compatibility with Python,
+        // we should emulate pickle here, but it seems
+        // to be quite some work and PHP already has
+        // it's own serialization mechanism anyway.
         $s      = serialize($record->dict);
         $slen   = pack('N', strlen($s));
         return $slen.$s;
