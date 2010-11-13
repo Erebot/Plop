@@ -21,7 +21,7 @@
  * It uses the concepts of loggers, handlers & formatters
  * to offer customizable logs.
  */
-class Plop_Plop
+class Plop
 {
     const BASIC_FORMAT  = "%(levelname)s:%(name)s:%(message)s";
 

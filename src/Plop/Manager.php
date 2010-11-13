@@ -33,7 +33,7 @@ class Plop_Manager
 
     public function getLogger($name)
     {
-        $logging =& Plop_Plop::getInstance();
+        $logging =& Plop::getInstance();
         $cls = $logging->getLoggerClass();
         $rv = NULL;
         if (isset($this->loggerDict[$name])) {

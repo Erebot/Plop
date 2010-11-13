@@ -32,7 +32,7 @@ class Plop_Record
     )
     {
         $ct         = microtime(TRUE);
-        $logging    = Plop_Plop::getInstance();
+        $logging    = Plop::getInstance();
 
         if (isset($_SERVER['argv'][0]))
             $processName = basename($_SERVER['argv'][0]);

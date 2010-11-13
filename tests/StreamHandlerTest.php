@@ -23,13 +23,13 @@ extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        Plop_Logger::$root     = new Plop_RootLogger(Plop_Plop::WARNING);
+        Plop_Logger::$root     = new Plop_RootLogger(Plop::WARNING);
         Plop_Logger::$manager  = new Plop_Manager(Plop_Logger::$root);
         $this->tempfile = tmpfile();
-        $this->logging =& Plop_Plop::getInstance();
+        $this->logging =& Plop::getInstance();
         $this->logging->basicConfig(array(
             'stream'    => $this->tempfile,
-            'level'     => Plop_Plop::DEBUG,
+            'level'     => Plop::DEBUG,
         ));
     }
 

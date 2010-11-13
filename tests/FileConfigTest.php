@@ -23,18 +23,18 @@ extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        Plop_Logger::$root     = new Plop_RootLogger(Plop_Plop::WARNING);
+        Plop_Logger::$root     = new Plop_RootLogger(Plop::WARNING);
         Plop_Logger::$manager  = new Plop_Manager(Plop_Logger::$root);
-        $this->logging =& Plop_Plop::getInstance();
+        $this->logging =& Plop::getInstance();
     }
 
     protected function checkLoggingSettings()
     {
         $root = $this->logging->getLogger();
-        $this->assertSame(Plop_Plop::DEBUG, $root->level);
+        $this->assertSame(Plop::DEBUG, $root->level);
         $this->assertSame(1, count($root->handlers));
         $this->assertTrue($root->handlers[0] instanceof Plop_Handler_Stream);
-        $this->assertSame(Plop_Plop::ERROR, $root->handlers[0]->level);
+        $this->assertSame(Plop::ERROR, $root->handlers[0]->level);
     }
 
     public function testLoadXMLConfigurationFromFilename()

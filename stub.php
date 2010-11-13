@@ -32,8 +32,8 @@ try {
 function Plop_autoload($class)
 {
     $class = str_replace(array('_', '\\'), '/', $class);
-    if (file_exists('phar://' . __FILE__ . '/Plop-0.3.1/php/' . $class . '.php')) {
-        include 'phar://' . __FILE__ . '/Plop-0.3.1/php/' . $class . '.php';
+    if (file_exists('phar://' . __FILE__ . '/Plop-0.2.0/php/' . $class . '.php')) {
+        include 'phar://' . __FILE__ . '/Plop-0.2.0/php/' . $class . '.php';
     }
 }
 spl_autoload_register("Plop_autoload");

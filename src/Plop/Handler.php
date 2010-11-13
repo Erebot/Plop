@@ -24,7 +24,7 @@ extends Plop_Filterer
     public $formatter;
     public $lock;
 
-    public function __construct($level = Plop_Plop::NOTSET)
+    public function __construct($level = Plop::NOTSET)
     {
         parent::__construct();
         $this->level        = $level;

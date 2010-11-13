@@ -24,12 +24,12 @@ extends PHPUnit_Extensions_OutputTestCase
 {
     public function setUp()
     {
-        Plop_Logger::$root     = new Plop_RootLogger(Plop_Plop::WARNING);
+        Plop_Logger::$root     = new Plop_RootLogger(Plop::WARNING);
         Plop_Logger::$manager  = new Plop_Manager(Plop_Logger::$root);
-        $this->logging =& Plop_Plop::getInstance();
+        $this->logging =& Plop::getInstance();
         $this->logging->basicConfig(array(
             'stream'    => fopen("php://output", "a+"),
-            'level'     => Plop_Plop::INFO,
+            'level'     => Plop::INFO,
         ));
     }
 
@@ -42,11 +42,11 @@ extends PHPUnit_Extensions_OutputTestCase
     public function testLevelChecking()
     {
         $messages = array(
-            array(Plop_Plop::DEBUG,      'This is a debug message'),
-            array(Plop_Plop::INFO,       'This is an info message'),
-            array(Plop_Plop::WARNING,    'This is a warning message'),
-            array(Plop_Plop::ERROR,      'This is an error message'),
-            array(Plop_Plop::CRITICAL,   'This is a critical error message'),
+            array(Plop::DEBUG,      'This is a debug message'),
+            array(Plop::INFO,       'This is an info message'),
+            array(Plop::WARNING,    'This is a warning message'),
+            array(Plop::ERROR,      'This is an error message'),
+            array(Plop::CRITICAL,   'This is a critical error message'),
         );
 
         foreach ($messages as $tuple) {
