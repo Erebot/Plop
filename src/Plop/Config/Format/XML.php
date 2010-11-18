@@ -96,8 +96,10 @@ extends Plop_Config_ParserAbstract
         if (!isset($this->cp->children(self::XMLNS)->loggers[0]))
             return;
 
-        $root       = $this->_logging->getLogger();
-        $existing   = array_keys($root::$manager->loggerDict);
+        $root       =   $this->_logging->getLogger();
+        $rootRefl   =   new ReflectionObject($root);
+        $manager    =   $rootRefl->getStaticPropertyValue('manager');
+        $existing   =   array_keys($manager->loggerDict);
         foreach ($this->cp->children(self::XMLNS)->loggers[0]
                     ->children(self::XMLNS)->logger as $logger) {
             $name = (string) $logger->attributes('')->name;
