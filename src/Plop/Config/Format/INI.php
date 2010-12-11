@@ -128,7 +128,9 @@ extends Plop_Config_ParserAbstract
             }
         }
 
-        $existing   = array_keys($root::$manager->loggerDict);
+        $reflector  = new ReflectionObject($root);
+        $manager    = $reflector->getStaticPropertyValue('manager');
+        $existing   = array_keys($manager->loggerDict);
         foreach ($llist as $log) {
             $sectname = "logger_".$log;
             $qn = $this->cp[$sectname]['qualname'];
