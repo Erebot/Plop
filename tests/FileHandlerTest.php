@@ -16,7 +16,11 @@
     along with Plop.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-require_once('PHPUnit/Framework.php');
+require_once(
+    dirname(__FILE__) .
+    DIRECTORY_SEPARATOR . 'testenv' .
+    DIRECTORY_SEPARATOR . 'bootstrap.php'
+);
 
 class FileHandlerTest
 extends PHPUnit_Framework_TestCase

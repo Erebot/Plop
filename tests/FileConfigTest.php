@@ -16,7 +16,11 @@
     along with Plop.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-require_once('PHPUnit/Framework.php');
+require_once(
+    dirname(__FILE__) .
+    DIRECTORY_SEPARATOR . 'testenv' .
+    DIRECTORY_SEPARATOR . 'bootstrap.php'
+);
 
 class FileConfigTest
 extends PHPUnit_Framework_TestCase
@@ -40,7 +44,7 @@ extends PHPUnit_Framework_TestCase
     public function testLoadXMLConfigurationFromFilename()
     {
         $this->logging->fileConfig(
-            dirname(__FILE__).'/config.xml',
+            dirname(__FILE__) . DIRECTORY_SEPARATOR . 'config.xml',
             array(),
             'Plop_Config_Format_XML'
         );
@@ -50,7 +54,7 @@ extends PHPUnit_Framework_TestCase
     public function testLoadINIConfigurationWithFilename()
     {
         $this->logging->fileConfig(
-            dirname(__FILE__).'/config.ini',
+            dirname(__FILE__) . DIRECTORY_SEPARATOR . 'config.ini',
             array(),
             'Plop_Config_Format_INI'
         );
@@ -59,7 +63,11 @@ extends PHPUnit_Framework_TestCase
 
     public function testLoadConfigurationWithFilename()
     {
-        $this->logging->fileConfig(__DIR__.'/config.ini');
+        $this->logging->fileConfig(
+            dirname(__FILE__) .
+            DIRECTORY_SEPARATOR .
+            'config.ini'
+        );
         $this->checkLoggingSettings();
     }
 }
