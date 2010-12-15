@@ -7,17 +7,19 @@ You'll need to adapt your code as a result.
 
 You should use PEAR2's autoloader to use Plop.
 
-The classes have been renamed to follow PEAR's naming conventions.
-For example, the ols stream handler class is now called:
-\PEAR2\Plop\Handler\Stream (note the namespace used).
-Also, the classes for configuration parsers were also renamed
-(\PEAR2\Plop\Config\Format\INI and \PEAR2\Plop\Config\Format\XML).
-As a result, calls to fileConfig() must be updated.
-This affects configuration files a little as the class names need
-to be updated.
+The classes have been renamed to be a little closer to PEAR's
+naming conventions..
+For example, the old stream handler class is now called:
+Plop_Handler_Stream.
 
-To sum it up, the snippets below show how Plop was used and how it
-must be used from now on.
+Also, the classes for configuration parsers were also renamed
+(Plop_Config_Format_INI and Plop_Config_Format_XML).
+As a result, calls to fileConfig() must be updated.
+This affects configuration files a little as the class names
+need to be updated to reflect those changes.
+
+To sum it up, the snippets below shows how Plop was used
+and how it must be used from now on.
 
 Old usage:
 1.  Include "logging.php" from Plop's sources.
@@ -34,19 +36,20 @@ Old usage:
 5.  Log whatever you want with eg. $logger->error('Ouch!'); 
 
 New usage:
-1.  Include PEAR2's Autoloader or roll your own autoloader
-2.  Include this statement in your code:
-    use \PEAR2\Plop\Plop;
-3.  Use $logging =& Plop::getInstance(); to retrieve an instance
+1.  Create and install an autoloader which maps class names to
+    their file, by simply replacing underscores with the
+    DIRECTORY_SEPARATOR and appending the ".php" suffix.
+    Eg. Plop_Config_Format_INI
+    ->  Plop/Config/Format/INI.php under Linux
+2.  Use $logging =& Plop::getInstance(); to retrieve an instance
     of the logging subsystem.
-4.  Configure logging, eg. with:
+3.  Configure logging, eg. with:
     $logging->fileConfig(
         $configPath,
         array(),
-        '\\PEAR2\\Plop\\Config\\Format\\XML'
+        'Plop_Config_Format_XML'
     );
-    Note that the backslashes must be escaped.
-5.  Use $logger = $logging->getLogger(__FILE__); to retrieve
+4.  Use $logger = $logging->getLogger(__FILE__); to retrieve
     a logger for the current file.
-6.  Log whatever you want with eg. $logger->error('Ouch!'); 
+5.  Log whatever you want with eg. $logger->error('Ouch!'); 
 

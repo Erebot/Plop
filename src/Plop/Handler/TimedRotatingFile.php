@@ -52,7 +52,6 @@ extends Plop_Handler_RotatingAbstract
         $this->when         = strtoupper($when);
         $this->backupCount  = $backupCount;
         $this->utc          = $utc;
-        $currentTime        = time();
         $this->rolloverAt   = NULL;
         $this->dayOfWeek    = NULL;
 

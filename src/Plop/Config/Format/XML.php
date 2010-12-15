@@ -83,7 +83,8 @@ extends Plop_Config_ParserAbstract
                 $h->setFormatter($formatters[$fmt]);
             }
             if (isset($handler->children(self::XMLNS)->target[0]))
-                $fixups[$name] = (string) $handler->children(self::XMLNS)->target[0];
+                $fixups[$name] =
+                    (string) $handler->children(self::XMLNS)->target[0];
             $handlers[$name] = $h;
         }
         foreach ($fixups as $n => $t)
@@ -127,7 +128,8 @@ extends Plop_Config_ParserAbstract
 
             $qn = (string) $logger->children(self::XMLNS)->qualname;
             if (isset($logger->children(self::XMLNS)->propagate[0]))
-                $propagate = (int) ((string) $logger->children(self::XMLNS)->propagate);
+                $propagate =
+                    (int) ((string) $logger->children(self::XMLNS)->propagate);
             else
                 $propagate = 1;
             $qnLogger = $this->_logging->getLogger($qn);
