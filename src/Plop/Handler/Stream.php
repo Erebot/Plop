@@ -24,8 +24,9 @@ extends Plop_Handler
     public function __construct(&$stream = NULL)
     {
         parent::__construct();
-        if ($stream === NULL)
+        if ($stream === NULL) {
             $stream = fopen('php://stderr', 'at');
+        }
         $this->_stream       =&  $stream;
         $this->formatter    =   NULL;
     }

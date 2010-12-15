@@ -200,11 +200,13 @@ extends Plop_Filterer
                 break;
         }
         if (!$found && !self::$manager->emittedNoHandlerWarning) {
+            $stderr = fopen('php://stderr', 'at');
             fprintf(
-                STDERR,
+                $stderr,
                 'No handlers could be found for logger "%s"'."\n",
                 $this->name
             );
+            fclose($stderr);
             self::$manager->emittedNoHandlerWarning = 1;
         }
     }

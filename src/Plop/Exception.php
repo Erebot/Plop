@@ -16,5 +16,7 @@
     along with Plop.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-interface Plop_Exception {}
+interface Plop_Exception
+{
+}
 

@@ -74,7 +74,10 @@ extends Plop_Config_ParserAbstract
             $args = array();
             if (isset($this->cp[$sectname]['args']))
                 $args = $this->cp[$sectname]['args'];
-            $h = $this->createHandlerInstance($this->cp[$sectname]['class'], $args);
+            $h = $this->createHandlerInstance(
+                $this->cp[$sectname]['class'],
+                $args
+            );
             if (isset($opts['level'])) {
                 $level = $opts['level'];
                 if (is_string($level))

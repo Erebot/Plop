@@ -100,7 +100,9 @@ extends Plop_Filterer
 
     public function handleError(Plop_Record &$record, Exception &$exception)
     {
-        fprintf(STDERR, "%s", $exception);
+        $stderr = fopen('php://stderr', 'at');
+        fprintf($stderr, "%s\n", $exception);
+        fclose($stderr);
     }
 }
 

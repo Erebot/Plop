@@ -21,7 +21,7 @@ class Plop_BufferingFormatter
     static public $defaultFormatter = NULL;
     protected $_lineFmt;
 
-    public function __construct($linefmt = NULL)
+    public function __construct($lineFmt = NULL)
     {
         if ($lineFmt)
             $this->_lineFmt = $lineFmt;
