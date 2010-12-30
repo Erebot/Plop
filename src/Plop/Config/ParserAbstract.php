@@ -26,8 +26,6 @@ abstract class Plop_Config_ParserAbstract
         $this->cp       =  $this->getConfigParserData($fname);
     }
 
-    abstract protected function getConfigParserData($fname);
-
     protected function createHandlerInstance($cls, &$args)
     {
         if (
@@ -43,15 +41,16 @@ abstract class Plop_Config_ParserAbstract
         return $reflector->newInstanceArgs($args);
     }
 
-    public function doWork()
+    public function doWork($disableExistingLoggers=TRUE)
     {
         $formatters = $this->createFormatters();
         $handlers = $this->installHandlers($formatters);
-        $this->installLoggers($handlers);
+        $this->installLoggers($handlers, $disableExistingLoggers);
     }
 
+    abstract protected function getConfigParserData($fname);
     abstract protected function createFormatters();
     abstract protected function installHandlers($formatters);
-    abstract protected function installLoggers($handlers);
+    abstract protected function installLoggers($handlers, $disableExistingLoggers);
 }
 

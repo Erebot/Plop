@@ -98,7 +98,7 @@ extends Plop_Config_ParserAbstract
         return $handlers;
     }
 
-    protected function installLoggers($handlers)
+    protected function installLoggers($handlers, $disableExistingLoggers)
     {
         if (!isset($this->cp['loggers']['keys']))
             return;
@@ -134,6 +134,8 @@ extends Plop_Config_ParserAbstract
         $reflector  = new ReflectionObject($root);
         $manager    = $reflector->getStaticPropertyValue('manager');
         $existing   = array_keys($manager->loggerDict);
+        sort($existing);
+        $childLoggers = array();
         foreach ($llist as $log) {
             $sectname = "logger_".$log;
             $qn = $this->cp[$sectname]['qualname'];
@@ -142,11 +144,19 @@ extends Plop_Config_ParserAbstract
                 $propagate = (int) $opts['propagate'];
             else
                 $propagate = 1;
-            $logger = $this->_logging->getLogger($qn);
+            $logger =& $this->_logging->getLogger($qn);
             if (isset($existing[$qn])) {
                 $key = array_search($qn, $existing);
-                if ($key !== FALSE)
+                if ($key !== FALSE) {
+                    $i = $key + 1;
+                    $prefixed = $qn . DIRECTORY_SEPARATOR;
+                    $pflen = strlen($prefixed);
+                    $numExisting = count($existing);
+                    while ($i < $numExisting &&
+                        strncmp($existing[$i], $prefixed, $pflen))
+                        $childLoggers[] = $existing[$i++];
                     unset($existing[$key]);
+                }
             }
             if (isset($opts['level'])) {
                 $level = $opts['level'];
@@ -162,9 +172,20 @@ extends Plop_Config_ParserAbstract
             $hlist = explode(',', $opts['handlers']);
             foreach ($hlist as $hand)
                 $logger->addHandler($handlers[trim($hand)]);
+            unset($logger);
         }
-        foreach ($existing as $log)
-            $root->manager->loggerDict[$log]->disabled = 1;
+
+        foreach ($existing as $log) {
+            $logger =& $manager->loggerDict[$log];
+            if (isset($childLoggers[$log])) {
+                $logger->level      = Plop::NOTSET;
+                $logger->handlers   = array();
+                $logger->propagate  = 1;
+            }
+            else if ($disableExistingLoggers)
+                $logger->disabled = 1;
+            unset($logger);
+        }
     }
 }
 

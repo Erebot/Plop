@@ -200,12 +200,16 @@ class Plop
 
     public function fileConfig(
         $fname,
-        $defaults   = array(),
-        $class     = 'Plop_Config_Format_INI'
+        $defaults               = NULL,
+        $class                  = 'Plop_Config_Format_INI',
+        $disableExistingLoggers = TRUE
     )
     {
+        /// @TODO: find some use to this parameter.
+        if ($defaults === NULL)
+            $defaults = array();
         $configParser = new $class($this, $fname);
-        $configParser->doWork();
+        $configParser->doWork($disableExistingLoggers);
     }
 }
 

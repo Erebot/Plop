@@ -92,23 +92,24 @@ extends Plop_Config_ParserAbstract
         return $handlers;
     }
 
-    protected function installLoggers($handlers)
+    protected function installLoggers($handlers, $disableExistingLoggers)
     {
         if (!isset($this->cp->children(self::XMLNS)->loggers[0]))
             return;
 
-        $root       =   $this->_logging->getLogger();
-        $rootRefl   =   new ReflectionObject($root);
-        $manager    =   $rootRefl->getStaticPropertyValue('manager');
-        $existing   =   array_keys($manager->loggerDict);
+        $root           = $this->_logging->getLogger();
+        $rootRefl       = new ReflectionObject($root);
+        $manager        = $rootRefl->getStaticPropertyValue('manager');
+        $existing       = array_keys($manager->loggerDict);
+        sort($existing);
+        $childLoggers   = array();
         foreach ($this->cp->children(self::XMLNS)->loggers[0]
-                    ->children(self::XMLNS)->logger as $logger) {
-            $name = (string) $logger->attributes('')->name;
+                    ->children(self::XMLNS)->logger as $loggerXML) {
+            $name = (string) $loggerXML->attributes('')->name;
             if ($name == "root") {
-                $xrl    =&  $logger;
                 $log    =&  $root;
-                if (isset($xrl->children(self::XMLNS)->level[0])) {
-                    $level = (string) $xrl->children(self::XMLNS)->level;
+                if (isset($loggerXML->children(self::XMLNS)->level[0])) {
+                    $level = (string) $loggerXML->children(self::XMLNS)->level;
                     if (is_numeric($level))
                         $level = (int) $level;
                     else
@@ -117,46 +118,66 @@ extends Plop_Config_ParserAbstract
                 }
                 foreach ($root->handlers as $h)
                     $root->removeHandler($h);
-                if (isset($xrl->children(self::XMLNS)->handlers[0])) {
-                    foreach ($xrl->children(self::XMLNS)->handlers[0]
+                if (isset($loggerXML->children(self::XMLNS)->handlers[0])) {
+                    foreach ($loggerXML
+                                ->children(self::XMLNS)->handlers[0]
                                 ->children(self::XMLNS)->handler as $hand) {
                         $hname = trim((string) $hand);
                         $log->addHandler($handlers[$hname]);
                     }
                 }
+                continue;
             }
 
-            $qn = (string) $logger->children(self::XMLNS)->qualname;
-            if (isset($logger->children(self::XMLNS)->propagate[0]))
+            $qn = (string) $loggerXML->children(self::XMLNS)->qualname;
+            if (isset($loggerXML->children(self::XMLNS)->propagate[0]))
                 $propagate =
-                    (int) ((string) $logger->children(self::XMLNS)->propagate);
+                    (int) ((string) $loggerXML->children(self::XMLNS)->propagate);
             else
                 $propagate = 1;
-            $qnLogger = $this->_logging->getLogger($qn);
+            $logger = $this->_logging->getLogger($qn);
             $key = array_search($qn, $existing, TRUE);
-            if ($key !== FALSE)
+            if ($key !== FALSE) {
+                $i = $key + 1;
+                $prefixed = $qn . DIRECTORY_SEPARATOR;
+                $pflen = strlen($prefixed);
+                $numExisting = count($existing);
+                while ($i < $numExisting &&
+                    strncmp($existing[$i], $prefixed, $pflen))
+                    $childLoggers[] = $existing[$i++];
                 unset($existing[$key]);
-            if (isset($logger->children(self::XMLNS)->level[0])) {
-                $level = (string) $logger->children(self::XMLNS)->level;
+            }
+            if (isset($loggerXML->children(self::XMLNS)->level[0])) {
+                $level = (string) $loggerXML->children(self::XMLNS)->level;
                 if (is_numeric($level))
                     $level = (int) $level;
                 else
                     $level = $this->_logging->getLevelName($level);
-                $qnLogger->setLevel($level);
+                $logger->setLevel($level);
             }
-            foreach ($qnLogger->handlers as &$h)
-                $qnLogger->removeHandler($h);
+            foreach ($logger->handlers as &$h)
+                $logger->removeHandler($h);
             unset($h);
-            $qnLogger->propagate  = $propagate;
-            $qnLogger->disabled   = 0;
-            foreach ($logger->children(self::XMLNS)->handlers[0]
-                            ->children(self::XMLNS)->handler as $hand) {
+            $logger->propagate  = $propagate;
+            $logger->disabled   = 0;
+            foreach ($loggerXML
+                        ->children(self::XMLNS)->handlers[0]
+                        ->children(self::XMLNS)->handler as $hand) {
                 $hname = trim((string) $hand);
-                $qnLogger->addHandler($handlers[$hname]);
+                $logger->addHandler($handlers[$hname]);
             }
         }
-        foreach ($existing as $log)
-            $root->manager->loggerDict[$log]->disabled = 1;
+
+        foreach ($existing as $log) {
+            $logger = $manager->loggerDict[$log];
+            if (isset($childLoggers[$log])) {
+                $logger->level      = Plop::NOTSET;
+                $logger->handlers   = array();
+                $logger->propagate  = 1;
+            }
+            else if ($disableExistingLoggers)
+                $logger->disabled = 1;
+        }
     }
 }
 

@@ -45,28 +45,26 @@ extends PHPUnit_Framework_TestCase
     {
         $this->logging->fileConfig(
             dirname(__FILE__) . DIRECTORY_SEPARATOR . 'config.xml',
-            array(),
+            NULL,
             'Plop_Config_Format_XML'
         );
         $this->checkLoggingSettings();
     }
 
-    public function testLoadINIConfigurationWithFilename()
+    public function testLoadINIConfigurationFromFilename()
     {
         $this->logging->fileConfig(
             dirname(__FILE__) . DIRECTORY_SEPARATOR . 'config.ini',
-            array(),
+            NULL,
             'Plop_Config_Format_INI'
         );
         $this->checkLoggingSettings();
     }
 
-    public function testLoadConfigurationWithFilename()
+    public function testLoadConfigurationFromFilename()
     {
         $this->logging->fileConfig(
-            dirname(__FILE__) .
-            DIRECTORY_SEPARATOR .
-            'config.ini'
+            dirname(__FILE__) . DIRECTORY_SEPARATOR . 'config.ini'
         );
         $this->checkLoggingSettings();
     }
