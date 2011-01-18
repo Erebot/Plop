@@ -18,7 +18,7 @@
 
     <target name="doc_pdf" description="">
         <exec command="doxygen Doxyfile_latex" dir="." passthru="true" checkreturn="true"/>
-        <exec command="make" dir="doc/latex" passthru="true"/>
+        <exec command="make" dir="docs/latex" passthru="true"/>
     </target>
 
     <import file="buildenv/build.xml"/>
