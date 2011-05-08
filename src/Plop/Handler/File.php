@@ -22,7 +22,7 @@ extends Plop_Handler_Stream
     public $baseFilename;
     public $mode;
 
-    public function __construct($filename, $mode='a', $encoding=NULL, $delay=0)
+    public function __construct($filename, $mode='at', $encoding=NULL, $delay=0)
     {
         $this->baseFilename = $filename;
         $this->mode         = $mode;

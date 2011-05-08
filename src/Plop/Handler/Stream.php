@@ -27,7 +27,7 @@ extends Plop_Handler
         if ($stream === NULL) {
             $stream = fopen('php://stderr', 'at');
         }
-        $this->_stream       =&  $stream;
+        $this->_stream      =&  $stream;
         $this->formatter    =   NULL;
     }
 
