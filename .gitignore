@@ -1,0 +1,7 @@
+/docs
+/*.pem
+/*.phar
+/*.pubkey
+/*.tgz
+/*.tagfile
+
