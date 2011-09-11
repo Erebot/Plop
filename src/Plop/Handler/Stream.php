@@ -24,9 +24,6 @@ extends Plop_Handler
     public function __construct(&$stream = NULL)
     {
         parent::__construct();
-        if ($stream === NULL) {
-            $stream = fopen('php://stderr', 'at');
-        }
         $this->_stream      =&  $stream;
         $this->formatter    =   NULL;
     }
@@ -38,9 +35,20 @@ extends Plop_Handler
 
     public function emit(Plop_Record &$record)
     {
+        if (!$this->_stream)
+            $stream = fopen('php://stderr', 'at');
+        else
+            $stream =& $this->_stream;
+
         $msg = $this->format($record);
-        fprintf($this->_stream, "%s\n", $msg);
-        $this->flush();
+        fprintf($stream, "%s\n", $msg);
+
+        if (!$this->_stream) {
+            fflush($stream);
+            fclose($stream);
+        }
+        else
+            $this->flush();
     }
 }
 
