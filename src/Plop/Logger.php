@@ -228,6 +228,8 @@ extends Plop_Filterer
     }
 }
 
-Plop_Logger::$root     = new Plop_RootLogger(Plop::WARNING);
-Plop_Logger::$manager  = new Plop_Manager(Plop_Logger::$root);
+if (class_exists('Plop_RootLogger') && Plop_Logger::$root === NULL) {
+    Plop_Logger::$root     = new Plop_RootLogger(Plop::WARNING);
+    Plop_Logger::$manager  = new Plop_Manager(Plop_Logger::$root);
+}
 

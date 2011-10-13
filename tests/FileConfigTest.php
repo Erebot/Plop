@@ -27,8 +27,9 @@ extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        Plop_Logger::$root     = new Plop_RootLogger(Plop::WARNING);
-        Plop_Logger::$manager  = new Plop_Manager(Plop_Logger::$root);
+        $rootLogger = new Plop_RootLogger(Plop::WARNING);
+        Plop_Logger::$root     = $rootLogger;
+        Plop_Logger::$manager  = new Plop_Manager($rootLogger);
         $this->logging =& Plop::getInstance();
     }
 

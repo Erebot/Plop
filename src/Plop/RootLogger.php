@@ -25,4 +25,8 @@ extends Plop_Logger
     }
 }
 
+if (Plop_Logger::$root === NULL) {
+    Plop_Logger::$root     = new Plop_RootLogger(Plop::WARNING);
+    Plop_Logger::$manager  = new Plop_Manager(Plop_Logger::$root);
+}
 

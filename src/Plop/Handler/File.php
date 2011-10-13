@@ -31,15 +31,18 @@ extends Plop_Handler_Stream
             Plop_Handler::__construct();
             $this->_stream = FALSE;
         }
-        else
-            parent::__construct($this->open());
+        else {
+            $stream = $this->open();
+            parent::__construct($stream);
+        }
     }
 
     protected function open()
     {
         $stream = fopen($this->baseFilename, $this->mode);
         if (function_exists('stream_encoding') &&
-            $this->encoding !== NULL && $stream !== FALSE)
+            $this->encoding !== NULL &&
+            $stream !== FALSE)
             stream_encoding($stream, $this->encoding);
         return $stream;
     }
