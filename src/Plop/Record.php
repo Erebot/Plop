@@ -31,13 +31,34 @@ class Plop_Record
         $func = NULL
     )
     {
-        $ct         = microtime(TRUE);
+        static $pid = NULL;
+        if ($pid === NULL)
+            $pid = getmypid();
+
         $logging    = Plop::getInstance();
+        $ct         = explode(" ", microtime(FALSE));
+        $msecs      = (int) substr($ct[0]."000000", 2);
+        $parsed     = strptime($ct[1], "%s");
+        $date       = new DateTime(
+            sprintf(
+                "%04d-%02d-%02dT%02d:%02d:%02d.%s",
+                $parsed["tm_year"] + 1900,
+                $parsed["tm_mon"] + 1,
+                $parsed["tm_mday"],
+                $parsed["tm_hour"],
+                $parsed["tm_min"],
+                $parsed["tm_sec"],
+                substr($ct[0], 2)
+            ),
+            new DateTimeZone("UTC")
+        );
+        $created    = ((float) $date->format("U.u"));
+        $diff       = ($created - $logging->created) * 1000;
 
         if (isset($_SERVER['argv'][0]))
             $processName = basename($_SERVER['argv'][0]);
         else
-            $processName = '???';
+            $processName = '-';
 
         $this->dict['name']             = $name;
         $this->dict['msg']              = $msg;
@@ -51,13 +72,15 @@ class Plop_Record
         $this->dict['exc_text']         = NULL;
         $this->dict['lineno']           = $lineno;
         $this->dict['funcName']         = $func;
-        $this->dict['created']          = $ct;
-        $this->dict['msecs']            = ($ct - ((int) $ct)) * 1000;
-        $this->dict['relativeCreated']  = ($ct - $logging->created) * 1000;
+        $this->dict['msecs']            = $msecs;
+        $this->dict['created']          = $created;
+        $this->dict['createdDate']      = $date;
+        $this->dict['relativeCreated']  = $diff;
         $this->dict['thread']           = NULL;
         $this->dict['threadName']       = NULL;
-        $this->dict['process']          = getmypid();
+        $this->dict['process']          = $pid;
         $this->dict['processName']      = $processName;
+        $this->dict['hostname']         = php_uname('n');
     }
 
     public function getMessage()

@@ -51,7 +51,7 @@ class Plop
             self::ERROR     => 'ERROR',
             self::CRITICAL  => 'CRITICAL',
         );
-        $this->_levelNames   = $this->_levelNames +
+        $this->_levelNames  = $this->_levelNames +
                                 array_flip($this->_levelNames);
         $this->created      = microtime(TRUE);
     }

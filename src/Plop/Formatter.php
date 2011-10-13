@@ -54,12 +54,9 @@ class Plop_Formatter
 
     public function formatTime(Plop_Record $record, $datefmt = NULL)
     {
-        $ct = $record->dict['created'];
-        if ($datefmt)
-            $s = strftime($datefmt, $ct);
-        else
-            $s = strftime("%F %T", $ct).
-                sprintf(",%03d", $record->dict['msecs']);
+        if (!$datefmt)
+            $datefmt = "Y-m-d H:i:s,u";
+        $s = $record->dict['createdDate']->format($datefmt);
         return $s;
     }
 
