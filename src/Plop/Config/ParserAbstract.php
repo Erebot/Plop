@@ -51,6 +51,9 @@ abstract class Plop_Config_ParserAbstract
     abstract protected function getConfigParserData($fname);
     abstract protected function createFormatters();
     abstract protected function installHandlers($formatters);
-    abstract protected function installLoggers($handlers, $disableExistingLoggers);
+    abstract protected function installLoggers(
+        $handlers,
+        $disableExistingLoggers
+    );
 }
 

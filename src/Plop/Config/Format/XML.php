@@ -62,7 +62,7 @@ extends Plop_Config_ParserAbstract
         $handlers = array();
         if (!isset($this->cp->children(self::XMLNS)->handlers[0]))
             return $handlers;
-    
+
         $fixups = array();
         foreach ($this->cp->children(self::XMLNS)->handlers[0]
                     ->children(self::XMLNS)->handler as $handler) {
@@ -131,8 +131,9 @@ extends Plop_Config_ParserAbstract
 
             $qn = (string) $loggerXML->children(self::XMLNS)->qualname;
             if (isset($loggerXML->children(self::XMLNS)->propagate[0]))
-                $propagate =
-                    (int) ((string) $loggerXML->children(self::XMLNS)->propagate);
+                $propagate = (int) (
+                    (string) $loggerXML->children(self::XMLNS)->propagate
+                );
             else
                 $propagate = 1;
             $logger = $this->_logging->getLogger($qn);

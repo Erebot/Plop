@@ -78,26 +78,32 @@ extends Plop_Handler_RotatingAbstract
         else if (substr($this->when, 0, 1) == 'W') {
             $this->interval = 60 * 60 * 24 * 7;
             if (strlen($this->when) != 2)
-                throw new Exception(sprintf(
-                    'You must specify a day for weekly rollover '.
-                    'from 0 to 6 (0 is Monday): %s',
-                    $this->when
-                ));
+                throw new Exception(
+                    sprintf(
+                        'You must specify a day for weekly rollover '.
+                        'from 0 to 6 (0 is Monday): %s',
+                        $this->when
+                    )
+                );
             $ord = ord($this->when[1]);
             if ($ord < ord('0') || $ord > ord('6'))
-                throw new Exception(sprintf(
-                    'Invalid day specified for weekly rollover: %s',
-                    $this->when
-                ));
+                throw new Exception(
+                    sprintf(
+                        'Invalid day specified for weekly rollover: %s',
+                        $this->when
+                    )
+                );
             $this->dayOfWeek = (int) $this->when[1];
             $this->suffix = '%Y-%m-%d';
             $this->extMatch = '^\\d{4}-\\d{2}-\\d{2}$';
         }
         else
-            throw new Exception(sprintf(
-                'Invalid rollover interval specified: %s',
-                $this->when
-            ));
+            throw new Exception(
+                sprintf(
+                    'Invalid rollover interval specified: %s',
+                    $this->when
+                )
+            );
         $this->interval     = $this->interval * $interval;
         $this->rolloverAt   = $this->compuleRollover(time());
     }
