@@ -32,7 +32,7 @@ extends PHPUnit_Extensions_OutputTestCase
         Plop_Logger::$manager  = new Plop_Manager($rootLogger);
         $this->logging =& Plop::getInstance();
         $this->logging->basicConfig(array(
-            'stream'    => fopen("php://output", "a+"),
+            'stream'    => fopen("php://output", "a+t"),
             'level'     => Plop::INFO,
         ));
     }
