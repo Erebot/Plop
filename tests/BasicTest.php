@@ -58,13 +58,14 @@ extends PHPUnit_Extensions_OutputTestCase
             $this->logging->log($level, $msg);
         }
 
-        $expected =<<<EXPECTED
-INFO:root:This is an info message
-WARNING:root:This is a warning message
-ERROR:root:This is an error message
-CRITICAL:root:This is a critical error message
-
-EXPECTED;
+        $expected = array(
+            'INFO:root:This is an info message',
+            'WARNING:root:This is a warning message',
+            'ERROR:root:This is an error message',
+            'CRITICAL:root:This is a critical error message',
+            ''
+        );
+        $expected = implode(PHP_EOL, $expected);
         $this->expectOutputString($expected);
     }
 
@@ -79,8 +80,8 @@ EXPECTED;
         $logger1->warning($msg1);
         $logger2->warning($msg2);
 
-        $expected = "WARNING:package1/module1:$msg1\n".
-                    "WARNING:package2/module2:$msg2\n";
+        $expected = "WARNING:package1/module1:$msg1".PHP_EOL.
+                    "WARNING:package2/module2:$msg2".PHP_EOL;
         $this->expectOutputString($expected);
     }
 }
