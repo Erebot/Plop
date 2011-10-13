@@ -36,7 +36,7 @@ extends Plop_Handler
     public function emit(Plop_Record &$record)
     {
         if (!$this->_stream)
-            $stream = fopen('php://stderr', 'at');
+            $stream = fopen('php://stderr', 'ab');
         else
             $stream =& $this->_stream;
 

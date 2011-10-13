@@ -32,7 +32,7 @@ extends PHPUnit_Extensions_OutputTestCase
         Plop_Logger::$manager  = new Plop_Manager($rootLogger);
         $this->logging =& Plop::getInstance();
         $this->logging->basicConfig(array(
-            'stream'    => fopen("php://output", "a+t"),
+            'stream'    => fopen("php://output", "a+b"),
             'level'     => Plop::INFO,
         ));
     }
@@ -65,7 +65,7 @@ extends PHPUnit_Extensions_OutputTestCase
             'CRITICAL:root:This is a critical error message',
             ''
         );
-        $expected = implode(PHP_EOL, $expected);
+        $expected = implode("\n", $expected);
         $this->expectOutputString($expected);
     }
 
@@ -80,8 +80,8 @@ extends PHPUnit_Extensions_OutputTestCase
         $logger1->warning($msg1);
         $logger2->warning($msg2);
 
-        $expected = "WARNING:package1/module1:$msg1".PHP_EOL.
-                    "WARNING:package2/module2:$msg2".PHP_EOL;
+        $expected = "WARNING:package1/module1:$msg1\n".
+                    "WARNING:package2/module2:$msg2\n";
         $this->expectOutputString($expected);
     }
 }
