@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package version="2.1" xmlns="http://pear.php.net/dtd/package-2.1" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0     http://pear.php.net/dtd/tasks-1.0.xsd     http://pear.php.net/dtd/package-2.1     http://pear.php.net/dtd/package-2.1.xsd">
+ <name>Plop</name>
+ <channel>pear.erebot.net</channel>
+ <summary>Python Logging On PHP
+</summary>
+ <description>
+PLOP is a rewrite of Python's logging API using PHP.
+It aims at keeping compatibility with Python's API
+while being more feature-complete than PEAR's Log package
+and more user-friendly than Apache's log4php.
+
+</description>
+ <lead>
+  <name>François Poirotte</name>
+  <user>Clicky</user>
+  <email>clicky@erebot.net</email>
+  <active>yes</active>
+ </lead>
+ <date>2011-10-16</date>
+ <time>18:06:33</time>
+ <version>
+  <release>0.2.1</release>
+  <api>0.2.0</api>
+ </version>
+ <stability>
+  <release>alpha</release>
+  <api>alpha</api>
+ </stability>
+ <license uri="http://www.gnu.org/copyleft/gpl.html">GPL</license>
+ <notes>Release notes for Plop version 0.2.1
+------------------------------------
+
+This file is only a placeholder until the real README
+is written.
+
+
+API release notes for Plop version 0.2.0
+----------------------------------------
+
+This version of Plop breaks backward compatibility as it uses
+a PEAR2-oriented directory layout.
+You'll need to adapt your code as a result.
+
+You should use PEAR2's autoloader to use Plop.
+
+The classes have been renamed to be a little closer to PEAR's
+naming conventions..
+For example, the old stream handler class is now called:
+Plop_Handler_Stream.
+
+Also, the classes for configuration parsers were also renamed
+(Plop_Config_Format_INI and Plop_Config_Format_XML).
+As a result, calls to fileConfig() must be updated.
+This affects configuration files a little as the class names
+need to be updated to reflect those changes.
+
+To sum it up, the snippets below shows how Plop was used
+and how it must be used from now on.
+
+Old usage:
+1.  Include &quot;logging.php&quot; from Plop's sources.
+2.  Use $logging =&amp; Plop::getInstance(); to retrieve an instance
+    of the logging subsystem.
+3.  Configure logging, eg. with:
+    $logging-&gt;fileConfig(
+        $configPath,
+        array(),
+        'XML'
+    );
+4.  Use $logger = $logging-&gt;getLogger(__FILE__); to retrieve
+    a logger for the current file.
+5.  Log whatever you want with eg. $logger-&gt;error('Ouch!'); 
+
+New usage:
+1.  Create and install an autoloader which maps class names to
+    their file, by simply replacing underscores with the
+    DIRECTORY_SEPARATOR and appending the &quot;.php&quot; suffix.
+    Eg. Plop_Config_Format_INI
+    -&gt;  Plop/Config/Format/INI.php under Linux
+2.  Use $logging =&amp; Plop::getInstance(); to retrieve an instance
+    of the logging subsystem.
+3.  Configure logging, eg. with:
+    $logging-&gt;fileConfig(
+        $configPath,
+        array(),
+        'Plop_Config_Format_XML'
+    );
+4.  Use $logger = $logging-&gt;getLogger(__FILE__); to retrieve
+    a logger for the current file.
+5.  Log whatever you want with eg. $logger-&gt;error('Ouch!'); 
+
+</notes>
+ <contents>
+  <dir name="/">
+   <file role="test" name="test/pear.erebot.net/Plop/testenv/testenv/bootstrap.php"/>
+   <file role="test" name="test/pear.erebot.net/Plop/testenv/testenv/Autoload.php"/>
+   <file role="test" name="test/pear.erebot.net/Plop/StreamHandlerTest.php"/>
+   <file role="test" name="test/pear.erebot.net/Plop/FileHandlerTest.php"/>
+   <file role="test" name="test/pear.erebot.net/Plop/FileConfigTest.php"/>
+   <file role="test" name="test/pear.erebot.net/Plop/config.xml"/>
+   <file role="test" name="test/pear.erebot.net/Plop/config.ini"/>
+   <file role="test" name="test/pear.erebot.net/Plop/BasicTest.php"/>
+   <file role="php" name="php/Plop/RootLogger.php"/>
+   <file role="php" name="php/Plop/Record.php"/>
+   <file role="php" name="php/Plop/PlaceHolder.php"/>
+   <file role="php" name="php/Plop/Manager.php"/>
+   <file role="php" name="php/Plop/Logger.php"/>
+   <file role="php" name="php/Plop/Handler/WatchedFile.php"/>
+   <file role="php" name="php/Plop/Handler/TimedRotatingFile.php"/>
+   <file role="php" name="php/Plop/Handler/SysLog.php"/>
+   <file role="php" name="php/Plop/Handler/Stream.php"/>
+   <file role="php" name="php/Plop/Handler/Socket.php"/>
+   <file role="php" name="php/Plop/Handler/RotatingFile.php"/>
+   <file role="php" name="php/Plop/Handler/RotatingAbstract.php"/>
+   <file role="php" name="php/Plop/Handler/File.php"/>
+   <file role="php" name="php/Plop/Handler/Datagram.php"/>
+   <file role="php" name="php/Plop/Handler.php"/>
+   <file role="php" name="php/Plop/Formatter.php"/>
+   <file role="php" name="php/Plop/Filterer.php"/>
+   <file role="php" name="php/Plop/Filter.php"/>
+   <file role="php" name="php/Plop/Exception.php"/>
+   <file role="php" name="php/Plop/Config/ParserAbstract.php"/>
+   <file role="php" name="php/Plop/Config/Format/XML.php"/>
+   <file role="php" name="php/Plop/Config/Format/INI.php"/>
+   <file role="php" name="php/Plop/BufferingFormatter.php"/>
+   <file role="php" name="php/Plop.php"/>
+   <file role="doc" name="doc/pear.erebot.net/Plop/coverage/default/coverage/default/Plop_RootLogger.html"/>
+   <file role="doc" name="doc/pear.erebot.net/Plop/coverage/default/coverage/default/Plop_Record.html"/>
+   <file role="doc" name="doc/pear.erebot.net/Plop/coverage/default/coverage/default/Plop_PlaceHolder.html"/>
+   <file role="doc" name="doc/pear.erebot.net/Plop/coverage/default/coverage/default/Plop_Manager.html"/>
+   <file role="doc" name="doc/pear.erebot.net/Plop/coverage/default/coverage/default/Plop_Logger.html"/>
+   <file role="doc" name="doc/pear.erebot.net/Plop/coverage/default/coverage/default/Plop_Handler_WatchedFile.html"/>
+   <file role="doc" name="doc/pear.erebot.net/Plop/coverage/default/coverage/default/Plop_Handler_TimedRotatingFile.html"/>
+   <file role="doc" name="doc/pear.erebot.net/Plop/coverage/default/coverage/default/Plop_Handler_SysLog.html"/>
+   <file role="doc" name="doc/pear.erebot.net/Plop/coverage/default/coverage/default/Plop_Handler_Stream.html"/>
+   <file role="doc" name="doc/pear.erebot.net/Plop/coverage/default/coverage/default/Plop_Handler_Socket.html"/>
+   <file role="doc" name="doc/pear.erebot.net/Plop/coverage/default/coverage/default/Plop_Handler_RotatingFile.html"/>
+   <file role="doc" name="doc/pear.erebot.net/Plop/coverage/default/coverage/default/Plop_Handler_RotatingAbstract.html"/>
+   <file role="doc" name="doc/pear.erebot.net/Plop/coverage/default/coverage/default/Plop_Handler_File.html"/>
+   <file role="doc" name="doc/pear.erebot.net/Plop/coverage/default/coverage/default/Plop_Handler_Datagram.html"/>
+   <file role="doc" name="doc/pear.erebot.net/Plop/coverage/default/coverage/default/Plop_Handler.html"/>
+   <file role="doc" name="doc/pear.erebot.net/Plop/coverage/default/coverage/default/Plop_Formatter.html"/>
+   <file role="doc" name="doc/pear.erebot.net/Plop/coverage/default/coverage/default/Plop_Filterer.html"/>
+   <file role="doc" name="doc/pear.erebot.net/Plop/coverage/default/coverage/default/Plop_Filter.html"/>
+   <file role="doc" name="doc/pear.erebot.net/Plop/coverage/default/coverage/default/Plop_Config_ParserAbstract.html"/>
+   <file role="doc" name="doc/pear.erebot.net/Plop/coverage/default/coverage/default/Plop_Config_Format_XML.html"/>
+   <file role="doc" name="doc/pear.erebot.net/Plop/coverage/default/coverage/default/Plop_Config_Format_INI.html"/>
+   <file role="doc" name="doc/pear.erebot.net/Plop/coverage/default/coverage/default/Plop_BufferingFormatter.html"/>
+   <file role="doc" name="doc/pear.erebot.net/Plop/coverage/default/coverage/default/Plop.html"/>
+   <file role="doc" name="doc/pear.erebot.net/Plop/coverage/default/coverage/default/package-summary.html"/>
+   <file role="doc" name="doc/pear.erebot.net/Plop/coverage/default/coverage/default/package-frame.html"/>
+   <file role="doc" name="doc/pear.erebot.net/Plop/coverage/coverage/stylesheet.css"/>
+   <file role="doc" name="doc/pear.erebot.net/Plop/coverage/coverage/overview-summary.html"/>
+   <file role="doc" name="doc/pear.erebot.net/Plop/coverage/coverage/overview-frame.html"/>
+   <file role="doc" name="doc/pear.erebot.net/Plop/coverage/coverage/index.html"/>
+   <file role="doc" name="doc/pear.erebot.net/Plop/coverage/coverage/allclasses-frame.html"/>
+   <file role="data" name="data/pear.erebot.net/Plop/i18n/i18n/Plop.pot"/>
+   <file role="data" name="data/pear.erebot.net/Plop/coverage-frames.xsl"/>
+   <file role="data" name="data/pear.erebot.net/Plop/config.rng"/>
+  </dir>
+ </contents>
+ <dependencies>
+  <required>
+   <php>
+    <min>5.2.0</min>
+   </php>
+   <pearinstaller>
+    <min>1.4.8</min>
+   </pearinstaller>
+  </required>
+ </dependencies>
+ <phprelease>
+  <filelist>
+   <install name="data/pear.erebot.net/Plop/config.rng" as="Plop/config.rng"/>
+   <install name="data/pear.erebot.net/Plop/coverage-frames.xsl" as="Plop/coverage-frames.xsl"/>
+   <install name="data/pear.erebot.net/Plop/i18n/i18n/Plop.pot" as="Plop/i18n/i18n/Plop.pot"/>
+   <install name="doc/pear.erebot.net/Plop/coverage/coverage/allclasses-frame.html" as="Plop/coverage/coverage/allclasses-frame.html"/>
+   <install name="doc/pear.erebot.net/Plop/coverage/coverage/index.html" as="Plop/coverage/coverage/index.html"/>
+   <install name="doc/pear.erebot.net/Plop/coverage/coverage/overview-frame.html" as="Plop/coverage/coverage/overview-frame.html"/>
+   <install name="doc/pear.erebot.net/Plop/coverage/coverage/overview-summary.html" as="Plop/coverage/coverage/overview-summary.html"/>
+   <install name="doc/pear.erebot.net/Plop/coverage/coverage/stylesheet.css" as="Plop/coverage/coverage/stylesheet.css"/>
+   <install name="doc/pear.erebot.net/Plop/coverage/default/coverage/default/package-frame.html" as="Plop/coverage/default/coverage/default/package-frame.html"/>
+   <install name="doc/pear.erebot.net/Plop/coverage/default/coverage/default/package-summary.html" as="Plop/coverage/default/coverage/default/package-summary.html"/>
+   <install name="doc/pear.erebot.net/Plop/coverage/default/coverage/default/Plop.html" as="Plop/coverage/default/coverage/default/Plop.html"/>
+   <install name="doc/pear.erebot.net/Plop/coverage/default/coverage/default/Plop_BufferingFormatter.html" as="Plop/coverage/default/coverage/default/Plop_BufferingFormatter.html"/>
+   <install name="doc/pear.erebot.net/Plop/coverage/default/coverage/default/Plop_Config_Format_INI.html" as="Plop/coverage/default/coverage/default/Plop_Config_Format_INI.html"/>
+   <install name="doc/pear.erebot.net/Plop/coverage/default/coverage/default/Plop_Config_Format_XML.html" as="Plop/coverage/default/coverage/default/Plop_Config_Format_XML.html"/>
+   <install name="doc/pear.erebot.net/Plop/coverage/default/coverage/default/Plop_Config_ParserAbstract.html" as="Plop/coverage/default/coverage/default/Plop_Config_ParserAbstract.html"/>
+   <install name="doc/pear.erebot.net/Plop/coverage/default/coverage/default/Plop_Filter.html" as="Plop/coverage/default/coverage/default/Plop_Filter.html"/>
+   <install name="doc/pear.erebot.net/Plop/coverage/default/coverage/default/Plop_Filterer.html" as="Plop/coverage/default/coverage/default/Plop_Filterer.html"/>
+   <install name="doc/pear.erebot.net/Plop/coverage/default/coverage/default/Plop_Formatter.html" as="Plop/coverage/default/coverage/default/Plop_Formatter.html"/>
+   <install name="doc/pear.erebot.net/Plop/coverage/default/coverage/default/Plop_Handler.html" as="Plop/coverage/default/coverage/default/Plop_Handler.html"/>
+   <install name="doc/pear.erebot.net/Plop/coverage/default/coverage/default/Plop_Handler_Datagram.html" as="Plop/coverage/default/coverage/default/Plop_Handler_Datagram.html"/>
+   <install name="doc/pear.erebot.net/Plop/coverage/default/coverage/default/Plop_Handler_File.html" as="Plop/coverage/default/coverage/default/Plop_Handler_File.html"/>
+   <install name="doc/pear.erebot.net/Plop/coverage/default/coverage/default/Plop_Handler_RotatingAbstract.html" as="Plop/coverage/default/coverage/default/Plop_Handler_RotatingAbstract.html"/>
+   <install name="doc/pear.erebot.net/Plop/coverage/default/coverage/default/Plop_Handler_RotatingFile.html" as="Plop/coverage/default/coverage/default/Plop_Handler_RotatingFile.html"/>
+   <install name="doc/pear.erebot.net/Plop/coverage/default/coverage/default/Plop_Handler_Socket.html" as="Plop/coverage/default/coverage/default/Plop_Handler_Socket.html"/>
+   <install name="doc/pear.erebot.net/Plop/coverage/default/coverage/default/Plop_Handler_Stream.html" as="Plop/coverage/default/coverage/default/Plop_Handler_Stream.html"/>
+   <install name="doc/pear.erebot.net/Plop/coverage/default/coverage/default/Plop_Handler_SysLog.html" as="Plop/coverage/default/coverage/default/Plop_Handler_SysLog.html"/>
+   <install name="doc/pear.erebot.net/Plop/coverage/default/coverage/default/Plop_Handler_TimedRotatingFile.html" as="Plop/coverage/default/coverage/default/Plop_Handler_TimedRotatingFile.html"/>
+   <install name="doc/pear.erebot.net/Plop/coverage/default/coverage/default/Plop_Handler_WatchedFile.html" as="Plop/coverage/default/coverage/default/Plop_Handler_WatchedFile.html"/>
+   <install name="doc/pear.erebot.net/Plop/coverage/default/coverage/default/Plop_Logger.html" as="Plop/coverage/default/coverage/default/Plop_Logger.html"/>
+   <install name="doc/pear.erebot.net/Plop/coverage/default/coverage/default/Plop_Manager.html" as="Plop/coverage/default/coverage/default/Plop_Manager.html"/>
+   <install name="doc/pear.erebot.net/Plop/coverage/default/coverage/default/Plop_PlaceHolder.html" as="Plop/coverage/default/coverage/default/Plop_PlaceHolder.html"/>
+   <install name="doc/pear.erebot.net/Plop/coverage/default/coverage/default/Plop_Record.html" as="Plop/coverage/default/coverage/default/Plop_Record.html"/>
+   <install name="doc/pear.erebot.net/Plop/coverage/default/coverage/default/Plop_RootLogger.html" as="Plop/coverage/default/coverage/default/Plop_RootLogger.html"/>
+   <install name="php/Plop.php" as="Plop.php"/>
+   <install name="php/Plop/BufferingFormatter.php" as="Plop/BufferingFormatter.php"/>
+   <install name="php/Plop/Config/Format/INI.php" as="Plop/Config/Format/INI.php"/>
+   <install name="php/Plop/Config/Format/XML.php" as="Plop/Config/Format/XML.php"/>
+   <install name="php/Plop/Config/ParserAbstract.php" as="Plop/Config/ParserAbstract.php"/>
+   <install name="php/Plop/Exception.php" as="Plop/Exception.php"/>
+   <install name="php/Plop/Filter.php" as="Plop/Filter.php"/>
+   <install name="php/Plop/Filterer.php" as="Plop/Filterer.php"/>
+   <install name="php/Plop/Formatter.php" as="Plop/Formatter.php"/>
+   <install name="php/Plop/Handler.php" as="Plop/Handler.php"/>
+   <install name="php/Plop/Handler/Datagram.php" as="Plop/Handler/Datagram.php"/>
+   <install name="php/Plop/Handler/File.php" as="Plop/Handler/File.php"/>
+   <install name="php/Plop/Handler/RotatingAbstract.php" as="Plop/Handler/RotatingAbstract.php"/>
+   <install name="php/Plop/Handler/RotatingFile.php" as="Plop/Handler/RotatingFile.php"/>
+   <install name="php/Plop/Handler/Socket.php" as="Plop/Handler/Socket.php"/>
+   <install name="php/Plop/Handler/Stream.php" as="Plop/Handler/Stream.php"/>
+   <install name="php/Plop/Handler/SysLog.php" as="Plop/Handler/SysLog.php"/>
+   <install name="php/Plop/Handler/TimedRotatingFile.php" as="Plop/Handler/TimedRotatingFile.php"/>
+   <install name="php/Plop/Handler/WatchedFile.php" as="Plop/Handler/WatchedFile.php"/>
+   <install name="php/Plop/Logger.php" as="Plop/Logger.php"/>
+   <install name="php/Plop/Manager.php" as="Plop/Manager.php"/>
+   <install name="php/Plop/PlaceHolder.php" as="Plop/PlaceHolder.php"/>
+   <install name="php/Plop/Record.php" as="Plop/Record.php"/>
+   <install name="php/Plop/RootLogger.php" as="Plop/RootLogger.php"/>
+   <install name="test/pear.erebot.net/Plop/BasicTest.php" as="Plop/BasicTest.php"/>
+   <install name="test/pear.erebot.net/Plop/config.ini" as="Plop/config.ini"/>
+   <install name="test/pear.erebot.net/Plop/config.xml" as="Plop/config.xml"/>
+   <install name="test/pear.erebot.net/Plop/FileConfigTest.php" as="Plop/FileConfigTest.php"/>
+   <install name="test/pear.erebot.net/Plop/FileHandlerTest.php" as="Plop/FileHandlerTest.php"/>
+   <install name="test/pear.erebot.net/Plop/StreamHandlerTest.php" as="Plop/StreamHandlerTest.php"/>
+   <install name="test/pear.erebot.net/Plop/testenv/testenv/Autoload.php" as="Plop/testenv/testenv/Autoload.php"/>
+   <install name="test/pear.erebot.net/Plop/testenv/testenv/bootstrap.php" as="Plop/testenv/testenv/bootstrap.php"/>
+  </filelist>
+ </phprelease>
+</package>

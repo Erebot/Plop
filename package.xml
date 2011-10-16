@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package version="2.1" xmlns="http://pear.php.net/dtd/package-2.1" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0     http://pear.php.net/dtd/tasks-1.0.xsd     http://pear.php.net/dtd/package-2.1     http://pear.php.net/dtd/package-2.1.xsd">
+ <name>Plop</name>
+ <channel>pear.erebot.net</channel>
+ <summary>Python Logging On PHP
+</summary>
+ <description>
+PLOP is a rewrite of Python's logging API using PHP.
+It aims at keeping compatibility with Python's API
+while being more feature-complete than PEAR's Log package
+and more user-friendly than Apache's log4php.
+
+</description>
+ <lead>
+  <name>François Poirotte</name>
+  <user>Clicky</user>
+  <email>clicky@erebot.net</email>
+  <active>yes</active>
+ </lead>
+ <date>2011-10-16</date>
+ <time>18:06:33</time>
+ <version>
+  <release>0.2.1</release>
+  <api>0.2.0</api>
+ </version>
+ <stability>
+  <release>alpha</release>
+  <api>alpha</api>
+ </stability>
+ <license uri="http://www.gnu.org/copyleft/gpl.html">GPL</license>
+ <notes>Release notes for Plop version 0.2.1
+------------------------------------
+
+This file is only a placeholder until the real README
+is written.
+
+
+API release notes for Plop version 0.2.0
+----------------------------------------
+
+This version of Plop breaks backward compatibility as it uses
+a PEAR2-oriented directory layout.
+You'll need to adapt your code as a result.
+
+You should use PEAR2's autoloader to use Plop.
+
+The classes have been renamed to be a little closer to PEAR's
+naming conventions..
+For example, the old stream handler class is now called:
+Plop_Handler_Stream.
+
+Also, the classes for configuration parsers were also renamed
+(Plop_Config_Format_INI and Plop_Config_Format_XML).
+As a result, calls to fileConfig() must be updated.
+This affects configuration files a little as the class names
+need to be updated to reflect those changes.
+
+To sum it up, the snippets below shows how Plop was used
+and how it must be used from now on.
+
+Old usage:
+1.  Include &quot;logging.php&quot; from Plop's sources.
+2.  Use $logging =&amp; Plop::getInstance(); to retrieve an instance
+    of the logging subsystem.
+3.  Configure logging, eg. with:
+    $logging-&gt;fileConfig(
+        $configPath,
+        array(),
+        'XML'
+    );
+4.  Use $logger = $logging-&gt;getLogger(__FILE__); to retrieve
+    a logger for the current file.
+5.  Log whatever you want with eg. $logger-&gt;error('Ouch!'); 
+
+New usage:
+1.  Create and install an autoloader which maps class names to
+    their file, by simply replacing underscores with the
+    DIRECTORY_SEPARATOR and appending the &quot;.php&quot; suffix.
+    Eg. Plop_Config_Format_INI
+    -&gt;  Plop/Config/Format/INI.php under Linux
+2.  Use $logging =&amp; Plop::getInstance(); to retrieve an instance
+    of the logging subsystem.
+3.  Configure logging, eg. with:
+    $logging-&gt;fileConfig(
+        $configPath,
+        array(),
+        'Plop_Config_Format_XML'
+    );
+4.  Use $logger = $logging-&gt;getLogger(__FILE__); to retrieve
+    a logger for the current file.
+5.  Log whatever you want with eg. $logger-&gt;error('Ouch!'); 
+
+</notes>
+ <contents>
+  <dir name="/">
+   <dir name="data" baseinstalldir="/">
+    <dir name="i18n">
+     <file role="data" name="Plop.pot"/>
+    </dir>
+    <file role="data" name="config.rng"/>
+    <file role="data" name="coverage-frames.xsl"/>
+   </dir>
+   <dir name="docs" baseinstalldir="/">
+    <dir name="coverage">
+     <dir name="default">
+      <file role="doc" name="package-frame.html"/>
+      <file role="doc" name="package-summary.html"/>
+      <file role="doc" name="Plop.html"/>
+      <file role="doc" name="Plop_BufferingFormatter.html"/>
+      <file role="doc" name="Plop_Config_Format_INI.html"/>
+      <file role="doc" name="Plop_Config_Format_XML.html"/>
+      <file role="doc" name="Plop_Config_ParserAbstract.html"/>
+      <file role="doc" name="Plop_Filter.html"/>
+      <file role="doc" name="Plop_Filterer.html"/>
+      <file role="doc" name="Plop_Formatter.html"/>
+      <file role="doc" name="Plop_Handler.html"/>
+      <file role="doc" name="Plop_Handler_Datagram.html"/>
+      <file role="doc" name="Plop_Handler_File.html"/>
+      <file role="doc" name="Plop_Handler_RotatingAbstract.html"/>
+      <file role="doc" name="Plop_Handler_RotatingFile.html"/>
+      <file role="doc" name="Plop_Handler_Socket.html"/>
+      <file role="doc" name="Plop_Handler_Stream.html"/>
+      <file role="doc" name="Plop_Handler_SysLog.html"/>
+      <file role="doc" name="Plop_Handler_TimedRotatingFile.html"/>
+      <file role="doc" name="Plop_Handler_WatchedFile.html"/>
+      <file role="doc" name="Plop_Logger.html"/>
+      <file role="doc" name="Plop_Manager.html"/>
+      <file role="doc" name="Plop_PlaceHolder.html"/>
+      <file role="doc" name="Plop_Record.html"/>
+      <file role="doc" name="Plop_RootLogger.html"/>
+     </dir>
+     <file role="doc" name="allclasses-frame.html"/>
+     <file role="doc" name="index.html"/>
+     <file role="doc" name="overview-frame.html"/>
+     <file role="doc" name="overview-summary.html"/>
+     <file role="doc" name="stylesheet.css"/>
+    </dir>
+   </dir>
+   <dir name="src" baseinstalldir="/">
+    <dir name="Plop">
+     <dir name="Config">
+      <dir name="Format">
+       <file role="php" name="INI.php"/>
+       <file role="php" name="XML.php"/>
+      </dir>
+      <file role="php" name="ParserAbstract.php"/>
+     </dir>
+     <dir name="Handler">
+      <file role="php" name="Datagram.php"/>
+      <file role="php" name="File.php"/>
+      <file role="php" name="RotatingAbstract.php"/>
+      <file role="php" name="RotatingFile.php"/>
+      <file role="php" name="Socket.php"/>
+      <file role="php" name="Stream.php"/>
+      <file role="php" name="SysLog.php"/>
+      <file role="php" name="TimedRotatingFile.php"/>
+      <file role="php" name="WatchedFile.php"/>
+     </dir>
+     <file role="php" name="BufferingFormatter.php"/>
+     <file role="php" name="Exception.php"/>
+     <file role="php" name="Filter.php"/>
+     <file role="php" name="Filterer.php"/>
+     <file role="php" name="Formatter.php"/>
+     <file role="php" name="Handler.php"/>
+     <file role="php" name="Logger.php"/>
+     <file role="php" name="Manager.php"/>
+     <file role="php" name="PlaceHolder.php"/>
+     <file role="php" name="Record.php"/>
+     <file role="php" name="RootLogger.php"/>
+    </dir>
+    <file role="php" name="Plop.php"/>
+   </dir>
+   <dir name="tests" baseinstalldir="/">
+    <dir name="testenv">
+     <file role="test" name="Autoload.php"/>
+     <file role="test" name="bootstrap.php"/>
+    </dir>
+    <file role="test" name="BasicTest.php"/>
+    <file role="test" name="config.ini"/>
+    <file role="test" name="config.xml"/>
+    <file role="test" name="FileConfigTest.php"/>
+    <file role="test" name="FileHandlerTest.php"/>
+    <file role="test" name="StreamHandlerTest.php"/>
+   </dir>
+  </dir>
+ </contents>
+ <dependencies>
+  <required>
+   <php>
+    <min>5.2.0</min>
+   </php>
+   <pearinstaller>
+    <min>2.0.0a1</min>
+   </pearinstaller>
+  </required>
+ </dependencies>
+ <phprelease/>
+</package>
