@@ -88,6 +88,16 @@ class Plop_Record
         return $this->formatPercent($this->dict['msg'], $this->dict['args']);
     }
 
+    static private function _pctPrefix($a)
+    {
+        return '%('.$a.')';
+    }
+
+    static private function _increment($a)
+    {
+        return '%'.($a + 1).'$';
+    }
+
     public function formatPercent($msg, $args)
     {
         if ($args === NULL || (is_array($args) && !count($args)))
@@ -99,10 +109,8 @@ class Plop_Record
         // Mapping = array(name => index)
         $keys       = array_keys($args);
         $mapping    = array_flip($keys);
-        $pctPrefix  = create_function('$a', 'return "%(".$a.")";');
-        $increment  = create_function('$a', 'return "%".($a + 1)."\\$";');
-        $keys       = array_map($pctPrefix, $keys);
-        $values     = array_map($increment, $mapping);
+        $keys       = array_map(array($this, '_pctPrefix'), $keys);
+        $values     = array_map(array($this, '_increment'), $mapping);
         $mapping    = array_combine($keys, $values);
         $msg        = strtr($msg, $mapping);
         return vsprintf($msg, array_values($args));
