@@ -38,16 +38,12 @@ class Plop_Record
         $logging    = Plop::getInstance();
         $ct         = explode(" ", microtime(FALSE));
         $msecs      = (int) substr($ct[0]."000000", 2);
-        $parsed     = strptime($ct[1], "%s");
+        /// @FIXME: There must be a better way to do this!
+        $date       = new DateTime("@".$ct[1], new DateTimeZone("UTC"));
         $date       = new DateTime(
             sprintf(
-                "%04d-%02d-%02dT%02d:%02d:%02d.%s",
-                $parsed["tm_year"] + 1900,
-                $parsed["tm_mon"] + 1,
-                $parsed["tm_mday"],
-                $parsed["tm_hour"],
-                $parsed["tm_min"],
-                $parsed["tm_sec"],
+                "%s.%s",
+                $date->format("Y-m-d\\TH:i:s"),
                 substr($ct[0], 2)
             ),
             new DateTimeZone("UTC")
