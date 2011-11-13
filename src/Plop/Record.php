@@ -81,7 +81,7 @@ class Plop_Record
 
     public function getMessage()
     {
-        return $this->formatPercent($this->dict['msg'], $this->dict['args']);
+        return self::formatPercent($this->dict['msg'], $this->dict['args']);
     }
 
     static private function _pctPrefix($a)
@@ -94,7 +94,7 @@ class Plop_Record
         return '%'.($a + 1).'$';
     }
 
-    public function formatPercent($msg, $args)
+    static public function formatPercent($msg, $args)
     {
         if ($args === NULL || (is_array($args) && !count($args)))
             return $msg;
