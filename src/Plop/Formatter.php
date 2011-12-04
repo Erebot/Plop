@@ -62,8 +62,9 @@ class Plop_Formatter
 
     public function formatException(Exception $exception)
     {
-        $s  = "Traceback (most recent call last):\n";
-        foreach ($exception->getTrace() as $trace) {
+        $s      = "Traceback (most recent call last):\n";
+        $traces = array_reverse($exception->getTrace());
+        foreach ($traces as $trace) {
             $origin = '';
             if (isset($trace['class']))
                 $origin = $trace['class'].$trace['type'];
