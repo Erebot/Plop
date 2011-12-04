@@ -63,8 +63,8 @@ class Plop_Formatter
     public function formatException(Exception $exception)
     {
         $s      = "Traceback (most recent call last):\n";
-        $traces = array_reverse($exception->getTrace());
-        foreach ($traces as $trace) {
+        $traces = array();
+        foreach ($exception->getTrace() as $trace) {
             $origin = '';
             if (isset($trace['class']))
                 $origin = $trace['class'].$trace['type'];
@@ -75,8 +75,7 @@ class Plop_Formatter
             $traces[] = 'File "'.$trace['file'].'", line '.
                 $trace['line'].', in '.$origin;
         }
-        array_reverse($traces);
-        $s .= implode("\n", $traces)."\n";
+        $s .= implode("\n", array_reverse($traces))."\n";
         $s .= (string) $exception;
         if (substr($s, -1) == "\n")
             $s = substr($s, 0, -1);
