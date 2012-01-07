@@ -178,10 +178,10 @@ extends Plop_Filterer
 
     public function removeHandler(Plop_Handler &$handler)
     {
-        $key = array_search($handler, $this->handlers, TRUE);
-        if ($key !== FALSE) {
+        $keys = array_keys($this->handlers, $handler);
+        if ($keys[0] !== FALSE) {
             $handler->acquire();
-            unset($this->filters[$key]);
+            unset($this->filters[$keys[0]]);
             $handler->release();
         }
     }
