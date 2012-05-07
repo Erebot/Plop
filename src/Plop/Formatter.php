@@ -69,7 +69,7 @@ class Plop_Formatter
             if (isset($trace['class']))
                 $origin = $trace['class'].$trace['type'];
             if (isset($trace['function']))
-            $origin .= $trace['function'];
+                $origin .= $trace['function'].'()';
             if ($origin == '')
                 $origin = '???';
             $traces[] = 'File "'.$trace['file'].'", line '.
