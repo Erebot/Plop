@@ -30,7 +30,7 @@ class Plop_Formatter
         else
             $this->fmt = $fmt;
         $this->datefmt = $datefmt;
-        $this->pythonLike = TRUE;
+        $this->pythonLike = FALSE;
     }
 
     public function format(Plop_Record $record)
