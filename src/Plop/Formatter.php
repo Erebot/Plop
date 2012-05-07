@@ -21,7 +21,7 @@ class Plop_Formatter
     public $fmt;
     public $datefmt;
     public $converter;
-    protected $_hasXdebug;
+    public $pythonLike;
 
     public function __construct($fmt = NULL, $datefmt = NULL)
     {
@@ -30,7 +30,7 @@ class Plop_Formatter
         else
             $this->fmt = $fmt;
         $this->datefmt = $datefmt;
-        $this->_hasXdebug = in_array("xdebug", get_loaded_extensions());
+        $this->pythonLike = TRUE;
     }
 
     public function format(Plop_Record $record)
@@ -68,28 +68,32 @@ class Plop_Formatter
         // is set to "On" (which ini_get() returns as "1").
         if (!((int) ini_get("display_errors")))
             return FALSE;
-        if (!$this->_hasXdebug) {
-            $s      = "Traceback (most recent call last):\n";
-            $traces = array();
-            foreach ($exception->getTrace() as $trace) {
-                $origin = '';
-                if (isset($trace['class']))
-                    $origin = $trace['class'].$trace['type'];
-                if (isset($trace['function']))
-                    $origin .= $trace['function'].'()';
-                if ($origin == '')
-                    $origin = '???';
-                $traces[] = 'File "'.$trace['file'].'", line '.
-                    $trace['line'].', in '.$origin;
-            }
-            $s .= implode("\n", array_reverse($traces))."\n";
-        }
-        else
-            $s = "";
 
-        $s .= (string) $exception;
-        if (substr($s, -1) == "\n")
-            $s = substr($s, 0, -1);
+        if (!$this->pythonLike) {
+            $s = (string) $exception;
+            if (substr($s, -1) == "\n")
+                $s = substr($s, 0, -1);
+            return $s;
+        }
+
+        $s      = "Traceback (most recent call last):\n";
+        $traces = array();
+        foreach ($exception->getTrace() as $trace) {
+            $origin = '';
+            if (isset($trace['class']))
+                $origin = $trace['class'].$trace['type'];
+            if (isset($trace['function']))
+                $origin .= $trace['function'].'()';
+            if ($origin == '')
+                $origin = '???';
+            $traces[] = 'File "'.$trace['file'].'", line '.
+                $trace['line'].', in '.$origin;
+        }
+        $s .= implode("\n", array_reverse($traces))."\n";
+        $s .=   "Exception '" . get_class($exception) .
+                "' with message '" . $exception->getMessage() .
+                "' in " . $exception->getFile() .
+                ":" . $exception->getLine();
         return $s;
     }
 }
