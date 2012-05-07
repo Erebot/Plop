@@ -21,6 +21,7 @@ class Plop_Formatter
     public $fmt;
     public $datefmt;
     public $converter;
+    protected $_hasXdebug;
 
     public function __construct($fmt = NULL, $datefmt = NULL)
     {
@@ -29,6 +30,7 @@ class Plop_Formatter
         else
             $this->fmt = $fmt;
         $this->datefmt = $datefmt;
+        $this->_hasXdebug = in_array("xdebug", get_loaded_extensions());
     }
 
     public function format(Plop_Record $record)
@@ -62,20 +64,25 @@ class Plop_Formatter
 
     public function formatException(Exception $exception)
     {
-        $s      = "Traceback (most recent call last):\n";
-        $traces = array();
-        foreach ($exception->getTrace() as $trace) {
-            $origin = '';
-            if (isset($trace['class']))
-                $origin = $trace['class'].$trace['type'];
-            if (isset($trace['function']))
-                $origin .= $trace['function'].'()';
-            if ($origin == '')
-                $origin = '???';
-            $traces[] = 'File "'.$trace['file'].'", line '.
-                $trace['line'].', in '.$origin;
+        if (!$this->_hasXdebug) {
+            $s      = "Traceback (most recent call last):\n";
+            $traces = array();
+            foreach ($exception->getTrace() as $trace) {
+                $origin = '';
+                if (isset($trace['class']))
+                    $origin = $trace['class'].$trace['type'];
+                if (isset($trace['function']))
+                    $origin .= $trace['function'].'()';
+                if ($origin == '')
+                    $origin = '???';
+                $traces[] = 'File "'.$trace['file'].'", line '.
+                    $trace['line'].', in '.$origin;
+            }
+            $s .= implode("\n", array_reverse($traces))."\n";
         }
-        $s .= implode("\n", array_reverse($traces))."\n";
+        else
+            $s = "";
+
         $s .= (string) $exception;
         if (substr($s, -1) == "\n")
             $s = substr($s, 0, -1);
