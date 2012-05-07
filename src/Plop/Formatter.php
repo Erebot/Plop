@@ -64,6 +64,10 @@ class Plop_Formatter
 
     public function formatException(Exception $exception)
     {
+        // Don't display exceptions unless display_errors
+        // is set to "On" (which ini_get() returns as "1").
+        if (!((int) ini_get("display_errors")))
+            return FALSE;
         if (!$this->_hasXdebug) {
             $s      = "Traceback (most recent call last):\n";
             $traces = array();
