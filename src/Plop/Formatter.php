@@ -16,60 +16,88 @@
     along with Plop.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-class Plop_Formatter
+class       Plop_Formatter
+implements  Plop_FormatterInterface
 {
-    public $fmt;
-    public $datefmt;
-    public $converter;
-    public $pythonLike;
+    const DEFAULT_DATE_FORMAT = "Y-m-d H:i:s,u";
 
-    public function __construct($fmt = NULL, $datefmt = NULL)
+    protected $_format;
+    protected $_dateFormat;
+    protected $_pythonLike;
+
+    public function __construct(
+        $format     = '%(message)s',
+        $dateFormat = self::DEFAULT_DATE_FORMAT
+    )
     {
-        if ($fmt === NULL)
-            $this->fmt = '%(message)s';
-        else
-            $this->fmt = $fmt;
-        $this->datefmt = $datefmt;
-        $this->pythonLike = FALSE;
+        $this->setFormat($format);
+        $this->setDateFormat($dateFormat);
+        $this->_pythonLike = FALSE;
     }
 
-    public function format(Plop_Record $record)
+    public function getFormat()
     {
-        $record->dict['message'] = $record->getMessage();
-        if (strpos($this->fmt, '%(asctime)') !== FALSE)
-            $record->dict['asctime'] = $this->formatTime(
-                $record, $this->datefmt
-            );
-        $s = $record->formatPercent($this->fmt, $record->dict);
-        if ($record->dict['exc_info'])
-            if (!$record->dict['exc_text'])
-                $record->dict['exc_text'] = $this->formatException(
-                    $record->dict['exc_info']
-                );
-        if ($record->dict['exc_text']) {
-            if (substr($s, -1) != "\n")
+        return $this->_format;
+    }
+
+    public function setFormat($format)
+    {
+        $this->_format = $format;
+        return $this;
+    }
+
+    public function getDateFormat()
+    {
+        return $this->_dateFormat;
+    }
+
+    public function setDateFormat($dateFormat)
+    {
+        $this->_dateFormat = $dateFormat;
+        return $this;
+    }
+
+    public function format(Plop_RecordInterface $record)
+    {
+        $record['message'] = $record->getMessage();
+        $format = (string) $this->_format;
+        $dateFormat = (string) $this->_dateFormat;
+        if (strpos($format, '%(asctime)') !== FALSE) {
+            $record['asctime'] = $this->_formatTime($record, $dateFormat);
+        }
+
+        $s = $record->formatPercent($format, $record->asDict());
+        if ($record['exc_info']) {
+            if (!$record['exc_text']) {
+                $record['exc_text'] =
+                    $this->_formatException($record['exc_info']);
+            }
+        }
+        if ($record['exc_text']) {
+            if (substr($s, -1) != "\n") {
                 $s .= "\n";
-            $s .= $record->dict['exc_text'];
+            }
+            $s .= $record['exc_text'];
         }
         return $s;
     }
 
-    public function formatTime(Plop_Record $record, $datefmt = NULL)
+    protected function _formatTime(
+        Plop_RecordInterface    $record,
+                                $dateFormat = self::DEFAULT_DATE_FORMAT
+    )
     {
-        if (!$datefmt)
-            $datefmt = "Y-m-d H:i:s,u";
-        $s = $record->dict['createdDate']->format($datefmt);
-        return $s;
+        return $record['createdDate']->format((string) $dateFormat);
     }
 
-    public function formatException(Exception $exception)
+    protected function _formatException(Exception $exception)
     {
         // Don't display exceptions unless display_errors
         // is set to "On" (which ini_get() returns as "1").
         if (!((int) ini_get("display_errors")))
             return FALSE;
 
-        if (!$this->pythonLike) {
+        if (!$this->_pythonLike) {
             $s = (string) $exception;
             if (substr($s, -1) == "\n")
                 $s = substr($s, 0, -1);

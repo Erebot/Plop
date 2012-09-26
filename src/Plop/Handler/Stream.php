@@ -17,30 +17,29 @@
 */
 
 class   Plop_Handler_Stream
-extends Plop_Handler
+extends Plop_HandlerAbstract
 {
     protected $_stream;
 
-    public function __construct(&$stream = NULL)
+    public function __construct($stream = NULL)
     {
         parent::__construct();
-        $this->_stream      =&  $stream;
-        $this->formatter    =   NULL;
+        $this->_stream      = $stream;
     }
 
-    public function flush()
+    protected function _flush()
     {
         fflush($this->_stream);
     }
 
-    public function emit(Plop_Record &$record)
+    protected function _emit(Plop_RecordInterface $record)
     {
         if (!$this->_stream)
             $stream = fopen('php://stderr', 'ab');
         else
-            $stream =& $this->_stream;
+            $stream = $this->_stream;
 
-        $msg = $this->format($record);
+        $msg = $this->_format($record);
         fprintf($stream, "%s\n", $msg);
 
         if (!$this->_stream) {
@@ -48,7 +47,7 @@ extends Plop_Handler
             fclose($stream);
         }
         else
-            $this->flush();
+            $this->_flush();
     }
 }
 

@@ -16,20 +16,11 @@
     along with Plop.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-class Plop_PlaceHolder
+interface Plop_FiltererInterface
 {
-    public $loggerMap;
-
-    public function __construct(Plop_Logger &$alogger)
-    {
-        $this->loggerMap = array($alogger);
-    }
-
-    public function append(Plop_Logger &$alogger)
-    {
-        $key = array_search($alogger, $this->loggerMap, TRUE);
-        if ($key === FALSE)
-            $this->loggerMap[] = $alogger;
-    }
+    public function addFilter(Plop_FilterInterface $filter);
+    public function removeFilter(Plop_FilterInterface $filter);
+    public function getFilters();
+    public function filter(Plop_RecordInterface $record);
 }
 

@@ -19,8 +19,8 @@
 class   Plop_Handler_RotatingFile
 extends Plop_Handler_RotatingAbstract
 {
-    public $maxBytes;
-    public $backupCount;
+    protected $_maxBytes;
+    protected $_backupCount;
 
     public function __construct(
         $filename,
@@ -34,42 +34,42 @@ extends Plop_Handler_RotatingAbstract
         if ($maxBytes > 0)
             $mode = 'a';
         parent::__construct($filename, $mode, $encoding, $delay);
-        $this->maxBytes     = $maxBytes;
-        $this->backupCount  = $backupCount;
+        $this->_maxBytes    = $maxBytes;
+        $this->_backupCount = $backupCount;
     }
 
-    public function doRollover()
+    protected function _doRollover()
     {
         fclose($this->_stream);
-        if ($this->backupCount > 0) {
-            for ($i = $this->backupCount - 1; $i > 0; $i--) {
-                $sfn = sprintf("%s.%d", $this->baseFilename, $i);
-                $dfn = sprintf("%s.%d", $this->baseFilename, $i + 1);
+        if ($this->_backupCount > 0) {
+            for ($i = $this->_backupCount - 1; $i > 0; $i--) {
+                $sfn = sprintf("%s.%d", $this->_baseFilename, $i);
+                $dfn = sprintf("%s.%d", $this->_baseFilename, $i + 1);
                 if (file_exists($sfn)) {
                     if (file_exists($dfn))
                         @unlink($dfn);
                     rename($sfn, $dfn);
                 }
             }
-            $dfn = sprintf("%s.1", $this->baseFilename);
+            $dfn = sprintf("%s.1", $this->_baseFilename);
             if (file_exists($dfn))
                 @unlink($dfn);
-            rename($this->baseFilename, $dfn);
+            rename($this->_baseFilename, $dfn);
         }
-        $this->mode     = 'w';
+        $this->_mode    = 'w';
         $this->_stream  = $this->_open();
     }
 
-    public function shouldRollover(Plop_Record &$record)
+    protected function _shouldRollover(Plop_RecordInterface $record)
     {
         if (!$this->_stream)
-            $this->_stream = $this->open();
-        if ($this->maxBytes > 0) {
-            $msg = $this->format($record)."\n";
+            $this->_stream = $this->_open();
+        if ($this->_maxBytes > 0) {
+            $msg = $this->_format($record)."\n";
             // The python doc states this is due to a non-POSIX-compliant
             // behaviour under Windows.
             fseek($this->_stream, 0, SEEK_END);
-            if (ftell($this->_stream) + strlen($msg) >= $this->maxBytes)
+            if (ftell($this->_stream) + strlen($msg) >= $this->_maxBytes)
                 return TRUE;
         }
         return FALSE;

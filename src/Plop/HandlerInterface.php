@@ -16,18 +16,19 @@
     along with Plop.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-abstract class  Plop_Handler_RotatingAbstract
-extends         Plop_Handler_File
+interface Plop_HandlerInterface
 {
-    protected function _emit(Plop_RecordInterface $record)
-    {
-        try {
-            if ($this->_shouldRollover($record))
-                $this->_doRollover();
-        }
-        catch (Exception $e) {
-            $this->handleError($record, $e);
-        }
-    }
+    public function getLevel();
+    public function setLevel($level);
+
+    public function handle(Plop_RecordInterface $record);
+
+    public function getFormatter();
+    public function setFormatter(Plop_FormatterInterface $formatter);
+
+    public function handleError(
+        Plop_RecordInterface $record,
+        Exception            $exception
+    );
 }
 

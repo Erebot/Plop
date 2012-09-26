@@ -40,14 +40,14 @@ extends Plop_Handler_File
         }
     }
 
-    public function emit(Plop_Record &$record)
+    protected function _emit(Plop_RecordInterface $record)
     {
-        if (!file_exists($this->baseFilename)) {
+        if (!file_exists($this->_baseFilename)) {
             $stats = NULL;
             $changed = 1;
         }
         else {
-            $stats = stat($this->baseFilename);
+            $stats = stat($this->_baseFilename);
             $changed = (
                 ($stat['dev'] != $this->_dev) ||
                 ($stat['ino'] != $this->_ino)
@@ -56,9 +56,9 @@ extends Plop_Handler_File
         if ($changed && $this->_stream !== FALSE) {
             fflush($this->_stream);
             fclose($this->_stream);
-            $this->open();
+            $this->_open();
             if (!$stats)
-                $stats = stat($this->baseFilename);
+                $stats = stat($this->_baseFilename);
             $this->_dev = $stats['dev'];
             $this->_ino = $stats['ino'];
         }

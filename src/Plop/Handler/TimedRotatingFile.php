@@ -19,14 +19,14 @@
 class   Plop_Handler_TimedRotatingFile
 extends Plop_Handler_RotatingAbstract
 {
-    public $when;
-    public $backupCount;
-    public $utc;
-    public $interval;
-    public $suffix;
-    public $extMatch;
-    public $dayOfWeek;
-    public $rolloverAt;
+    protected $_when;
+    protected $_backupCount;
+    protected $_utc;
+    protected $_interval;
+    protected $_suffix;
+    protected $_extMatch;
+    protected $_dayOfWeek;
+    protected $_rolloverAt;
 
     static protected $_dayNames = array(
         'Monday',
@@ -49,89 +49,89 @@ extends Plop_Handler_RotatingAbstract
     )
     {
         parent::__construct($filename, 'a', $encoding, $delay);
-        $this->when         = strtoupper($when);
-        $this->backupCount  = $backupCount;
-        $this->utc          = $utc;
-        $this->rolloverAt   = NULL;
-        $this->dayOfWeek    = NULL;
+        $this->_when        = strtoupper($when);
+        $this->_backupCount = $backupCount;
+        $this->_utc         = $utc;
+        $this->_rolloverAt  = NULL;
+        $this->_dayOfWeek   = NULL;
 
-        if ($this->when == 'S') {
-            $this->interval = 1;
-            $this->suffix   = '%Y-%m-%d_%H-%M-%S';
-            $this->extMatch = '^\\d{4}-\\d{2}-\\d{2}_\\d{2}-\\d{2}-\\d{2}$';
+        if ($this->_when == 'S') {
+            $this->_interval    = 1;
+            $this->_suffix      = '%Y-%m-%d_%H-%M-%S';
+            $this->_extMatch    = '^\\d{4}-\\d{2}-\\d{2}_\\d{2}-\\d{2}-\\d{2}$';
         }
-        else if ($this->when == 'M') {
-            $this->interval = 60;
-            $this->suffix   = '%Y-%m-%d_%H-%M';
-            $this->extMatch = '^\\d{4}-\\d{2}-\\d{2}_\\d{2}-\\d{2}$';
+        else if ($this->_when == 'M') {
+            $this->_interval    = 60;
+            $this->_suffix      = '%Y-%m-%d_%H-%M';
+            $this->_extMatch    = '^\\d{4}-\\d{2}-\\d{2}_\\d{2}-\\d{2}$';
         }
-        else if ($this->when == 'H') {
-            $this->interval = 60 * 60;
-            $this->suffix   = '%Y-%m-%d_%H';
-            $this->extMatch = '^\\d{4}-\\d{2}-\\d{2}_\\d{2}$';
+        else if ($this->_when == 'H') {
+            $this->_interval    = 60 * 60;
+            $this->_suffix      = '%Y-%m-%d_%H';
+            $this->_extMatch    = '^\\d{4}-\\d{2}-\\d{2}_\\d{2}$';
         }
-        else if ($this->when == 'D' || $this->when == 'MIDNIGHT') {
-            $this->interval = 60 * 60 * 24;
-            $this->suffix   = '%Y-%m-%d';
-            $this->extMatch = '^\\d{4}-\\d{2}-\\d{2}$';
+        else if ($this->_when == 'D' || $this->_when == 'MIDNIGHT') {
+            $this->_interval    = 60 * 60 * 24;
+            $this->_suffix      = '%Y-%m-%d';
+            $this->_extMatch    = '^\\d{4}-\\d{2}-\\d{2}$';
         }
-        else if (substr($this->when, 0, 1) == 'W') {
-            $this->interval = 60 * 60 * 24 * 7;
-            if (strlen($this->when) != 2)
+        else if (substr($this->_when, 0, 1) == 'W') {
+            $this->_interval = 60 * 60 * 24 * 7;
+            if (strlen($this->_when) != 2)
                 throw new Exception(
                     sprintf(
                         'You must specify a day for weekly rollover '.
                         'from 0 to 6 (0 is Monday): %s',
-                        $this->when
+                        $this->_when
                     )
                 );
-            $ord = ord($this->when[1]);
+            $ord = ord($this->_when[1]);
             if ($ord < ord('0') || $ord > ord('6'))
                 throw new Exception(
                     sprintf(
                         'Invalid day specified for weekly rollover: %s',
-                        $this->when
+                        $this->_when
                     )
                 );
-            $this->dayOfWeek = (int) $this->when[1];
-            $this->suffix = '%Y-%m-%d';
-            $this->extMatch = '^\\d{4}-\\d{2}-\\d{2}$';
+            $this->_dayOfWeek = (int) $this->_when[1];
+            $this->_suffix = '%Y-%m-%d';
+            $this->_extMatch = '^\\d{4}-\\d{2}-\\d{2}$';
         }
         else
             throw new Exception(
                 sprintf(
                     'Invalid rollover interval specified: %s',
-                    $this->when
+                    $this->_when
                 )
             );
-        $this->interval     = $this->interval * $interval;
-        $this->rolloverAt   = $this->compuleRollover(time());
+        $this->_interval    = $this->_interval * $interval;
+        $this->_rolloverAt  = $this->_computeRollover(time());
     }
 
-    public function compuleRollover($currentTime)
+    protected function _computeRollover($currentTime)
     {
-        if ($this->when == 'MIDNIGHT')
+        if ($this->_when == 'MIDNIGHT')
             return strtotime("midnight + 1 day", $currentTime);
-        if (substr($this->when, 0, 1) == 'W')
+        if (substr($this->_when, 0, 1) == 'W')
             return strtotime(
-                "next " . self::$_dayNames[$this->dayOfWeek],
+                "next " . self::$_dayNames[$this->_dayOfWeek],
                 $currentTime
             );
-        return $currentTime + $this->interval;
+        return $currentTime + $this->_interval;
     }
 
-    public function shouldRollover(Plop_Record &$record)
+    protected function _shouldRollover(Plop_RecordInterface $record)
     {
         $t = time();
-        if ($t >= $this->rolloverAt)
+        if ($t >= $this->_rolloverAt)
             return TRUE;
         return FALSE;
     }
 
     public function getFilesToDelete()
     {
-        $dirName    = dirname($this->baseFilename);
-        $baseName   = basename($this->baseFilename);
+        $dirName    = dirname($this->_baseFilename);
+        $baseName   = basename($this->_baseFilename);
         $fileNames  = scandir($dirName);
         $result     = array();
         $prefix     = $baseName . '.';
@@ -141,16 +141,16 @@ extends Plop_Handler_RotatingAbstract
                 continue;
             if (!strncmp($fileName, $prefix, $plen)) {
                 $suffix = substr($fileName, $plen);
-                if (preg_match($this->extMatch, $suffix))
+                if (preg_match($this->_extMatch, $suffix))
                     $result[] = $dirName.DIRECTORY_SEPARATOR.$fileName;
             }
         }
         sort($result);
         $rlen = count($result);
-        if ($rlen < $this->backupCount)
+        if ($rlen < $this->_backupCount)
             $result = array();
         else
-            $result = array_slice($result, 0, $rlen - $this->backupCount);
+            $result = array_slice($result, 0, $rlen - $this->_backupCount);
         return $result;
     }
 
@@ -158,26 +158,26 @@ extends Plop_Handler_RotatingAbstract
     {
         if ($this->_stream)
             fclose($this->_stream);
-        $t      = $this->rolloverAt - $this->interval;
-        if ($this->utc)
+        $t      = $this->_rolloverAt - $this->_interval;
+        if ($this->_utc)
             $formatFunc = 'gmstrftime';
         else
             $formatFunc = 'strftime';
-        $dfn    = $this->baseFilename.'.'.$formatFunc($this->suffix, $t);
+        $dfn    = $this->_baseFilename.'.'.$formatFunc($this->_suffix, $t);
         if (file_exists($dfn))
             @unlink($dfn);
-        rename($this->baseFilename, $dfn);
-        if ($this->backupCount > 0) {
-            foreach ($this->getFilesToDelete() as $s)
+        rename($this->_baseFilename, $dfn);
+        if ($this->_backupCount > 0) {
+            foreach ($this->_getFilesToDelete() as $s)
                 @unlink($s);
         }
-        $this->mode     = 'w';
-        $this->_stream  = $this->open();
+        $this->_mode    = 'w';
+        $this->_stream  = $this->_open();
         $currentTime    = time();
-        $newRolloverAt  = $this->compuleRollover($currentTime);
+        $newRolloverAt  = $this->_computeRollover($currentTime);
         while ($newRolloverAt <= $currentTime)
-            $newRolloverAt += $this->interval;
-        $this->rolloverAt = $newRolloverAt;
+            $newRolloverAt += $this->_interval;
+        $this->_rolloverAt = $newRolloverAt;
     }
 }
 

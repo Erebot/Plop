@@ -16,39 +16,42 @@
     along with Plop.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-class Plop_Filterer
+class       Plop_Filterer
+implements  Plop_FiltererInterface
 {
-    public $filters;
+    protected $_filters;
     
     public function __construct()
     {
-        $this->filters = array();
+        $this->_filters = array();
     }
 
-    public function addFilter(Plop_Filter &$filter)
+    public function addFilter(Plop_FilterInterface $filter)
     {
-        if (!in_array($filter, $this->filters, TRUE))
-            $this->filters[] =& $filter;
+        if (!in_array($filter, $this->_filters, TRUE))
+            $this->_filters[] = $filter;
     }
 
-    public function removeFilter(Plop_Filter &$filter)
+    public function removeFilter(Plop_FilterInterface $filter)
     {
-        $key = array_search($filter, $this->filters, TRUE);
+        $key = array_search($filter, $this->_filters, TRUE);
         if ($key !== FALSE)
-            unset($this->filters[$key]);
+            unset($this->_filters[$key]);
     }
 
-    public function filter(Plop_Record &$record)
+    public function getFilters()
     {
-        $rv = 1;
-        foreach ($this->filters as &$filter) {
+        return $this->_filters;
+    }
+
+    public function filter(Plop_RecordInterface $record)
+    {
+        foreach ($this->_filters as $filter) {
             if (!$filter->filter($record)) {
-                $rv = 0;
-                break;
+                return FALSE;
             }
         }
-        unset($filter);
-        return $rv;
+        return TRUE;
     }
 }
 

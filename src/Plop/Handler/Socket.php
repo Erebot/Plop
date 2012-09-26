@@ -17,85 +17,90 @@
 */
 
 class   Plop_Handler_Socket
-extends Plop_Handler
+extends Plop_HandlerAbstract
 {
-    public $host;
-    public $port;
-    public $sock;
-    public $closeOnError;
-    public $retryTime;
-    public $retryStart;
-    public $retryMax;
-    public $retryFactor;
-    public $retryPeriod;
+    protected $_host;
+    protected $_port;
+    protected $_sock;
+    protected $_closeOnError;
+    protected $_retryTime;
+    protected $_retryStart;
+    protected $_retryMax;
+    protected $_retryFactor;
+    protected $_retryPeriod;
 
     public function __construct($host, $port)
     {
         parent::__construct();
-        $this->host         = $host;
-        $this->port         = $port;
-        $this->sock         = FALSE;
-        $this->closeOnError = 0;
-        $this->retryTime    = NULL;
-        $this->retryStart   = 1.0;
-        $this->retryMax     = 30.0;
-        $this->retryFactor  = 2.0;
-        $this->retryPeriod  = 0;
+        $this->_host            = $host;
+        $this->_port            = $port;
+        $this->_sock            = FALSE;
+        $this->_closeOnError    = 0;
+        $this->_retryTime       = NULL;
+        $this->_retryStart      = 1.0;
+        $this->_retryMax        = 30.0;
+        $this->_retryFactor     = 2.0;
+        $this->_retryPeriod     = 0;
     }
 
-    public function makeSocket($timeout=1)
+    public function __destruct()
+    {
+        $this->_close();
+    }
+
+    protected function _makeSocket($timeout=1)
     {
         return fsockopen(
-            'tcp://' . $this->host,
-            $this->port,
+            'tcp://' . $this->_host,
+            $this->_port,
             $errno,
             $errstr,
             $timeout
         );
     }
 
-    public function createSocket()
+    protected function _createSocket()
     {
         $now = time();
-        if ($this->retryTime === NULL)
+        if ($this->_retryTime === NULL)
             $attempt = TRUE;
         else
-            $attempt = ($now >= $this->retryTime);
+            $attempt = ($now >= $this->_retryTime);
         if (!$attempt)
             return;
-        $this->sock = $this->makeSocket();
-        if ($this->sock !== FALSE) {
-            $this->retryTime = NULL;
+        $this->_sock = $this->_makeSocket();
+        if ($this->_sock !== FALSE) {
+            $this->_retryTime = NULL;
             return;
         }
-        if ($this->retryTime === NULL)
-            $this->retryPeriod = $this->retryStart;
+        if ($this->_retryTime === NULL)
+            $this->_retryPeriod = $this->_retryStart;
         else {
-            $this->retryPeriod *= $this->retryFactor;
-            if ($this->retryPeriod > $this->retryMax)
-                $this->retryPeriod = $this->retryMax;
+            $this->_retryPeriod *= $this->_retryFactor;
+            if ($this->_retryPeriod > $this->_retryMax)
+                $this->_retryPeriod = $this->_retryMax;
         }
-        $this->retryTime = $now + $this->retryPeriod;
+        $this->_retryTime = $now + $this->_retryPeriod;
     }
 
-    public function send($s)
+    protected function _send($s)
     {
-        if (!$this->sock)
-            $this->createSocket();
-        if (!$this->sock)
+        if (!$this->_sock)
+            $this->_createSocket();
+        if (!$this->_sock)
             return;
         $len = strlen($s);
         for ($written = 0; $written < $len; $written += $fwrite) {
-            $fwrite = fwrite($this->sock, substr($s, $written));
+            $fwrite = fwrite($this->_sock, substr($s, $written));
             if ($fwrite === FALSE) {
-                fclose($this->sock);
-                $this->sock = FALSE;
+                fclose($this->_sock);
+                $this->_sock = FALSE;
                 return;
             }
         }
     }
 
-    public function makePickle(Plop_Record &$record)
+    protected function _makePickle(Plop_RecordInterface $record)
     {
         // To maintain full compatibility with Python,
         // we should emulate pickle here, but it seems
@@ -106,34 +111,33 @@ extends Plop_Handler
         return $slen.$s;
     }
 
-    public function handleError(Plop_Record &$record, Exception &$exc)
+    public function handleError(Plop_RecordInterface $record, Exception $exc)
     {
-        if ($this->closeOnError && $this->sock) {
-            fclose($this->sock);
-            $this->sock = FALSE;
+        if ($this->_closeOnError && $this->_sock) {
+            fclose($this->_sock);
+            $this->_sock = FALSE;
         }
         else
             parent::handleError($record, $exc);
     }
 
-    public function emit(Plop_Record &$record)
+    protected function _emit(Plop_RecordInterface $record)
     {
         try {
-            $s = $this->makePickle($record);
-            $this->send($s);
+            $s = $this->_makePickle($record);
+            $this->_send($s);
         }
         catch (Exception $e) {
-            $this->handleError($record, $e);
+            $this->_handleError($record, $e);
         }
     }
 
-    public function close()
+    public function _close()
     {
-        if ($this->sock) {
-            fclose($this->sock);
-            $this->sock = FALSE;
+        if ($this->_sock) {
+            fclose($this->_sock);
+            $this->_sock = FALSE;
         }
-        parent::close();
     }
 }
 

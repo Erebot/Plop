@@ -17,7 +17,7 @@
 */
 
 class   Plop_Handler_SysLog
-extends Plop_Handler
+extends Plop_HandlerAbstract
 {
     const LOG_FORMAT_STRING = "<%d>%s\000";
 
@@ -63,7 +63,7 @@ extends Plop_Handler
         The map below appears to be trivially lowercasing the key. However,
         there's more to it than meets the eye - in some locales, lowercasing
         gives unexpected results. See SF #1524081: in the Turkish locale,
-        "INFO".lower() != "info"
+        "INFO".lower() != "info". The same is true in PHP.
      */
     static public $priorityMap = array(
         'DEBUG'     => 'debug',
@@ -113,7 +113,7 @@ extends Plop_Handler
         return "warning";
     }
 
-    public function emit(Plop_Record &$record)
+    protected function _emit(Plop_RecordInterface $record)
     {
         $msg = $this->format($record);
         $msg = sprintf(

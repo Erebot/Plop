@@ -19,40 +19,44 @@
 class   Plop_Handler_File
 extends Plop_Handler_Stream
 {
-    public $baseFilename;
-    public $mode;
+    protected $_baseFilename;
+    protected $_mode;
 
     public function __construct($filename, $mode='at', $encoding=NULL, $delay=0)
     {
-        $this->baseFilename = $filename;
-        $this->mode         = $mode;
-        $this->encoding     = $encoding;
+        $this->_baseFilename    = $filename;
+        $this->_mode            = $mode;
+        $this->_encoding        = $encoding;
         if ($delay) {
             Plop_Handler::__construct();
             $this->_stream = FALSE;
         }
         else {
-            $stream = $this->open();
+            $stream = $this->_open();
             parent::__construct($stream);
         }
     }
 
-    protected function open()
+    public function __destruct()
     {
-        $stream = fopen($this->baseFilename, $this->mode);
+        $this->_close();
+    }
+
+    protected function _open()
+    {
+        $stream = fopen($this->_baseFilename, $this->_mode);
         if (function_exists('stream_encoding') &&
-            $this->encoding !== NULL &&
+            $this->_encoding !== NULL &&
             $stream !== FALSE)
-            stream_encoding($stream, $this->encoding);
+            stream_encoding($stream, $this->_encoding);
         return $stream;
     }
 
-    public function close()
+    protected function _close()
     {
         if ($this->_stream) {
-            $this->flush();
+            $this->_flush();
             fclose($this->_stream);
-            parent::close();
         }
     }
 }

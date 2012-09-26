@@ -21,11 +21,12 @@
  * It uses the concepts of loggers, handlers & formatters
  * to offer customizable logs.
  */
-class Plop
+class       Plop
+implements  ArrayAccess
 {
-    const BASIC_FORMAT  = "%(levelname)s:%(name)s:%(message)s";
+    const BASIC_FORMAT  = '%(levelname)s:%(name)s:%(message)s';
 
-    const NOTSET    = 0;
+    const NOTSET    =  0;
     const DEBUG     = 10;
     const INFO      = 20;
     const WARNING   = 30;
@@ -35,15 +36,20 @@ class Plop
 
     static protected $_instance = NULL;
     protected $_loggers;
-    protected $_loggerClass;
     protected $_levelNames;
-    public $created;
+    protected $_created;
 
     protected function __construct()
     {
-        $this->_loggerClass  = 'Plop_Logger';
-        $this->_loggers      = array();
-        $this->_levelNames   = array(
+        $this->_loggers = array();
+        $rootLogger = new Plop_Logger('', self::NOTSET);
+        $basicHandler = new Plop_Handler_Stream(STDERR);
+        $this[] = $rootLogger->addHandler(
+            $basicHandler->setFormatter(
+                new Plop_Formatter(self::BASIC_FORMAT)
+            )
+        );
+        $this->_levelNames = array(
             self::NOTSET    => 'NOTSET',
             self::DEBUG     => 'DEBUG',
             self::INFO      => 'INFO',
@@ -51,9 +57,7 @@ class Plop
             self::ERROR     => 'ERROR',
             self::CRITICAL  => 'CRITICAL',
         );
-        $this->_levelNames  = $this->_levelNames +
-                                array_flip($this->_levelNames);
-        $this->created      = microtime(TRUE);
+        $this->_created = microtime(TRUE);
     }
 
     public function __clone()
@@ -70,146 +74,92 @@ class Plop
         return self::$_instance;
     }
 
-    public function getLogger($name = NULL)
+    public function getCreationDate()
     {
-        if ($name === NULL)
-            return Plop_Logger::$root;
-        return Plop_Logger::$manager->getLogger($name);
+        return $this->_created;
     }
 
-    public function getLoggerClass()
+    public function getLogger($name = '')
     {
-        return $this->_loggerClass;
+        return $this[$name];
     }
 
-    public function debug($msg, $args = array(), $exception = NULL)
+    public function addLogger(Plop_LoggerInterface $logger)
     {
-        return $this->log(self::DEBUG, $msg, $args, $exception);
-    }
-
-    public function info($msg, $args = array(), $exception = NULL)
-    {
-        return $this->log(self::INFO, $msg, $args, $exception);
-    }
-
-    public function warning($msg, $args = array(), $exception = NULL)
-    {
-        return $this->log(self::WARNING, $msg, $args, $exception);
-    }
-
-    public function warn($msg, $args = array(), $exception = NULL)
-    {
-        return $this->log(self::WARNING, $msg, $args, $exception);
-    }
-
-    public function error($msg, $args = array(), $exception = NULL)
-    {
-        return $this->log(self::ERROR, $msg, $args, $exception);
-    }
-
-    public function critical($msg, $args = array(), $exception = NULL)
-    {
-        return $this->log(self::CRITICAL, $msg, $args, $exception);
-    }
-
-    public function fatal($msg, $args = array(), $exception = NULL)
-    {
-        return $this->log(self::CRITICAL, $msg, $args, $exception);
-    }
-
-    public function exception($msg, $exception, $args = array())
-    {
-        return $this->log(self::ERROR, $msg, $args, $exception);
-    }
-
-    public function log($lvl, $msg, $args = array(), $exception = NULL)
-    {
-        $this->basicConfig();
-        $root = $this->getLogger();
-        return $root->log($lvl, $msg, $args, $exception);
-    }
-
-    public function disable($level)
-    {
-        Logger::$manager->disable = $level;
+        $this[] = $logger;
     }
 
     public function addLevelName($lvl, $lvlName)
     {
         $this->_levelNames[$lvl] = $lvlName;
-        $this->_levelNames[$lvlName] = $lvl;
     }
 
     public function getLevelName($lvl)
     {
-        if (!isset($this->_levelNames[$lvl]))
+        if (!isset($this->_levelNames[$lvl])) {
             return "Level ".$lvl;
-
+        }
         return $this->_levelNames[$lvl];
     }
 
-    public function makeLogRecord($attrs)
+    public function getLevelValue($name)
     {
-        $rv = Plop_Record(NULL, NULL, "", 0, "", array(), NULL, NULL);
-        $rv->dict = array_merge($rv->dict, $attrs);
-        return $rv;
+        $key = array_search($name, $this->_levelNames, TRUE);
+        return (int) $key; // FALSE is silently converted to 0.
     }
 
-    public function basicConfig($args = array())
+    public function offsetSet($name, $logger)
     {
-        $root = $this->getLogger();
-        if (!count($root->handlers)) {
-            $filename = isset($args['filename']) ? $args['filename'] : NULL;
-            if ($filename !== NULL) {
-                $mode = isset($args['filemode']) ? $args['filemode'] : 'a';
-                $hdlr = new Plop_Handler_File($filename, $mode);
-            }
-            else {
-                $stream = isset($args['stream']) ? $args['stream'] : NULL;
-                $hdlr = new Plop_Handler_Stream($stream);
-            }
-            $fs = isset($args['format']) ? $args['format'] : self::BASIC_FORMAT;
-            $dfs = isset($args['datefmt']) ? $args['datefmt'] : NULL;
-            $fmt = new Plop_Formatter($fs, $dfs);
-            $hdlr->setFormatter($fmt);
-            $root->addHandler($hdlr);
-            if (isset($args['level'])) {
-                $level = $args['level'];
-                if (is_numeric($level))
-                    $level = (int) $level;
-                else
-                    $level = $this->getLevelName($level);
-                $root->setLevel($level);
+        if (!($logger instanceof Plop_LoggerInterface))
+            throw new RuntimeException('Invalid logger');
+
+        if ($name instanceof Plop_LoggerInterface) {
+            $name = $name->getName();
+        }
+        else if (is_string($name)) {
+            if ($name != $logger->getName()) {
+                throw new RuntimeException('Invalid name');
             }
         }
+        else {
+            $name = $logger->getName();
+        }
+
+        $this->_loggers[$name] = $logger;
     }
 
-    public function shutdown()
+    public function offsetGet($name)
     {
-        /// @TODO
+        if (!is_string($name)) {
+            throw new RuntimeException('Invalid logger name');
+        }
+
+        $parts = explode(DIRECTORY_SEPARATOR, $name);
+        while ($parts) {
+            $name = implode(DIRECTORY_SEPARATOR, $parts);
+            if (isset($this->_loggers[$name])) {
+                return $this->_loggers[$name];
+            }
+            array_pop($parts);
+        }
+        return $this->_loggers[''];
     }
 
-    public function setLoggerClass($class)
+    public function offsetExists($name)
     {
-        if (!class_exists($class) ||
-            !is_subclass_of($class, 'Plop_Logger'))
-            throw new Exception($class);
-
-        $this->_loggerClass = $class;
+        if ($name instanceof Plop_LoggerInterface) {
+            $name = $name->getName();
+        }
+        return isset($this->_loggers[$name]);
     }
 
-    public function fileConfig(
-        $fname,
-        $defaults               = NULL,
-        $class                  = 'Plop_Config_Format_INI',
-        $disableExistingLoggers = TRUE
-    )
+    public function offsetUnset($name)
     {
-        /// @TODO: find some use to this parameter.
-        if ($defaults === NULL)
-            $defaults = array();
-        $configParser = new $class($this, $fname);
-        $configParser->doWork($disableExistingLoggers);
+        /// @TODO: special treatment for '' (root logger).
+        if ($name instanceof Plop_LoggerInterface) {
+            $name = $name->getName();
+        }
+        unset($this->_loggers[$name]);
     }
 }
 

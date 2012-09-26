@@ -18,41 +18,39 @@
 
 class Plop_BufferingFormatter
 {
-    static public $defaultFormatter = NULL;
-    protected $_lineFmt;
+    protected $_lineFormat;
 
-    public function __construct($lineFmt = NULL)
+    public function __construct(Plop_FormatterInterface $lineFormat)
     {
-        if ($lineFmt)
-            $this->_lineFmt = $lineFmt;
-        else
-            $this->_lineFmt = self::$defaultFormatter;
+        $this->_lineFormat = $lineFormat;
     }
 
-    public function formatHeader($records)
+    protected function _formatHeader($records)
     {
         return "";
     }
 
-    public function formatFooter($records)
+    protected function _formatFooter($records)
     {
         return "";
     }
 
-    public function format($records)
+    public function format(Plop_RecordInterface $record /* , ... */)
     {
+        $records = func_get_args();
+        foreach ($records as $record) {
+            if (!($record instanceof Plop_RecordInterface))
+                throw new Exception('Not a valid record');
+        }
         $rv = "";
         if (count($records)) {
-            $rv .= $this->formatHeader($records);
-            foreach ($records as &$record) {
-                $rv .= $this->_lineFmt->format($record);
+            $rv .= $this->_formatHeader($records);
+            foreach ($records as $record) {
+                $rv .= $this->_lineFormat->format($record);
             }
-            unset($record);
-            $rv .= $this->formatFooter($records);
+            $rv .= $this->_formatFooter($records);
         }
         return $rv;
     }
 }
-
-Plop_BufferingFormatter::$defaultFormatter = new Plop_Formatter();
 

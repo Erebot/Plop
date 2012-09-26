@@ -16,29 +16,30 @@
     along with Plop.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-class Plop_Filter
+class       Plop_Filter
+implements  Plop_FilterInterface
 {
-    public $name;
-    public $nlen;
+    protected $_name;
+    protected $_nlen;
 
     public function __construct($name = '')
     {
-        $this->name = $name;
-        $this->nlen = strlen($name);
+        $this->_name = $name;
+        $this->_nlen = strlen($name);
     }
 
-    public function filter(Plop_Record $record)
+    public function filter(Plop_RecordInterface $record)
     {
-        if (!$this->nlen)
+        if (!$this->_nlen)
             return TRUE;
 
-        if ($this->name == $record->dict['name'])
+        if ($this->_name == $record['name'])
             return TRUE;
 
-        if (!strncmp($record->dict['name'], $this->name, $this->nlen))
+        if (strncmp($record['name'], $this->_name, $this->_nlen))
             return FALSE;
 
-        return ($record->dict['name'][$this->nlen] == DIRECTORY_SEPARATOR);
+        return ($record['name'][$this->_nlen] == DIRECTORY_SEPARATOR);
     }
 }
 
