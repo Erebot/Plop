@@ -1,6 +1,8 @@
 <?php
 /*
-    This file is part of Plop.
+    This file is part of Plop, a simple logging library for PHP.
+
+    Copyright © 2010-2012 François Poirotte
 
     Plop is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -22,7 +24,12 @@ extends Plop_Handler_Stream
     protected $_baseFilename;
     protected $_mode;
 
-    public function __construct($filename, $mode='at', $encoding=NULL, $delay=0)
+    public function __construct(
+        $filename,
+        $mode       = 'at',
+        $encoding   = NULL,
+        $delay      = 0
+    )
     {
         $this->_baseFilename    = $filename;
         $this->_mode            = $mode;
@@ -47,8 +54,9 @@ extends Plop_Handler_Stream
         $stream = fopen($this->_baseFilename, $this->_mode);
         if (function_exists('stream_encoding') &&
             $this->_encoding !== NULL &&
-            $stream !== FALSE)
+            $stream !== FALSE) {
             stream_encoding($stream, $this->_encoding);
+        }
         return $stream;
     }
 

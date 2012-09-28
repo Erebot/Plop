@@ -1,6 +1,8 @@
 <?php
 /*
-    This file is part of Plop.
+    This file is part of Plop, a simple logging library for PHP.
+
+    Copyright © 2010-2012 François Poirotte
 
     Plop is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -21,7 +23,7 @@ extends Plop_HandlerAbstract
 {
     protected $_host;
     protected $_port;
-    protected $_sock;
+    protected $_socket;
     protected $_closeOnError;
     protected $_retryTime;
     protected $_retryStart;
@@ -34,7 +36,7 @@ extends Plop_HandlerAbstract
         parent::__construct();
         $this->_host            = $host;
         $this->_port            = $port;
-        $this->_sock            = FALSE;
+        $this->_socket          = FALSE;
         $this->_closeOnError    = 0;
         $this->_retryTime       = NULL;
         $this->_retryStart      = 1.0;
@@ -62,19 +64,26 @@ extends Plop_HandlerAbstract
     protected function _createSocket()
     {
         $now = time();
-        if ($this->_retryTime === NULL)
+        if ($this->_retryTime === NULL) {
             $attempt = TRUE;
-        else
+        }
+        else {
             $attempt = ($now >= $this->_retryTime);
-        if (!$attempt)
+        }
+
+        if (!$attempt) {
             return;
-        $this->_sock = $this->_makeSocket();
-        if ($this->_sock !== FALSE) {
+        }
+
+        $this->_socket = $this->_makeSocket();
+        if ($this->_socket !== FALSE) {
             $this->_retryTime = NULL;
             return;
         }
-        if ($this->_retryTime === NULL)
+
+        if ($this->_retryTime === NULL) {
             $this->_retryPeriod = $this->_retryStart;
+        }
         else {
             $this->_retryPeriod *= $this->_retryFactor;
             if ($this->_retryPeriod > $this->_retryMax)
@@ -85,16 +94,20 @@ extends Plop_HandlerAbstract
 
     protected function _send($s)
     {
-        if (!$this->_sock)
+        if (!$this->_socket) {
             $this->_createSocket();
-        if (!$this->_sock)
+        }
+
+        if (!$this->_socket) {
             return;
+        }
+
         $len = strlen($s);
         for ($written = 0; $written < $len; $written += $fwrite) {
-            $fwrite = fwrite($this->_sock, substr($s, $written));
+            $fwrite = fwrite($this->_socket, substr($s, $written));
             if ($fwrite === FALSE) {
-                fclose($this->_sock);
-                $this->_sock = FALSE;
+                fclose($this->_socket);
+                $this->_socket = FALSE;
                 return;
             }
         }
@@ -113,12 +126,10 @@ extends Plop_HandlerAbstract
 
     public function handleError(Plop_RecordInterface $record, Exception $exc)
     {
-        if ($this->_closeOnError && $this->_sock) {
-            fclose($this->_sock);
-            $this->_sock = FALSE;
+        if ($this->_closeOnError) {
+            $this->_close();
         }
-        else
-            parent::handleError($record, $exc);
+        parent::handleError($record, $exc);
     }
 
     protected function _emit(Plop_RecordInterface $record)
@@ -134,9 +145,9 @@ extends Plop_HandlerAbstract
 
     public function _close()
     {
-        if ($this->_sock) {
-            fclose($this->_sock);
-            $this->_sock = FALSE;
+        if ($this->_socket) {
+            fclose($this->_socket);
+            $this->_socket = FALSE;
         }
     }
 }

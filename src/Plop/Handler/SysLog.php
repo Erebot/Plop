@@ -1,6 +1,8 @@
 <?php
 /*
-    This file is part of Plop.
+    This file is part of Plop, a simple logging library for PHP.
+
+    Copyright © 2010-2012 François Poirotte
 
     Plop is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -21,7 +23,7 @@ extends Plop_HandlerAbstract
 {
     const LOG_FORMAT_STRING = "<%d>%s\000";
 
-    static public $priorityNames = array(
+    static protected $_priorityNames = array(
         'alert'     => LOG_ALERT,
         'crit'      => LOG_CRIT,
         'critical'  => LOG_CRIT,
@@ -36,7 +38,7 @@ extends Plop_HandlerAbstract
         'warning'   => LOG_WARNING,
     );
 
-    static public $facilityNames = array(
+    static protected $_facilityNames = array(
         'auth'      => LOG_AUTH,
         'authpriv'  => LOG_AUTHPRIV,
         'cron'      => LOG_CRON,
@@ -65,7 +67,7 @@ extends Plop_HandlerAbstract
         gives unexpected results. See SF #1524081: in the Turkish locale,
         "INFO".lower() != "info". The same is true in PHP.
      */
-    static public $priorityMap = array(
+    static protected $_priorityMap = array(
         'DEBUG'     => 'debug',
         'INFO'      => 'info',
         'WARNING'   => 'warning',
@@ -73,9 +75,9 @@ extends Plop_HandlerAbstract
         'CRITICAL'  => 'critical',
     );
 
-    public $address;
-    public $facility;
-    public $socket;
+    protected $_address;
+    protected $_facility;
+    protected $_socket;
 
     public function __construct(
         $address    = 'udg:///dev/log',
@@ -83,50 +85,57 @@ extends Plop_HandlerAbstract
     )
     {
         parent::__construct();
-        $this->address      = $address;
-        $this->facility     = $facility;
-        $this->socket       = stream_socket_client($address);
-        if ($this->socket === FALSE)
+        $this->_address     = $address;
+        $this->_facility    = $facility;
+        $this->_socket      = stream_socket_client($address);
+        if ($this->_socket === FALSE) {
             throw new Exception('Unable to connect to the syslog');
-        $this->formatter    = NULL;
+        }
     }
 
-    public function encodePriority($facility, $priority)
+    public function __destruct()
+    {
+        $this->_close();
+    }
+
+    protected function _encodePriority($facility, $priority)
     {
         if (is_string($facility))
-            $facility = self::$facilityNames[$facility];
+            $facility = self::$_facilityNames[$facility];
         if (is_string($priority))
-            $priority = self::$priorityNames[$priority];
+            $priority = self::$_priorityNames[$priority];
         return ($facility << 3) | $priority;
     }
 
-    public function close()
+    protected function _close()
     {
-        fclose($this->socket);
-        parent::close();
+        if ($this->_socket !== FALSE) {
+            fclose($this->_socket);
+            $this->_socket = FALSE;
+        }
     }
 
-    public function mapPriority($levelName)
+    protected function _mapPriority($levelName)
     {
-        if (isset(self::$priorityMap[$levelName]))
-            return self::$priorityMap[$levelName];
+        if (isset(self::$_priorityMap[$levelName]))
+            return self::$_priorityMap[$levelName];
         return "warning";
     }
 
     protected function _emit(Plop_RecordInterface $record)
     {
-        $msg = $this->format($record);
+        $msg = $this->_format($record);
         $msg = sprintf(
             self::LOG_FORMAT_STRING,
-            $this->encodePriority(
-                $this->facility,
-                $this->mapPriority($record->dict['levelname'])
+            $this->_encodePriority(
+                $this->_facility,
+                $this->_mapPriority($record['levelname'])
             ),
             $msg
         );
 
         try {
-            fwrite($this->socket, $msg, strlen($msg));
+            fwrite($this->_socket, $msg);
         }
         catch (Exception $e) {
             $this->handleError($record, $e);

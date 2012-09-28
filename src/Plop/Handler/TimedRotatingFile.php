@@ -1,6 +1,8 @@
 <?php
 /*
-    This file is part of Plop.
+    This file is part of Plop, a simple logging library for PHP.
+
+    Copyright © 2010-2012 François Poirotte
 
     Plop is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -77,7 +79,7 @@ extends Plop_Handler_RotatingAbstract
         }
         else if (substr($this->_when, 0, 1) == 'W') {
             $this->_interval = 60 * 60 * 24 * 7;
-            if (strlen($this->_when) != 2)
+            if (strlen($this->_when) != 2) {
                 throw new Exception(
                     sprintf(
                         'You must specify a day for weekly rollover '.
@@ -85,46 +87,56 @@ extends Plop_Handler_RotatingAbstract
                         $this->_when
                     )
                 );
+            }
+
             $ord = ord($this->_when[1]);
-            if ($ord < ord('0') || $ord > ord('6'))
+            if ($ord < ord('0') || $ord > ord('6')) {
                 throw new Exception(
                     sprintf(
                         'Invalid day specified for weekly rollover: %s',
                         $this->_when
                     )
                 );
+            }
+
             $this->_dayOfWeek = (int) $this->_when[1];
             $this->_suffix = '%Y-%m-%d';
             $this->_extMatch = '^\\d{4}-\\d{2}-\\d{2}$';
         }
-        else
+        else {
             throw new Exception(
                 sprintf(
                     'Invalid rollover interval specified: %s',
                     $this->_when
                 )
             );
+        }
         $this->_interval    = $this->_interval * $interval;
         $this->_rolloverAt  = $this->_computeRollover(time());
     }
 
     protected function _computeRollover($currentTime)
     {
-        if ($this->_when == 'MIDNIGHT')
+        if ($this->_when == 'MIDNIGHT') {
             return strtotime("midnight + 1 day", $currentTime);
-        if (substr($this->_when, 0, 1) == 'W')
+        }
+
+        if (substr($this->_when, 0, 1) == 'W') {
             return strtotime(
                 "next " . self::$_dayNames[$this->_dayOfWeek],
                 $currentTime
             );
+        }
+
         return $currentTime + $this->_interval;
     }
 
     protected function _shouldRollover(Plop_RecordInterface $record)
     {
         $t = time();
-        if ($t >= $this->_rolloverAt)
+        if ($t >= $this->_rolloverAt) {
             return TRUE;
+        }
         return FALSE;
     }
 
@@ -137,46 +149,58 @@ extends Plop_Handler_RotatingAbstract
         $prefix     = $baseName . '.';
         $plen       = strlen($prefix);
         foreach ($fileNames as $fileName) {
-            if ($fileName == '.' || $fileName == '..')
+            if ($fileName == '.' || $fileName == '..') {
                 continue;
+            }
+
             if (!strncmp($fileName, $prefix, $plen)) {
                 $suffix = substr($fileName, $plen);
-                if (preg_match($this->_extMatch, $suffix))
+                if (preg_match($this->_extMatch, $suffix)) {
                     $result[] = $dirName.DIRECTORY_SEPARATOR.$fileName;
+                }
             }
         }
         sort($result);
         $rlen = count($result);
-        if ($rlen < $this->_backupCount)
+        if ($rlen < $this->_backupCount) {
             $result = array();
-        else
+        }
+        else {
             $result = array_slice($result, 0, $rlen - $this->_backupCount);
+        }
         return $result;
     }
 
     public function doRollover()
     {
-        if ($this->_stream)
+        if ($this->_stream) {
             fclose($this->_stream);
-        $t      = $this->_rolloverAt - $this->_interval;
-        if ($this->_utc)
+        }
+        $t = $this->_rolloverAt - $this->_interval;
+
+        if ($this->_utc) {
             $formatFunc = 'gmstrftime';
-        else
+        }
+        else {
             $formatFunc = 'strftime';
+        }
+
         $dfn    = $this->_baseFilename.'.'.$formatFunc($this->_suffix, $t);
         if (file_exists($dfn))
             @unlink($dfn);
         rename($this->_baseFilename, $dfn);
         if ($this->_backupCount > 0) {
-            foreach ($this->_getFilesToDelete() as $s)
+            foreach ($this->_getFilesToDelete() as $s) {
                 @unlink($s);
+            }
         }
         $this->_mode    = 'w';
         $this->_stream  = $this->_open();
         $currentTime    = time();
         $newRolloverAt  = $this->_computeRollover($currentTime);
-        while ($newRolloverAt <= $currentTime)
+        while ($newRolloverAt <= $currentTime) {
             $newRolloverAt += $this->_interval;
+        }
         $this->_rolloverAt = $newRolloverAt;
     }
 }

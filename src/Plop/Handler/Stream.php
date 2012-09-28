@@ -1,6 +1,8 @@
 <?php
 /*
-    This file is part of Plop.
+    This file is part of Plop, a simple logging library for PHP.
+
+    Copyright © 2010-2012 François Poirotte
 
     Plop is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -24,7 +26,7 @@ extends Plop_HandlerAbstract
     public function __construct($stream = NULL)
     {
         parent::__construct();
-        $this->_stream      = $stream;
+        $this->_stream = $stream;
     }
 
     protected function _flush()
@@ -34,10 +36,12 @@ extends Plop_HandlerAbstract
 
     protected function _emit(Plop_RecordInterface $record)
     {
-        if (!$this->_stream)
+        if (!$this->_stream) {
             $stream = fopen('php://stderr', 'ab');
-        else
+        }
+        else {
             $stream = $this->_stream;
+        }
 
         $msg = $this->_format($record);
         fprintf($stream, "%s\n", $msg);
@@ -46,8 +50,9 @@ extends Plop_HandlerAbstract
             fflush($stream);
             fclose($stream);
         }
-        else
+        else {
             $this->_flush();
+        }
     }
 }
 

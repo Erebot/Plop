@@ -1,6 +1,8 @@
 <?php
 /*
-    This file is part of Plop.
+    This file is part of Plop, a simple logging library for PHP.
+
+    Copyright © 2010-2012 François Poirotte
 
     Plop is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -22,8 +24,10 @@ extends         Plop_Handler_File
     protected function _emit(Plop_RecordInterface $record)
     {
         try {
-            if ($this->_shouldRollover($record))
+            if ($this->_shouldRollover($record)) {
                 $this->_doRollover();
+            }
+            parent::_emit($record);
         }
         catch (Exception $e) {
             $this->handleError($record, $e);

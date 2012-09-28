@@ -1,6 +1,8 @@
 <?php
 /*
-    This file is part of Plop.
+    This file is part of Plop, a simple logging library for PHP.
+
+    Copyright © 2010-2012 François Poirotte
 
     Plop is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -31,8 +33,9 @@ extends Plop_Handler_RotatingAbstract
         $delay          = 0
     )
     {
-        if ($maxBytes > 0)
+        if ($maxBytes > 0) {
             $mode = 'a';
+        }
         parent::__construct($filename, $mode, $encoding, $delay);
         $this->_maxBytes    = $maxBytes;
         $this->_backupCount = $backupCount;
@@ -46,14 +49,16 @@ extends Plop_Handler_RotatingAbstract
                 $sfn = sprintf("%s.%d", $this->_baseFilename, $i);
                 $dfn = sprintf("%s.%d", $this->_baseFilename, $i + 1);
                 if (file_exists($sfn)) {
-                    if (file_exists($dfn))
+                    if (file_exists($dfn)) {
                         @unlink($dfn);
+                    }
                     rename($sfn, $dfn);
                 }
             }
             $dfn = sprintf("%s.1", $this->_baseFilename);
-            if (file_exists($dfn))
+            if (file_exists($dfn)) {
                 @unlink($dfn);
+            }
             rename($this->_baseFilename, $dfn);
         }
         $this->_mode    = 'w';
@@ -62,15 +67,18 @@ extends Plop_Handler_RotatingAbstract
 
     protected function _shouldRollover(Plop_RecordInterface $record)
     {
-        if (!$this->_stream)
+        if (!$this->_stream) {
             $this->_stream = $this->_open();
+        }
+
         if ($this->_maxBytes > 0) {
             $msg = $this->_format($record)."\n";
             // The python doc states this is due to a non-POSIX-compliant
             // behaviour under Windows.
             fseek($this->_stream, 0, SEEK_END);
-            if (ftell($this->_stream) + strlen($msg) >= $this->_maxBytes)
+            if (ftell($this->_stream) + strlen($msg) >= $this->_maxBytes) {
                 return TRUE;
+            }
         }
         return FALSE;
     }
