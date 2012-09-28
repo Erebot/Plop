@@ -1,6 +1,8 @@
 <?php
 /*
-    This file is part of Plop.
+    This file is part of Plop, a simple logging library for PHP.
+
+    Copyright © 2010-2012 François Poirotte
 
     Plop is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,12 +20,12 @@
 
 interface Plop_FormatterInterface
 {
-    public function format(Plop_RecordInterface $record);
-
     public function getFormat();
     public function setFormat($format);
 
     public function getDateFormat();
     public function setDateFormat($dateFormat);
+
+    public function format(Plop_RecordInterface $record);
 }
 

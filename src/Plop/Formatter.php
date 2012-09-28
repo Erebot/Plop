@@ -1,6 +1,8 @@
 <?php
 /*
-    This file is part of Plop.
+    This file is part of Plop, a simple logging library for PHP.
+
+    Copyright © 2010-2012 François Poirotte
 
     Plop is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -66,7 +68,7 @@ implements  Plop_FormatterInterface
             $record['asctime'] = $this->_formatTime($record, $dateFormat);
         }
 
-        $s = $record->formatPercent($format, $record->asDict());
+        $s = $record->formatPercent($format, $record->asArray());
         if ($record['exc_info']) {
             if (!$record['exc_text']) {
                 $record['exc_text'] =

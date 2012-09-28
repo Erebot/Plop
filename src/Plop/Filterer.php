@@ -1,6 +1,8 @@
 <?php
 /*
-    This file is part of Plop.
+    This file is part of Plop, a simple logging library for PHP.
+
+    Copyright © 2010-2012 François Poirotte
 
     Plop is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -20,8 +22,8 @@ class       Plop_Filterer
 implements  Plop_FiltererInterface
 {
     protected $_filters;
-    
-    public function __construct()
+
+    protected function __construct()
     {
         $this->_filters = array();
     }
