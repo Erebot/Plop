@@ -1,6 +1,8 @@
 <?php
 /*
-    This file is part of Plop.
+    This file is part of Plop, a simple logging library for PHP.
+
+    Copyright © 2010-2012 François Poirotte
 
     Plop is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -22,6 +24,11 @@ extends     Plop_FiltererInterface
     public function getEffectiveLevel();
     public function setLevel($level);
     public function isEnabledFor($level);
+
+    public function getFile();
+    public function getClass();
+    public function getMethod();
+    public function getId();
 
     public function debug($msg, $args = array(), $exception = NULL);
     public function info($msg, $args = array(), $exception = NULL);

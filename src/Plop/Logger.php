@@ -1,6 +1,8 @@
 <?php
 /*
-    This file is part of Plop.
+    This file is part of Plop, a simple logging library for PHP.
+
+    Copyright © 2010-2012 François Poirotte
 
     Plop is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -19,16 +21,20 @@
 class       Plop_Logger
 extends     Plop_LoggerAbstract
 {
-    protected $_name;
+    protected $_file;
+    protected $_class;
+    protected $_method;
     protected $_level;
     protected $_handlers;
     protected $_emittedWarning;
 
-    public function __construct($name, $level = Plop::NOTSET)
+    public function __construct($file = NULL, $class = NULL, $method = NULL)
     {
         parent::__construct();
-        $this->_name            = $name;
-        $this->_level           = $level;
+        $this->_file            = $file;
+        $this->_class           = $class;
+        $this->_method          = $method;
+        $this->_level           = Plop::NOTSET;
         $this->_handlers        = array();
         $this->_emittedWarning  = FALSE;
     }
@@ -47,53 +53,46 @@ extends     Plop_LoggerAbstract
         return $this;
     }
 
-    public function getName()
+    public function getFile()
     {
-        return $this->_name;
+        return $this->_file;
+    }
+
+    public function getClass()
+    {
+        return $this->_class;
+    }
+
+    public function getMethod()
+    {
+        return $this->_method;
+    }
+
+    public function getId()
+    {
+        return $this->_method.':'.$this->_class.':'.$this->_file;
     }
 
     public function log($level, $msg, $args = array(), $exception = NULL)
     {
         if ($this->isEnabledFor($level)) {
-            $caller = $this->findCaller();
-            $record = $this->makeRecord(
-                $this->_name,
+            $caller = Plop::findCaller();
+            $record = $this->_makeRecord(
+                $this->getId(),
                 $level,
-                $caller['fn'],
+                $caller['fn'] ? $caller['fn'] : '???',
                 $caller['lno'],
                 $msg,
                 $args,
                 $exception,
-                $caller['func']
+                $caller['func'] ? $caller['func'] : NULL
             );
             $this->handle($record);
         }
         return $this;
     }
 
-    public function findCaller()
-    {
-        $bt     = debug_backtrace();
-        $dir    = dirname(__FILE__);
-        $max    = count($bt);
-        for ($i = 1; $i < $max && dirname($bt[$i]['file']) == $dir; $i++)
-            ; // Skip frames until we get out of logging code.
-
-        if ($i == $max)
-            return array(
-                'fn'    => '???',
-                'lno'   => 0,
-                'func'  => '???',
-            );
-
-        return array(
-            'fn'    => $bt[$i]['file'],
-            'lno'   => $bt[$i]['line'],
-            'func'  => ($i+1 == $max ? '???' : $bt[$i+1]['function']),
-        );
-    }
-
-    public function makeRecord(
+    protected function _makeRecord(
         $name,
         $level,
         $fn,
@@ -120,7 +119,7 @@ extends     Plop_LoggerAbstract
             foreach ($extra as $k => &$v) {
                 if (
                     in_array($key, array('message', 'asctime')) ||
-                    in_array($key, $rv->dict)
+                    in_array($key, array_keys($rv->asArray()))
                 )
                     throw new Exception(
                         'Attempt to override '.$k.' in record'

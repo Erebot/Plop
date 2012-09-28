@@ -1,6 +1,8 @@
 <?php
 /*
-    This file is part of Plop.
+    This file is part of Plop, a simple logging library for PHP.
+
+    Copyright © 2010-2012 François Poirotte
 
     Plop is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -22,9 +24,10 @@
  * to offer customizable logs.
  */
 class       Plop
+extends     Plop_IndirectLoggerAbstract
 implements  ArrayAccess
 {
-    const BASIC_FORMAT  = '%(levelname)s:%(name)s:%(message)s';
+    const BASIC_FORMAT  = '[%(levelname)s] %(message)s';
 
     const NOTSET    =  0;
     const DEBUG     = 10;
@@ -42,7 +45,7 @@ implements  ArrayAccess
     protected function __construct()
     {
         $this->_loggers = array();
-        $rootLogger = new Plop_Logger('', self::NOTSET);
+        $rootLogger = new Plop_Logger(NULL, NULL, NULL);
         $basicHandler = new Plop_Handler_Stream(STDERR);
         $this[] = $rootLogger->addHandler(
             $basicHandler->setFormatter(
@@ -79,9 +82,9 @@ implements  ArrayAccess
         return $this->_created;
     }
 
-    public function getLogger($name = '')
+    public function getLogger($file = NULL, $class = NULL, $method = NULL)
     {
-        return $this[$name];
+        return $this["$method:$class:$file"];
     }
 
     public function addLogger(Plop_LoggerInterface $logger)
@@ -110,19 +113,20 @@ implements  ArrayAccess
 
     public function offsetSet($name, $logger)
     {
-        if (!($logger instanceof Plop_LoggerInterface))
+        if (!($logger instanceof Plop_LoggerInterface)) {
             throw new RuntimeException('Invalid logger');
+        }
 
         if ($name instanceof Plop_LoggerInterface) {
-            $name = $name->getName();
+            $name = $name->getId();
         }
         else if (is_string($name)) {
-            if ($name != $logger->getName()) {
+            if ($name != $logger->getId()) {
                 throw new RuntimeException('Invalid name');
             }
         }
         else {
-            $name = $logger->getName();
+            $name = $logger->getId();
         }
 
         $this->_loggers[$name] = $logger;
@@ -134,32 +138,100 @@ implements  ArrayAccess
             throw new RuntimeException('Invalid logger name');
         }
 
-        $parts = explode(DIRECTORY_SEPARATOR, $name);
+        $parts = explode(':', $name, 3);
+        if (count($parts) != 3) {
+            throw new RuntimeException('Invalid logger name');
+        }
+        list($method, $class, $file) = $parts;
+        if (substr($file, -strlen(DIRECTORY_SEPARATOR)) ==
+            DIRECTORY_SEPARATOR) {
+            $file = (string) substr($file, 0, -strlen(DIRECTORY_SEPARATOR));
+        }
+
+        // File + class + method match.
+        if (isset($this->_loggers["$method:$class:$file"])) {
+            return $this->_loggers["$method:$class:$file"];
+        }
+
+        // File + class match.
+        // Note: for functions, this is actually a file match,
+        //       which is redundant with the loop afterwards,
+        //       but that's okay 'cause the performance penalty
+        //       ain't that big.
+        if (isset($this->_loggers[":$class:$file"])) {
+            return $this->_loggers[":$class:$file"];
+        }
+
+        // File match.
+        $parts = explode(DIRECTORY_SEPARATOR, $file);
         while ($parts) {
             $name = implode(DIRECTORY_SEPARATOR, $parts);
-            if (isset($this->_loggers[$name])) {
-                return $this->_loggers[$name];
+            if (isset($this->_loggers["::$name"])) {
+                return $this->_loggers["::$name"];
             }
             array_pop($parts);
         }
-        return $this->_loggers[''];
+
+        // Root logger.
+        return $this->_loggers['::'];
     }
 
     public function offsetExists($name)
     {
         if ($name instanceof Plop_LoggerInterface) {
-            $name = $name->getName();
+            $name = $name->getId();
         }
         return isset($this->_loggers[$name]);
     }
 
     public function offsetUnset($name)
     {
-        /// @TODO: special treatment for '' (root logger).
         if ($name instanceof Plop_LoggerInterface) {
-            $name = $name->getName();
+            $name = $name->getId();
+        }
+        if ($name == "::") {
+            throw new RuntimeException('The root logger cannot be unset!');
         }
         unset($this->_loggers[$name]);
+    }
+
+    protected function _getIndirectLogger()
+    {
+        $caller = self::findCaller();
+        return $this["${caller['func']}:${caller['class']}:${caller['fn']}"];
+    }
+
+    static public function findCaller()
+    {
+        if (version_compare(PHP_VERSION, '5.3.6', '>=')) {
+            $bt = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+        }
+        else {
+            $bt = debug_backtrace(FALSE);
+        }
+
+        $dir    = dirname(__FILE__) . DIRECTORY_SEPARATOR;
+        $len    = strlen($dir);
+        $max    = count($bt);
+        for ($i = 1; $i < $max && !strncmp($dir, $bt[$i]['file'], $len); $i++) {
+            ; // Skip frames until we get out of logging code.
+        }
+
+        if ($i == $max) {
+            return array(
+                'fn'    => NULL,
+                'lno'   => 0,
+                'func'  => NULL,
+                'class' => NULL,
+            );
+        }
+
+        return array(
+            'fn'    => $bt[$i]['file'],
+            'lno'   => $bt[$i]['line'],
+            'func'  => ($i + 1 == $max ? NULL : $bt[$i + 1]['function']),
+            'class' => ($i + 1 == $max ? NULL : $bt[$i + 1]['class']),
+        );
     }
 }
 
