@@ -18,9 +18,15 @@
     along with Plop.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/**
+ *  \brief
+ *      An abstract class for handlers that must deal
+ *      with file rotations.
+ */
 abstract class  Plop_Handler_RotatingAbstract
 extends         Plop_Handler_File
 {
+    /// \copydoc Plop_HandlerAbstract::_emit().
     protected function _emit(Plop_RecordInterface $record)
     {
         try {
@@ -33,5 +39,25 @@ extends         Plop_Handler_File
             $this->handleError($record, $e);
         }
     }
+
+    /**
+     * Decide whether a file rotation is necessary.
+     *
+     * \param Plop_RecordInterface $record
+     *      The log record being handled.
+     *
+     * \retval bool
+     *      \a TRUE if a file rotation is required,
+     *      \a FALSE otherwise.
+     */
+    abstract protected function _shouldRollover(Plop_RecordInterface $record);
+
+    /**
+     * Do the actual file rotation.
+     *
+     * \return
+     *      This method does not return any value.
+     */
+    abstract protected function _doRollover();
 }
 

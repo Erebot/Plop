@@ -18,14 +18,60 @@
     along with Plop.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/**
+ *  \brief
+ *      Interface to a record formatter.
+ */
 interface Plop_FormatterInterface
 {
+    /**
+     * Return the general format used to render
+     * records.
+     *
+     * \retval string
+     *      The format used to render records.
+     */
     public function getFormat();
+
+    /**
+     * Set the format used to render records.
+     *
+     * \param string $format
+     *      The new format to use.
+     *
+     * \retval Plop_FormatterInterface
+     *      The formatter instance (ie. \a $this).
+     */
     public function setFormat($format);
 
+    /**
+     * Return the format used to render dates.
+     *
+     * \retval string
+     *      The format used to render dates.
+     */
     public function getDateFormat();
+
+    /**
+     * Set the format used to render dates.
+     *
+     * \param string $dateFormat
+     *      The new format to use.
+     *
+     * \retval Plop_FormatterInterface
+     *      The formatter instance (ie. \a $this).
+     */
     public function setDateFormat($dateFormat);
 
+    /**
+     * Format a record.
+     *
+     * \param Plop_RecordInterface $record
+     *      The record to format.
+     *
+     * \retval string
+     *      Formatted string representing the given record.
+     */
     public function format(Plop_RecordInterface $record);
 }
 

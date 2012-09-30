@@ -18,17 +18,27 @@
     along with Plop.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/**
+ *  \brief
+ *      An handler that logs to a file and
+ *      automatically reopens that file when
+ *      it changes (eg. due to log rotation).
+ */
 class   Plop_Handler_WatchedFile
 extends Plop_Handler_File
 {
+    /// Device the watched file resides on.
     protected $_dev;
+
+    /// Inode number of the watched file.
     protected $_ino;
 
+    /// \copydoc Plop_Handler_File::__construct($filename, $mode, $encoding, $delay).
     public function __construct(
         $filename,
-        $mode       = 'a',
+        $mode       = 'at',
         $encoding   = NULL,
-        $delay      = 0
+        $delay      = FALSE
     )
     {
         parent::__construct($filename, $mode, $encoding, $delay);
@@ -42,6 +52,7 @@ extends Plop_Handler_File
         }
     }
 
+    /// \copydoc Plop_HandlerAbstract::_emit().
     protected function _emit(Plop_RecordInterface $record)
     {
         if (!file_exists($this->_baseFilename)) {

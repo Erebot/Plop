@@ -18,30 +18,49 @@
     along with Plop.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-class       Plop_Filter
+/**
+ *  \brief
+ *      A filter that only accepts records from a specific
+ *      logger.
+ */
+class       Plop_Filter_Name
 implements  Plop_FilterInterface
 {
+    /// Identifier of the logger whose records will be handled.
     protected $_name;
+
+    /// Length of the identifier.
     protected $_nlen;
 
+    /**
+     * Construct a new instance of this filter.
+     *
+     * \param string $name
+     *      (optional) Identifier of the only logger
+     *      this filter will accept records from.
+     *      An empty string means "accept any logger".
+     *      By default, an empty string is used.
+     */
     public function __construct($name = '')
     {
         $this->_name = $name;
         $this->_nlen = strlen($name);
     }
 
+    /// \copydoc Plop_FilterInterface::filter().
     public function filter(Plop_RecordInterface $record)
     {
         if (!$this->_nlen)
             return TRUE;
 
-        if ($this->_name == $record['name'])
-            return TRUE;
-
-        if (strncmp($record['name'], $this->_name, $this->_nlen))
+        list(, , $name) = explode($record['name'], 3);
+        if (strncmp($name, $this->_name, $this->_nlen))
             return FALSE;
 
-        return ($record['name'][$this->_nlen] == DIRECTORY_SEPARATOR);
+        return (
+            strlen($name) == $this->_nlen ||
+            $name[$this->_nlen] == DIRECTORY_SEPARATOR
+        );
     }
 }
 

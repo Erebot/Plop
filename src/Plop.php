@@ -19,29 +19,97 @@
 */
 
 /**
- * A logging module, similar to the one provided by Python.
- * It uses the concepts of loggers, handlers & formatters
- * to offer customizable logs.
+ *  \brief
+ *      Main class for Plop.
+ *
+ *  For the most basic use cases, the Plop class acts
+ *  as an instance of Plop_LoggerInterface, which means
+ *  you only need code such as the following to start
+ *  logging messages:
+ *  \code
+ *      // Grab an instance of the logging service.
+ *      $logging = Plop::getInstance();
+ *      // Log a message with the INFO level.
+ *      $logging->info('The cat is both dead and alive!');
+ *  \endcode
+ *
+ *  This is equivalent to the following less concise
+ *  piece of code:
+ *  \code
+ *      $logging = Plop::getInstance();
+ *      $logger = $logging->getLogger(__FILE__, __CLASS__, __FUNCTION__);
+ *      $logger->info('The cat is both dead and alive!');
+ *  \endcode
+ *
+ *  For more complex use cases, you will need to configure
+ *  logging (either manually or by means of tools such as a
+ *  <a href="https://github.com/Erebot/DependencyInjection">Dependency
+ *  Injection Container</a>).
+ *  The following piece of code shows how to configure bits of Plop
+ *  using PHP code:
+ *  \code
+ *      $logging = Plop::getInstance();
+ *
+ *      // Grab the root logger.
+ *      $logger = $logging->getLogger();
+ *
+ *      // Log only messages with a level of INFO or more.
+ *      $logger->setLevel(Plop::INFO);
+ *
+ *      // Change the format used to display logs on the console.
+ *      // Also, display dates as UNIX timestamps instead of using
+ *      // the default format ("2012-09-29 11:16:15,123").
+ *      foreach ($logger->getHandlers() as $handler)
+ *          $handler->getFormatter()
+ *              ->setFormat('%(asctime)s - %(levelname)s - %(message)s')
+ *              ->setDateFormat('U'); // We want UNIX timestamps.
+ *
+ *      // Send logs to the syslog (using the default format),
+ *      // in addition to the console, if the level is WARNING
+ *      // or above.
+ *      $handler = new Plop_Handler_SysLog(
+ *          Plop_Handler_SysLog::DEFAULT_ADDRESS,
+ *          LOG_DAEMON
+ *      );
+ *      $logger->addHandler($handler->setLevel(Plop::WARNING));
+ *  \endcode
  */
 class       Plop
 extends     Plop_IndirectLoggerAbstract
-implements  ArrayAccess
+implements  ArrayAccess,
+            Countable
 {
+    /// Default format used by the root logger.
     const BASIC_FORMAT  = '[%(levelname)s] %(message)s';
 
+    /// No log level defined.
     const NOTSET    =  0;
+    /// DEBUG log level.
     const DEBUG     = 10;
+    /// INFO log level.
     const INFO      = 20;
+    /// WARNING log level.
     const WARNING   = 30;
+    /// Alias for the WARNING log level.
     const WARN      = 30;
+    /// ERROR log level.
     const ERROR     = 40;
+    /// CRITICAL error log level.
     const CRITICAL  = 50;
 
+    /// Shared instance of the logging service.
     static protected $_instance = NULL;
+
+    /// Associative array of loggers, indexed by their ID.
     protected $_loggers;
+    /// Mapping between level names and their value.
     protected $_levelNames;
+    /// Date and time when the logging service was initialized.
     protected $_created;
 
+    /**
+     * Create a new instance of the logging service.
+     */
     protected function __construct()
     {
         $this->_loggers = array();
@@ -63,11 +131,18 @@ implements  ArrayAccess
         $this->_created = microtime(TRUE);
     }
 
+    /// This class is not clone-safe.
     public function __clone()
     {
-        throw new Exception('cloning this class is forbidden!');
+        throw new Plop_Exception('cloning this class is forbidden!');
     }
 
+    /**
+     * Return an instance of the logging service.
+     *
+     * \retval Plop
+     *      Instance of the logging service.
+     */
     static public function & getInstance()
     {
         if (self::$_instance === NULL) {
@@ -77,70 +152,283 @@ implements  ArrayAccess
         return self::$_instance;
     }
 
+    /**
+     * Get the date and time (as a UNIX timestamp
+     * with microseconds resolution) when the logging
+     * service was created.
+     *
+     * \retval float
+     *      Creation date of the logging service.
+     */
     public function getCreationDate()
     {
         return $this->_created;
     }
 
-    public function getLogger($file = NULL, $class = NULL, $method = NULL)
+    /**
+     * Set a (new) name for a given level.
+     *
+     * \param int $level
+     *      Level to which a (new) name will be given.
+     *
+     * \param string $levelName
+     *      New name for that level.
+     *
+     * \retval Plop
+     *      The current logging service (ie. \a $this).
+     */
+    public function addLevelName($level, $levelName)
+    {
+        if (!is_int($level)) {
+            throw new Plop_Exception('Invalid level value');
+        }
+        if (!is_string($levelName)) {
+            throw new Plop_Exception('Invalid level name');
+        }
+        $this->_levelNames[$level] = $levelName;
+        return $this;
+    }
+
+    /**
+     * Return the name of a level given its value.
+     *
+     * \param int $level
+     *      Level for which a name must be returned.
+     *
+     * \retval string
+     *      Name for the given level.
+     *
+     * \note
+     *      If the level was not given a specific name
+     *      (ie. Plop::addLevelName() was not called first),
+     *      "Level $level" is returned.
+     */
+    public function getLevelName($level)
+    {
+        if (!is_int($level)) {
+            throw new Plop_Exception('Invalid level value');
+        }
+        if (!isset($this->_levelNames[$level])) {
+            return "Level $level";
+        }
+        return $this->_levelNames[$level];
+    }
+
+    /**
+     * Return the value of a level given its name.
+     *
+     * \param string $levelName
+     *      Level for which a value must be returned.
+     *
+     * \retval int
+     *      Value for the given level.
+     *
+     * \note
+     *      If the given level name is not known,
+     *      Plop::NOTSET (0) is returned.
+     *
+     * \note
+     *      You may use Plop::addLevelName() to register
+     *      new levels.
+     */
+    public function getLevelValue($levelName)
+    {
+        if (!is_string($levelName)) {
+            throw new Plop_Exception('Invalid level name');
+        }
+        $key = array_search($levelName, $this->_levelNames, TRUE);
+        return (int) $key; // FALSE is silently converted to 0.
+    }
+
+    /**
+     * Return the logger that is most appropriate
+     * given a bit of context.
+     *
+     * \param string $file
+     *      (optional) Name of the file for which
+     *      a logger must be returned.
+     *      Most of the time, you will pass the value
+     *      of \a \_\_FILE\_\_ to this parameter.
+     *
+     * \param string $class
+     *      (optional) Class inside the given file
+     *      for which a logger must be returned.
+     *      Most of the time, you will pass the value
+     *      of \a \_\_CLASS\_\_ to this parameter.
+     *
+     * \param string $method
+     *      (optional) Method inside the given class
+     *      for which a logger must be returned.
+     *      Most of the time, you will pass the value
+     *      of \a \_\_FUNCTION\_\_ to this parameter,
+     *      even for methods, where this will have
+     *      the same value as \a \_\_METHOD\_\_.
+     *
+     * \retval Plop_LoggerInterface
+     *      Logger that is the most appropriate given
+     *      the context.
+     *
+     * \note
+     *      For functions, pass \a NULL as the value
+     *      for the \a $class parameter.
+     *
+     * \warning
+     *      When the default value is kept for every
+     *      parameter, this method will return the root
+     *      logger. It will not try to get the values
+     *      of \a \_\_FILE\_\_, \a \_\_CLASS\_\_ and
+     *      \a \_\_FUNCTION\_\_ automatically.
+     *      If you need more magic than that, keep in mind
+     *      that the Plop class also implements the
+     *      Plop_LoggerInterface interface to provide
+     *      shortcuts.
+     *      Therefore,
+     *      \code
+     *          $logging->info('The quick brown fox jumps over the lazy dog');
+     *      \endcode
+     *      is equivalent to
+     *      \code
+     *          $logging
+     *              ->getLogger(\_\_FILE\_\_, \_\_CLASS\_\_, \_\_FUNCTION\_\_)
+     *              ->info('The quick brown fox jumps over the lazy dog');
+     *      \endcode
+     */
+    public function getLogger($file = '', $class = '', $method = '')
     {
         return $this["$method:$class:$file"];
     }
 
+    /**
+     * Register a logger.
+     *
+     * This is effectively a shortcut for the following piece
+     * of code:
+     * \code
+     *      $logging[] = $logger;
+     * \endcode
+     * It is kept to help other tools that operate on Plop
+     * (such as Dependency Injection Containers) but do not
+     * support object subscripting (ie. array notation).
+     *
+     * \param Plop_LoggerInterface $logger
+     *      New logger to register.
+     *
+     * \retval Plop
+     *      The current logging service (ie. \a $this).
+     *
+     * \note
+     *      Since the Plop class acts as a singleton,
+     *      any logger registered with this method
+     *      can be retrieved later by calling
+     *      \code
+     *          (Plop::getInstance())->getLogger();
+     *      \endcode
+     *      with the appropriate arguments.
+     */
     public function addLogger(Plop_LoggerInterface $logger)
     {
         $this[] = $logger;
+        return $this;
     }
 
-    public function addLevelName($lvl, $lvlName)
+    /**
+     * Return a logger's identifier.
+     *
+     * \param Plop_LoggerInterface $logger
+     *      A logger whose identifier we're interested in.
+     *
+     * \retval string
+     *      The logger's identifier.
+     */
+    protected function _getLoggerId(Plop_LoggerInterface $logger)
     {
-        $this->_levelNames[$lvl] = $lvlName;
+        $method = $logger->getMethod();
+        $class  = $logger->getClass();
+        $file   = $logger->getFile();
+        return "$method:$class:$file";
     }
 
-    public function getLevelName($lvl)
+    /**
+     * Return the number of loggers currently
+     * registered with Plop.
+     *
+     * \retval int
+     *      Number of loggers currently registered.
+     */
+    public function count()
     {
-        if (!isset($this->_levelNames[$lvl])) {
-            return "Level ".$lvl;
-        }
-        return $this->_levelNames[$lvl];
+        return count($this->_loggers);
     }
 
-    public function getLevelValue($name)
-    {
-        $key = array_search($name, $this->_levelNames, TRUE);
-        return (int) $key; // FALSE is silently converted to 0.
-    }
-
-    public function offsetSet($name, $logger)
+    /**
+     * Register a new logger with Plop.
+     *
+     * \param mixed $offset
+     *      (deprecated) Identifier for the logger,
+     *      must match the identifier of the logger
+     *      given in \a $logger.
+     *
+     * \param Plop_LoggerInterface $logger
+     *      New logger to register.
+     *
+     * \deprecated
+     *      The \a $offset argument is deprecated as
+     *      Plop already deduces the value automatically
+     *      from the \a $logger argument.
+     *
+     * \note
+     *      If a logger already exists with the given identifier,
+     *      it will be replaced by the new one.
+     *
+     * \note
+     *      The usual pattern for registering new loggers is
+     *      \code
+     *          $logging[] = $logger;
+     *      \endcode
+     *      Also, Plop::addLogger() is an alias for that pattern.
+     */
+    public function offsetSet($offset, $logger)
     {
         if (!($logger instanceof Plop_LoggerInterface)) {
-            throw new RuntimeException('Invalid logger');
+            throw new Plop_Exception('Invalid logger');
         }
 
-        if ($name instanceof Plop_LoggerInterface) {
-            $name = $name->getId();
-        }
-        else if (is_string($name)) {
-            if ($name != $logger->getId()) {
-                throw new RuntimeException('Invalid name');
+        if (is_string($offset)) {
+            if ($offset != $this->_getLoggerId($logger)) {
+                throw new Plop_Exception('Invalid identifier');
             }
         }
         else {
-            $name = $logger->getId();
+            $offset = $this->_getLoggerId($logger);
         }
 
-        $this->_loggers[$name] = $logger;
+        $this->_loggers[$offset] = $logger;
     }
 
-    public function offsetGet($name)
+    /**
+     * Return the registered logger with the given identifier,
+     * or the root logger if no other logger was found.
+     *
+     * \param string $offset
+     *      Identifier of the logger to return.
+     *
+     * \retval Plop_LoggerInterface
+     *      The registered logger with that identifier if one
+     *      was found, or the root logger.
+     *
+     * \warning
+     *      Do not call this method directly, use
+     *      Plop::getLogger() instead.
+     */
+    public function offsetGet($offset)
     {
-        if (!is_string($name)) {
-            throw new RuntimeException('Invalid logger name');
+        if (!is_string($offset)) {
+            throw new Plop_Exception('Invalid logger identifier');
         }
 
-        $parts = explode(':', $name, 3);
+        $parts = explode(':', $offset, 3);
         if (count($parts) != 3) {
-            throw new RuntimeException('Invalid logger name');
+            throw new Plop_Exception('Invalid logger identifier');
         }
         list($method, $class, $file) = $parts;
         if (substr($file, -strlen(DIRECTORY_SEPARATOR)) ==
@@ -165,9 +453,9 @@ implements  ArrayAccess
         // File match.
         $parts = explode(DIRECTORY_SEPARATOR, $file);
         while ($parts) {
-            $name = implode(DIRECTORY_SEPARATOR, $parts);
-            if (isset($this->_loggers["::$name"])) {
-                return $this->_loggers["::$name"];
+            $offset = implode(DIRECTORY_SEPARATOR, $parts);
+            if (isset($this->_loggers["::$offset"])) {
+                return $this->_loggers["::$offset"];
             }
             array_pop($parts);
         }
@@ -176,31 +464,90 @@ implements  ArrayAccess
         return $this->_loggers['::'];
     }
 
-    public function offsetExists($name)
+    /**
+     * Return a flag indicating whether a logger with
+     * the given identifier was registered with Plop.
+     *
+     * \param string|Plop_LoggerInterface $offset
+     *      A logger identifier. You may also pass a logger,
+     *      in which case, that logger's identifier will be
+     *      used for the test.
+     *
+     * \retval bool
+     *      A flag indicating whether a logger was registered
+     *      with that identifier (\a TRUE) or not (\a FALSE).
+     *
+     * \warning
+     *      When a logger is passed to this method, it will
+     *      only look for a registered logger with the same
+     *      identifier. It will not check whether both loggers
+     *      are actually the same.
+     */
+    public function offsetExists($offset)
     {
-        if ($name instanceof Plop_LoggerInterface) {
-            $name = $name->getId();
+        if ($offset instanceof Plop_LoggerInterface) {
+            $offset = $this->_getLoggerId($logger);
         }
-        return isset($this->_loggers[$name]);
+        if (!is_string($offset)) {
+            throw new Plop_Exception('Invalid identifier');
+        }
+        return isset($this->_loggers[$offset]);
     }
 
-    public function offsetUnset($name)
+    /**
+     * Unregister a logger.
+     *
+     * \param string|Plop_LoggerInterface $offset
+     *      Identifier of the logger to unregister.
+     *      You may also pass a logger, in which case,
+     *      that logger's identifier will be used.
+     *
+     * \warning
+     *      When a logger is passed to this method, it will
+     *      only look for a registered logger with the same
+     *      identifier. It will not check whether both loggers
+     *      are actually the same.
+     */
+    public function offsetUnset($offset)
     {
-        if ($name instanceof Plop_LoggerInterface) {
-            $name = $name->getId();
+        if ($offset instanceof Plop_LoggerInterface) {
+            $offset = $this->_getLoggerId($logger);
         }
-        if ($name == "::") {
-            throw new RuntimeException('The root logger cannot be unset!');
+        if ($offset == "::") {
+            throw new Plop_Exception('The root logger cannot be unset!');
         }
-        unset($this->_loggers[$name]);
+        unset($this->_loggers[$offset]);
     }
 
+    /// \copydoc Plop_IndirectLoggerAbstract::_getIndirectLogger().
     protected function _getIndirectLogger()
     {
         $caller = self::findCaller();
         return $this["${caller['func']}:${caller['class']}:${caller['fn']}"];
     }
 
+    /**
+     * Return information about the caller of this method.
+     *
+     * \retval array
+     *      An associative array with information about the caller.
+     *      This array always contains the following keys:
+     *      -   "fn" -- the name of the file where the call was made.
+     *      -   "lno" -- the line number in that file where the call
+     *          was made.
+     *      -   "func" -- the name of the function/method where the
+     *          call happened.
+     *      -   "class" -- the name of the class where the call was
+     *          made.
+     *
+     *      Each of those values may be NULL (or 0 in the case of
+     *      "lno") if the information could not be extracted from
+     *      the call stack.
+     *
+     * \note
+     *      Here, "caller" means the first context in the call stack
+     *      that does not refer to one of Plop's methods/files.
+     */
     static public function findCaller()
     {
         if (version_compare(PHP_VERSION, '5.3.6', '>=')) {

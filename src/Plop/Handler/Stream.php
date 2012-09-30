@@ -18,41 +18,50 @@
     along with Plop.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/**
+ *  \brief
+ *      An handler that writes log messages
+ *      to a PHP stream.
+ *
+ *  \see
+ *      http://php.net/streams
+ */
 class   Plop_Handler_Stream
 extends Plop_HandlerAbstract
 {
+    /// The stream where log messages will be write to.
     protected $_stream;
 
-    public function __construct($stream = NULL)
+    /**
+     * Create a new instance of this handler.
+     *
+     * \param resource $stream
+     *      (optional) The stream where log messages
+     *      will be written. Defaults to \a STDERR.
+     */
+    public function __construct($stream = STDERR)
     {
         parent::__construct();
         $this->_stream = $stream;
     }
 
+    /**
+     * Flush the stream's buffers.
+     *
+     * \return
+     *      This method does not return any value.
+     */
     protected function _flush()
     {
         fflush($this->_stream);
     }
 
+    /// \copydoc Plop_HandlerAbstract::_emit().
     protected function _emit(Plop_RecordInterface $record)
     {
-        if (!$this->_stream) {
-            $stream = fopen('php://stderr', 'ab');
-        }
-        else {
-            $stream = $this->_stream;
-        }
-
         $msg = $this->_format($record);
-        fprintf($stream, "%s\n", $msg);
-
-        if (!$this->_stream) {
-            fflush($stream);
-            fclose($stream);
-        }
-        else {
-            $this->_flush();
-        }
+        fprintf($this->_stream, "%s\n", $msg);
+        $this->_flush();
     }
 }
 

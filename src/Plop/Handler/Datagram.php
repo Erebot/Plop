@@ -18,28 +18,34 @@
     along with Plop.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/**
+ *  \brief
+ *      An handler that sends log messages
+ *      to a remote host using UDP datagrams.
+ */
 class   Plop_Handler_Datagram
 extends Plop_Handler_Socket
 {
+    /// \copydoc Plop_Handler_Socket::__construct($host, $port).
     public function __construct($host, $port)
     {
+        if (strpos(':', $host) !== FALSE) {
+            // IPv6 addresses must be enclosed in brackets.
+            $host = "[$host]";
+        }
         parent::__construct($host, $port);
         $this->_closeOnError = 0;
     }
 
+    /**
+     * Create a new socket.
+     *
+     * \retval resource
+     *      The newly created socket.
+     */
     protected function _makeSocket()
     {
         return fsockopen('udp://'.$this->_host, $this->_port);
-    }
-
-    protected function _send($s)
-    {
-        // PHP's way is different from Python's way here.
-        // We don't need to override send(), but this is
-        // done so that people don't get confused over a
-        // missing method while looking at the two codes
-        // side by side.
-        parent::_send($s);
     }
 }
 

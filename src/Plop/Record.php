@@ -18,18 +18,57 @@
     along with Plop.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/**
+ *  \brief
+ *      A class that stores a log record.
+ *
+ *  A log records contains everything that is related
+ *  to a specific log, like what time it was emitted at,
+ *  the level of the log, the file that emitted it, etc.
+ */
 class       Plop_Record
 implements  Plop_RecordInterface
 {
+    /// Array of properties for the log record.
     protected $_dict;
 
+    /**
+     * Construct a new log record.
+     *
+     * \param string $name
+     *      The name of the logger that received the log.
+     *
+     * \param int $level
+     *      The level of the log.
+     *
+     * \param string $pathname
+     *      The name of the file where the log was emitted.
+     *
+     * \param int $lineno
+     *      The line number where the log was emitted inside
+     *      the file indicated by the \a $pathname parameter.
+     *
+     * \param string $msg
+     *      The message to log.
+     *
+     * \param array $args
+     *      Additional arguments for the log message.
+     *
+     * \param NULL|Exception $exception
+     *      An exception whose backtrace will be merged
+     *      into the log message.
+     *
+     * \param NULL|string $func
+     *      The name of the function/method inside \a $pathname
+     *      where the log was emitted.
+     */
     public function __construct(
         $name,
         $level,
         $pathname,
         $lineno,
         $msg,
-        $args,
+        array $args,
         $exception,
         $func = NULL
     )
@@ -82,34 +121,55 @@ implements  Plop_RecordInterface
         $this->_dict['hostname']        = php_uname('n');
     }
 
+    /// \copydoc Plop_RecordInterface::getMessage().
     public function getMessage()
     {
         return self::formatPercent($this->_dict['msg'], $this->_dict['args']);
     }
 
+    /**
+     * Return a percent-prefixed variable.
+     *
+     * \param string $a
+     *      Variable to work on.
+     *
+     * \retval string
+     *      Percent-prefixed version of the variable name.
+     */
     static private function _pctPrefix($a)
     {
         return '%('.$a.')';
     }
 
+    /**
+     * Return an incremented and percent-prefixed variable.
+     *
+     * \param int $a
+     *      Variable to work on.
+     *
+     * \retval string
+     *      Incremented and percent-prefixed version
+     *      of the variable.
+     */
     static private function _increment($a)
     {
         return '%'.($a + 1).'$';
     }
 
-    static public function formatPercent($msg, $args)
+    /// \copydoc Plop_RecordInterface::formatPercent().
+    static public function formatPercent($msg, array $args)
     {
-        if ($args === NULL || (is_array($args) && !count($args)))
-            return $msg;
-
-        if (!is_array($args))
-            return sprintf($msg, $args);
-
         preg_match_all('/(?<!%)(?:%%)*%\\(([^\\)]*)\\)/', $msg, $matches);
-        $args += array_combine(
-            $matches[1],
-            array_fill(0, count($matches[1]), NULL)
-        );
+        // Only define the variables if there are any.
+        if (isset($matches[1][0])) {
+            $args += array_combine(
+                $matches[1],
+                array_fill(0, count($matches[1]), NULL)
+            );
+        }
+
+        if (!count($args))
+            return $msg;
 
         // Mapping = array(name => index)
         $keys       = array_keys($args);
@@ -121,29 +181,122 @@ implements  Plop_RecordInterface
         return vsprintf($msg, array_values($args));
     }
 
+    /**
+     * Return the value for one of the properties
+     * of the log record.
+     *
+     * \param string $offset
+     *      The name of the property to return.
+     *      The default properties include:
+     *      -   args
+     *      -   created
+     *      -   createdDate
+     *      -   exc_info
+     *      -   exc_text
+     *      -   filename
+     *      -   funcName
+     *      -   hostname
+     *      -   levelname
+     *      -   levelno
+     *      -   lineno
+     *      -   module
+     *      -   msecs
+     *      -   msg
+     *      -   name
+     *      -   pathname
+     *      -   process
+     *      -   processName
+     *      -   relativeCreated
+     *      -   thread
+     *      -   threadName
+     *
+     *      Additional properties may be available.
+     *
+     * \retval mixed
+     *      The value for that property.
+     */
     public function offsetGet($offset)
     {
         return $this->_dict[$offset];
     }
 
+    /**
+     * Add/set a new value for a property
+     * of this log.
+     *
+     * \param string $offset
+     *      The name of the property to add/set.
+     *
+     * \param mixed $value
+     *      The new value for that property.
+     *
+     * \see
+     *      Plop_Record::offsetGet() for the names
+     *      of all default properties.
+     */
     public function offsetSet($offset, $value)
     {
         return $this->_dict[$offset] = $value;
     }
 
+    /**
+     * Test whether a given property exists for
+     * this log record.
+     *
+     * \param string $offset
+     *      The name of the property whose existence
+     *      must be checked.
+     *
+     * \retval bool
+     *      \a TRUE if the given property exists
+     *      for this log record, \a FALSE otherwise.
+     */
     public function offsetExists($offset)
     {
         return isset($this->_dict[$offset]);
     }
 
+    /**
+     * Remove a property from this log record.
+     *
+     * \param string $offset
+     *      The name of the property to remove.
+     */
     public function offsetUnset($offset)
     {
         unset($this->_dict[$offset]);
     }
 
+    /// \copydoc Plop_RecordInterface::asArray().
     public function asArray()
     {
         return $this->_dict;
+    }
+
+    /**
+     * Serialize this log record.
+     *
+     * \retval string
+     *      Serialized representation of this record.
+     */
+    public function serialize()
+    {
+        return serialize($this->_dict);
+    }
+
+    /**
+     * Reconstruct a log record from
+     * its serialized representation.
+     *
+     * \param string $data
+     *      Serialized representation of the record.
+     *
+     * \return
+     *      This method does not return any value.
+     */
+    public function unserialize($data)
+    {
+        $this->_dict = unserialize($data);
     }
 }
 

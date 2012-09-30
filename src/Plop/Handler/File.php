@@ -18,17 +18,48 @@
     along with Plop.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/**
+ *  \brief
+ *      An handler that writes log messages
+ *      to a file.
+ */
 class   Plop_Handler_File
 extends Plop_Handler_Stream
 {
+    /// Path to the log file this handler writes to.
     protected $_baseFilename;
+
+    /// Opening mode for the log file.
     protected $_mode;
 
+    /// Encoding to use when writing to the file.
+    protected $_encoding;
+
+    /**
+     * Construct a new instance of this handler.
+     *
+     * \param string $filename
+     *      Name of the log file to write to.
+     *
+     * \param string $mode
+     *      (optional) Mode to use when opening
+     *      the file. Defauts to "at" (append).
+     *
+     * \param NULL|string $encoding
+     *      (optional) Encoding to use when writing
+     *      to the file. Defaults to \a NULL
+     *      (auto-detect).
+     *
+     * \param bool $delay
+     *      (optional) Whether to delay the actual
+     *      opening of the file until the first write.
+     *      Defaults to \a FALSE (no delay).
+     */
     public function __construct(
         $filename,
         $mode       = 'at',
         $encoding   = NULL,
-        $delay      = 0
+        $delay      = FALSE
     )
     {
         $this->_baseFilename    = $filename;
@@ -44,11 +75,19 @@ extends Plop_Handler_Stream
         }
     }
 
+    /// Free the resources used by this handler.
     public function __destruct()
     {
         $this->_close();
     }
 
+    /**
+     * Open the log file.
+     *
+     * \retval resource
+     *      A stream representing the newly
+     *      opened log file.
+     */
     protected function _open()
     {
         $stream = fopen($this->_baseFilename, $this->_mode);
@@ -60,6 +99,12 @@ extends Plop_Handler_Stream
         return $stream;
     }
 
+    /**
+     * Close the log file.
+     *
+     * \return
+     *      This method does not return any value.
+     */
     protected function _close()
     {
         if ($this->_stream) {

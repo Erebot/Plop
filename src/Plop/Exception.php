@@ -18,7 +18,13 @@
     along with Plop.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-interface Plop_Exception
+/**
+ * \brief
+ *      This exception is thrown by Plop whenever
+ *      a problem is detected.
+ */
+class   Plop_Exception
+extends Exception
 {
 }
 

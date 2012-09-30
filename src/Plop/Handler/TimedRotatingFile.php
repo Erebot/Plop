@@ -18,18 +18,40 @@
     along with Plop.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/**
+ *  \brief
+ *      An handler that writes logs to a file
+ *      but also handles that file's rotation,
+ *      based on time.
+ */
 class   Plop_Handler_TimedRotatingFile
 extends Plop_Handler_RotatingAbstract
 {
+    /// Log rotation specification (eg. 'W' or 'MIDNIGHT').
     protected $_when;
+
+    /// Number of backup log files to keep.
     protected $_backupCount;
+
+    /// Whether the files are named based on UTC time or local time.
     protected $_utc;
+
+    /// Interval between file rotations.
     protected $_interval;
+
+    /// The date format that will be used as a suffix for the log files.
     protected $_suffix;
+
+    /// A PCRE pattern that matches rotated files.
     protected $_extMatch;
+
+    /// Day of week (0=Monday...6=Sunday) when the log rotation happens.
     protected $_dayOfWeek;
+
+    /// UNIX timestamp of the next log rotation.
     protected $_rolloverAt;
 
+    /// The names of days in English, starting with Monday.
     static protected $_dayNames = array(
         'Monday',
         'Tuesday',
@@ -40,6 +62,63 @@ extends Plop_Handler_RotatingAbstract
         'Sunday'
     );
 
+    /**
+     * Construct a new instance of this handler.
+     *
+     * \param string $filename
+     *      Name of the log file to write to.
+     *
+     * \param string $when
+     *      (optional) A log rotation specification,
+     *      which acts as a multiplier for the \a $interval
+     *      parameter. The default value is "h".
+     *      Valid (case-insensitive) values include
+     *      -   "s" -- rotate the logs every \a $interval
+     *          seconds.
+     *      -   "m" -- rotate the logs every \a $interval
+     *          minutes.
+     *      -   "h" -- rotate the logs every \a $interval
+     *          hours.
+     *      -   "d" -- rotate the logs every \a $interval
+     *          days.
+     *      -   "w0" through "w6" -- rotate the logs every
+     *          \a $interval weeks. The number after the "w"
+     *          character indicates on what day of the week
+     *          the log rotation will happen (0 means Monday,
+     *          1 means Tuesday and so on).
+     *
+     * \param int $interval
+     *      (optional)-The interval at which log rotations happen.
+     *      See also the documentation for the \a $when
+     *      parameter for more information on how the two
+     *      parameters interact with each other.
+     *      The default for both this parameter and \a $when
+     *      means that the log rotation will take place every hour.
+     *
+     * \param int $backupCount
+     *      (optional) Specifies how many backup logs are kept
+     *      alongside the current log file.
+     *      Backup logs are named after the date and time
+     *      at which they were created. The exact format
+     *      depends on the value of the \a $when parameter.
+     *      The default value is 0, which disables deletion
+     *      of old backups.
+     *
+     * \param NULL|string $encoding
+     *      (optional) Encoding to use when writing
+     *      to the file. Defaults to \a NULL
+     *      (auto-detect).
+     *
+     * \param bool $delay
+     *      (optional) Whether to delay the actual
+     *      opening of the file until the first write.
+     *      Defaults to \a FALSE (no delay).
+     *
+     * \param bool $utc
+     *      Whether the dates and times used in the backups'
+     *      name should use UTC (\a TRUE) or local time
+     *      (\a FALSE).
+     */
     public function __construct(
         $filename,
         $when           = 'h',
@@ -47,7 +126,7 @@ extends Plop_Handler_RotatingAbstract
         $backupCount    = 0,
         $encoding       = NULL,
         $delay          = 0,
-        $utc            = 0
+        $utc            = FALSE
     )
     {
         parent::__construct($filename, 'a', $encoding, $delay);
@@ -80,7 +159,7 @@ extends Plop_Handler_RotatingAbstract
         else if (substr($this->_when, 0, 1) == 'W') {
             $this->_interval = 60 * 60 * 24 * 7;
             if (strlen($this->_when) != 2) {
-                throw new Exception(
+                throw new Plop_Exception(
                     sprintf(
                         'You must specify a day for weekly rollover '.
                         'from 0 to 6 (0 is Monday): %s',
@@ -89,9 +168,9 @@ extends Plop_Handler_RotatingAbstract
                 );
             }
 
-            $ord = ord($this->_when[1]);
-            if ($ord < ord('0') || $ord > ord('6')) {
-                throw new Exception(
+            $day = ord($this->_when[1]) - ord('0');
+            if ($day < 0 || $day > 6) {
+                throw new Plop_Exception(
                     sprintf(
                         'Invalid day specified for weekly rollover: %s',
                         $this->_when
@@ -99,12 +178,12 @@ extends Plop_Handler_RotatingAbstract
                 );
             }
 
-            $this->_dayOfWeek = (int) $this->_when[1];
+            $this->_dayOfWeek = $day;
             $this->_suffix = '%Y-%m-%d';
             $this->_extMatch = '^\\d{4}-\\d{2}-\\d{2}$';
         }
         else {
-            throw new Exception(
+            throw new Plop_Exception(
                 sprintf(
                     'Invalid rollover interval specified: %s',
                     $this->_when
@@ -115,6 +194,16 @@ extends Plop_Handler_RotatingAbstract
         $this->_rolloverAt  = $this->_computeRollover(time());
     }
 
+    /**
+     * Determine when the next log rotation
+     * should take place.
+     *
+     * \param int $currentTime
+     *      Current time, as a UNIX timestamp.
+     *
+     * \retval int
+     *      UNIX timestamp for the next log rotation.
+     */
     protected function _computeRollover($currentTime)
     {
         if ($this->_when == 'MIDNIGHT') {
@@ -131,6 +220,7 @@ extends Plop_Handler_RotatingAbstract
         return $currentTime + $this->_interval;
     }
 
+    /// \copydoc Plop_Handler_RotatingAbstract::_shouldRollover().
     protected function _shouldRollover(Plop_RecordInterface $record)
     {
         $t = time();
@@ -140,7 +230,13 @@ extends Plop_Handler_RotatingAbstract
         return FALSE;
     }
 
-    public function getFilesToDelete()
+    /**
+     * Return a list of old log files to delete.
+     *
+     * \retval array
+     *      List of old log files to delete.
+     */
+    protected function _getFilesToDelete()
     {
         $dirName    = dirname($this->_baseFilename);
         $baseName   = basename($this->_baseFilename);
@@ -171,7 +267,8 @@ extends Plop_Handler_RotatingAbstract
         return $result;
     }
 
-    public function doRollover()
+    /// \copydoc Plop_Handler_RotatingAbstract::_doRollover().
+    protected function _doRollover()
     {
         if ($this->_stream) {
             fclose($this->_stream);

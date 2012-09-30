@@ -18,46 +18,91 @@
     along with Plop.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/**
+ *  \brief
+ *      An abstract class that can be used as a base
+ *      to create new loggers.
+ */
 abstract class  Plop_LoggerAbstract
 extends         Plop_Filterer
 implements      Plop_LoggerInterface
 {
-    public function debug($msg, $args = array(), $exception = NULL)
+    /// \copydoc Plop_LoggerInterface::debug().
+    public function debug(
+                    $msg,
+        array       $args       = array(),
+        Exception   $exception  = NULL
+    )
     {
         return $this->log(Plop::DEBUG, $msg, $args, $exception);
     }
 
-    public function info($msg, $args = array(), $exception = NULL)
+    /// \copydoc Plop_LoggerInterface::info().
+    public function info(
+                    $msg,
+        array       $args       = array(),
+        Exception   $exception  = NULL
+    )
     {
         return $this->log(Plop::INFO, $msg, $args, $exception);
     }
 
-    public function warning($msg, $args = array(), $exception = NULL)
+    /// \copydoc Plop_LoggerInterface::warning().
+    public function warning(
+                    $msg,
+        array       $args       = array(),
+        Exception   $exception  = NULL
+    )
     {
         return $this->log(Plop::WARNING, $msg, $args, $exception);
     }
 
-    public function warn($msg, $args = array(), $exception = NULL)
+    /// \copydoc Plop_LoggerInterface::warn().
+    public function warn(
+                    $msg,
+        array       $args       = array(),
+        Exception   $exception  = NULL
+    )
     {
         return $this->log(Plop::WARN, $msg, $args, $exception);
     }
 
-    public function error($msg, $args = array(), $exception = NULL)
+    /// \copydoc Plop_LoggerInterface::error().
+    public function error(
+                    $msg,
+        array       $args       = array(),
+        Exception   $exception  = NULL
+    )
     {
         return $this->log(Plop::ERROR, $msg, $args, $exception);
     }
 
-    public function critical($msg, $args = array(), $exception = NULL)
+    /// \copydoc Plop_LoggerInterface::critical().
+    public function critical(
+                    $msg,
+        array       $args       = array(),
+        Exception   $exception  = NULL
+    )
     {
         return $this->log(Plop::CRITICAL, $msg, $args, $exception);
     }
 
-    public function fatal($msg, $args = array(), $exception = NULL)
+    /// \copydoc Plop_LoggerInterface::fatal().
+    public function fatal(
+                    $msg,
+        array       $args       = array(),
+        Exception   $exception  = NULL
+    )
     {
         return $this->log(Plop::CRITICAL, $msg, $args, $exception);
     }
 
-    public function exception($msg, $exception, $args = array())
+    /// \copydoc Plop_LoggerInterface::exception().
+    public function exception(
+                    $msg,
+        Exception   $exception,
+        array       $args = array()
+    )
     {
         return $this->log(Plop::ERROR, $msg, $args, $exception);
     }

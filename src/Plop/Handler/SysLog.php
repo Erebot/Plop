@@ -18,11 +18,21 @@
     along with Plop.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/**
+ *  \brief
+ *      An handler that sends log messages to the
+ *      system logs (syslog).
+ */
 class   Plop_Handler_SysLog
 extends Plop_HandlerAbstract
 {
+    /// Specific format string used for system logs.
     const LOG_FORMAT_STRING = "<%d>%s\000";
 
+    /// Default address for the system logs.
+    const DEFAULT_ADDRESS   = 'udg:///dev/log';
+
+    /// Mapping between Plop's log levels and the syslog ones.
     static protected $_priorityNames = array(
         'alert'     => LOG_ALERT,
         'crit'      => LOG_CRIT,
@@ -38,6 +48,7 @@ extends Plop_HandlerAbstract
         'warning'   => LOG_WARNING,
     );
 
+    /// Mapping between the facility names and their associated constant.
     static protected $_facilityNames = array(
         'auth'      => LOG_AUTH,
         'authpriv'  => LOG_AUTHPRIV,
@@ -60,12 +71,14 @@ extends Plop_HandlerAbstract
         'local7'    => LOG_LOCAL7,
     );
 
-    /*
-        From python's logging/handlers.py :
-        The map below appears to be trivially lowercasing the key. However,
-        there's more to it than meets the eye - in some locales, lowercasing
-        gives unexpected results. See SF #1524081: in the Turkish locale,
-        "INFO".lower() != "info". The same is true in PHP.
+    /**
+     *  From python's logging/handlers.py :
+     *  This map appears to be trivially lowercasing the key.
+     *  However, there's more to it than meets the eye - in some locales,
+     *  lowercasing gives unexpected results.
+     *  See SF #1524081: in the Turkish locale,
+     *  \verbatim "INFO".lower() != "info" \endverbatim
+     *  The same is true for PHP.
      */
     static protected $_priorityMap = array(
         'DEBUG'     => 'debug',
@@ -75,12 +88,32 @@ extends Plop_HandlerAbstract
         'CRITICAL'  => 'critical',
     );
 
+    /// Address of the syslog where the logs will be sent.
     protected $_address;
+
+    /// The facility to use when logging the messages.
     protected $_facility;
+
+    /// The socket that will be used to send the logs.
     protected $_socket;
 
+    /**
+     * Construct a new instance of this handler.
+     *
+     * \param string $address
+     *      (optional) Address of the syslog
+     *      where the log messages will be sent.
+     *      The default is to use the value of the
+     *      Plop_Handler_SysLog::DEFAULT_ADDRESS
+     *      constant.
+     *
+     * \param int|string $facility
+     *      (optional) The name or the value of the
+     *      facility to use when sending the logs.
+     *      By default, the "user" facility is used.
+     */
     public function __construct(
-        $address    = 'udg:///dev/log',
+        $address    = self::DEFAULT_ADDRESS,
         $facility   = LOG_USER
     )
     {
@@ -89,15 +122,29 @@ extends Plop_HandlerAbstract
         $this->_facility    = $facility;
         $this->_socket      = stream_socket_client($address);
         if ($this->_socket === FALSE) {
-            throw new Exception('Unable to connect to the syslog');
+            throw new Plop_Exception('Unable to connect to the syslog');
         }
     }
 
+    /// Free the resources used by this handler.
     public function __destruct()
     {
         $this->_close();
     }
 
+    /**
+     * Encode facility & priority information.
+     *
+     * \param int|string $facility
+     *      The facility.
+     *
+     * \param int|string $priority
+     *      The priority.
+     *
+     * \retval int
+     *      The facility & priority, combined
+     *      in a single integer.
+     */
     protected function _encodePriority($facility, $priority)
     {
         if (is_string($facility))
@@ -107,6 +154,12 @@ extends Plop_HandlerAbstract
         return ($facility << 3) | $priority;
     }
 
+    /**
+     * Close the socket associated with this handler.
+     *
+     * \return
+     *      This method does not return any value.
+     */
     protected function _close()
     {
         if ($this->_socket !== FALSE) {
@@ -115,6 +168,17 @@ extends Plop_HandlerAbstract
         }
     }
 
+    /**
+     * Return the syslog priority associated with
+     * the given (Plop) level name.
+     *
+     * \param string $levelName
+     *      The name of a log level defined in Plop.
+     *
+     * \retval string
+     *      The syslog level to use to match the one
+     *      given.
+     */
     protected function _mapPriority($levelName)
     {
         if (isset(self::$_priorityMap[$levelName]))
@@ -122,6 +186,7 @@ extends Plop_HandlerAbstract
         return "warning";
     }
 
+    /// \copydoc Plop_HandlerAbstract::_emit().
     protected function _emit(Plop_RecordInterface $record)
     {
         $msg = $this->_format($record);

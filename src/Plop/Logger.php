@@ -18,16 +18,53 @@
     along with Plop.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/**
+ *  \brief
+ *      A class that provides logging capabilities.
+ */
 class       Plop_Logger
 extends     Plop_LoggerAbstract
 {
+    /// Name of the file this logger relates to.
     protected $_file;
+
+    /// Name of the class this logger relates to.
     protected $_class;
+
+    /// Name of the method or function this logger relates to.
     protected $_method;
+
+    /// Minimum level at which this logger will accept log entries.
     protected $_level;
+
+    /// A list with the handlers currently associated with this logger.
     protected $_handlers;
+
+    /// Whether a warning has been emitted about this logger having no handlers.
     protected $_emittedWarning;
 
+    /**
+     * Construct a new logger with no attached handlers
+     * and that accepts any log entry.
+     *
+     * \param string|NULL $file
+     *      (optional) The name of the file this logger
+     *      relates to. The default is \a NULL
+     *      (meaning this logger is not related to any
+     *      specific file).
+     *
+     * \param string|NULL $class
+     *      (optional) The name of the class this logger
+     *      relates to. The default is \a NULL
+     *      (meaning this logger is not related to any
+     *      specific class).
+     *
+     * \param string|NULL $method
+     *      (optional) The name of the method or function
+     *      this logger relates to. The default is \a NULL
+     *      (meaning this logger is not related to any
+     *      specific method or function).
+     */
     public function __construct($file = NULL, $class = NULL, $method = NULL)
     {
         parent::__construct();
@@ -39,46 +76,36 @@ extends     Plop_LoggerAbstract
         $this->_emittedWarning  = FALSE;
     }
 
-    public function getLevel()
-    {
-        return $this->_level;
-    }
-
-    public function setLevel($level)
-    {
-        if (!is_int($level)) {
-            throw new Exception('Not a valid integer');
-        }
-        $this->_level = $level;
-        return $this;
-    }
-
+    /// \copydoc Plop_LoggerInterface::getFile().
     public function getFile()
     {
         return $this->_file;
     }
 
+    /// \copydoc Plop_LoggerInterface::getClass().
     public function getClass()
     {
         return $this->_class;
     }
 
+    /// \copydoc Plop_LoggerInterface::getMethod().
     public function getMethod()
     {
         return $this->_method;
     }
 
-    public function getId()
-    {
-        return $this->_method.':'.$this->_class.':'.$this->_file;
-    }
-
-    public function log($level, $msg, $args = array(), $exception = NULL)
+    /// \copydoc Plop_LoggerInterface::log().
+    public function log(
+                    $level,
+                    $msg,
+        array       $args       = array(),
+        Exception   $exception  = NULL
+    )
     {
         if ($this->isEnabledFor($level)) {
             $caller = Plop::findCaller();
-            $record = $this->_makeRecord(
-                $this->getId(),
+            $record = new Plop_Record(
+                $this->_method . ":" . $this->_class . ":" . $this->_file,
                 $level,
                 $caller['fn'] ? $caller['fn'] : '???',
                 $caller['lno'],
@@ -92,52 +119,24 @@ extends     Plop_LoggerAbstract
         return $this;
     }
 
-    protected function _makeRecord(
-        $name,
-        $level,
-        $fn,
-        $lno,
-        $msg,
-        $args,
-        $exception  = NULL,
-        $func       = NULL,
-        $extra      = NULL
-    )
-    {
-        $rv = new Plop_Record(
-            $name,
-            $level,
-            $fn,
-            $lno,
-            $msg,
-            $args,
-            $exception,
-            $func
-        );
-
-        if ($extra) {
-            foreach ($extra as $k => &$v) {
-                if (
-                    in_array($key, array('message', 'asctime')) ||
-                    in_array($key, array_keys($rv->asArray()))
-                )
-                    throw new Exception(
-                        'Attempt to override '.$k.' in record'
-                    );
-                $rv[$k] =& $v;
-            }
-            unset($v);
-        }
-        return $rv;
-    }
-
+    /**
+     * Handle a log record.
+     *
+     * \param Plop_RecordInterface $record
+     *      The log record to handle.
+     *
+     * \retval Plop_LoggerInterface
+     *      The logger instance (ie. \a $this).
+     */
     protected function handle(Plop_RecordInterface $record)
     {
-        if ($this->filter($record))
-            $this->callHandlers($record);
+        if ($this->filter($record)) {
+            $this->_callHandlers($record);
+        }
         return $this;
     }
 
+    /// \copydoc Plop_LoggerInterface::addHandler().
     public function addHandler(Plop_HandlerInterface $handler)
     {
         if (!in_array($handler, $this->_handlers, TRUE))
@@ -145,6 +144,7 @@ extends     Plop_LoggerAbstract
         return $this;
     }
 
+    /// \copydoc Plop_LoggerInterface::removeHandler().
     public function removeHandler(Plop_HandlerInterface $handler)
     {
         $keys = array_keys($this->_handlers, $handler);
@@ -154,19 +154,30 @@ extends     Plop_LoggerAbstract
         return $this;
     }
 
+    /// \copydoc Plop_LoggerInterface::getHandlers().
     public function getHandlers()
     {
         return $this->_handlers;
     }
 
-    protected function callHandlers(Plop_RecordInterface $record)
+    /**
+     * Call every handler associated with this logger
+     * in turn, passing them a log record to handle.
+     *
+     * \param Plop_RecordInterface $record
+     *      The log record to handle.
+     *
+     * \retval Plop_LoggerInterface
+     *      The logger instance (ie. \a $this).
+     */
+    protected function _callHandlers(Plop_RecordInterface $record)
     {
-        $found  =   0;
-
+        $found = 0;
         foreach ($this->_handlers as $handler) {
             $found += 1;
-            if ($record['levelno'] >= $handler->getLevel())
+            if ($record['levelno'] >= $handler->getLevel()) {
                 $handler->handle($record);
+            }
         }
 
         if (!$found && !$this->_emittedWarning) {
@@ -179,17 +190,29 @@ extends     Plop_LoggerAbstract
             fclose($stderr);
             $this->_emittedWarning = TRUE;
         }
+        return $this;
     }
 
-    public function getEffectiveLevel()
+    /// \copydoc Plop_LoggerInterface::getLevel().
+    public function getLevel()
     {
         return $this->_level;
     }
 
+    /// \copydoc Plop_LoggerInterface::setLevel().
+    public function setLevel($level)
+    {
+        if (!is_int($level)) {
+            throw new Plop_Exception('Not a valid integer');
+        }
+        $this->_level = $level;
+        return $this;
+    }
+
+    /// \copydoc Plop_LoggerInterface::isEnabledFor().
     public function isEnabledFor($level)
     {
-        $effectiveLevel = $this->getEffectiveLevel();
-        return ($level >= $effectiveLevel);
+        return ($level >= $this->_level);
     }
 }
 

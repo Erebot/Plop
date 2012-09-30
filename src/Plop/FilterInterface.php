@@ -18,8 +18,23 @@
     along with Plop.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/**
+ * \brief
+ *      Interface for a filter.
+ */
 interface Plop_FilterInterface
 {
+    /**
+     * Return whether the given record should be
+     * handled or filtered out.
+     *
+     * \param Plop_RecordInterface $record
+     *      The record to filter.
+     *
+     * \retval bool
+     *      Whether the given record should be handled
+     *      normalled (\a TRUE) or filtered out (\a FALSE).
+     */
     public function filter(Plop_RecordInterface $record);
 }
 
