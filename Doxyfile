@@ -3,4 +3,7 @@ PROJECT_NAME           = Plop
 PROJECT_NUMBER         = $(PLOP_VERSION)
 IGNORE_PREFIX          = $ \
                          Plop_
+ALIASES               += "codeCoverageIgnore="
+ALIASES               += "codeCoverageIgnoreStart="
+ALIASES               += "codeCoverageIgnoreEnd="
 

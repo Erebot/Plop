@@ -8,7 +8,7 @@
         <include name="**/*.php"/>
     </fileset>
 
-    <fileset dir="tests/" id="tests">
+    <fileset dir="tests/src" id="tests">
         <include name="**/*.php"/>
     </fileset>
 
