@@ -18,13 +18,80 @@
     along with Plop.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'Stderr.php');
+require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'Socket.php');
+
 class   Plop_TestCase
 extends PHPUnit_Framework_TestCase
 {
+    protected $stderrExpectedRegex;
+    protected $stderrExpectedString;
+    protected $stderr;
+    protected $stderrStream;
+
     public function setUp()
     {
         parent::setUp();
-        $this->_expectations = array();
+
+        $context = stream_context_create(
+            array(
+                'mock' => array(
+                    'callback' => array($this, 'writeToStderr')
+                )
+            )
+        );
+
+        $this->_expectations        = array();
+        $this->stderrExpectedRegex  = NULL;
+        $this->stderrExpectedString = NULL;
+        $this->stderr               = '';
+
+        stream_wrapper_register('stderr', 'Plop_Testenv_Stderr');
+        $this->stderrStream = fopen('stderr://', 'at', FALSE, $context);
+        stream_wrapper_unregister('stderr');
+    }
+
+    public function tearDown()
+    {
+        @fclose($this->stderrStream);
+
+        if ($this->stderrExpectedRegex !== NULL) {
+            $this->assertRegExp($this->stderrExpectedRegex, $this->stderr);
+            $this->stderrExpectedRegex = NULL;
+        }
+
+        else if ($this->stderrExpectedString !== NULL) {
+            $this->assertEquals($this->stderrExpectedString, $this->stderr);
+            $this->stderrExpectedString = NULL;
+        }
+        parent::tearDown();
+    }
+
+    public function writeToStderr($data)
+    {
+        $this->stderr .= $data;
+    }
+
+    public function expectStderrRegex($expectedRegex)
+    {
+        if ($this->stderrExpectedString !== NULL) {
+            throw new PHPUnit_Framework_Exception;
+        }
+
+        if (is_string($expectedRegex) || is_null($expectedRegex)) {
+            $this->stderrExpectedRegex = $expectedRegex;
+        }
+    }
+
+    public function expectStderrString($expectedString)
+    {
+        if ($this->stderrExpectedRegex !== NULL) {
+            throw new PHPUnit_Framework_Exception;
+        }
+
+        if (is_string($expectedString) || is_null($expectedString)) {
+            $this->stderrExpectedString = $expectedString;
+        }
     }
 
     protected function _setExpectations($obj, $method, $inputs, $outputs)

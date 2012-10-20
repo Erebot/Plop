@@ -24,13 +24,13 @@ require_once(
     DIRECTORY_SEPARATOR . 'Filterer.php'
 );
 
-class   FiltererTest
+class   Plop_Filterer_Test
 extends Plop_TestCase
 {
     public function setUp()
     {
         parent::setUp();
-        $this->_filterer    = new Plop_FiltererStub();
+        $this->_filterer    = new Plop_Filterer_Stub();
         $this->_filter      = $this->getMock('Plop_FilterInterface');
         $this->_record      = $this->getMock('Plop_RecordInterface');
     }
@@ -85,7 +85,7 @@ extends Plop_TestCase
     /**
      * @covers Plop_Filterer::filter
      */
-    public function testFiltering()
+    public function testFilterMethod()
     {
         // An empty filterer always accepts records.
         $this->assertTrue($this->_filterer->filter($this->_record));
@@ -94,7 +94,7 @@ extends Plop_TestCase
     /**
      * @covers Plop_Filterer::filter
      */
-    public function testFiltering2()
+    public function testFilterMethod2()
     {
         $this->_filterer->addFilter($this->_filter);
         $this->_filter
@@ -111,7 +111,7 @@ extends Plop_TestCase
     /**
      * @covers Plop_Filterer::filter
      */
-    public function testFiltering3()
+    public function testFilterMethod3()
     {
         $this->_filterer->addFilter($this->_filter);
         $this->_filter

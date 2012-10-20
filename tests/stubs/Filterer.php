@@ -1,6 +1,6 @@
 <?php
 
-class   Plop_FiltererStub
+class   Plop_Filterer_Stub
 extends Plop_Filterer
 {
     public function __construct()

@@ -28,7 +28,9 @@ extends Plop_TestCase
     {
         $factory    = new Plop_RecordFactory();
         $record     = $factory->createRecord(
-            'foo:bar:baz',
+            'foo',
+            'bar',
+            'baz',
             Plop::INFO,
             __FILE__,
             __LINE__,

@@ -26,7 +26,9 @@ extends Plop_TestCase
         parent::setUp();
         $this->_line    = __LINE__;
         $this->_record  = new Plop_Record(
-            'name',
+            'loggerFile',
+            'loggerClass',
+            'loggerMethod',
             Plop::DEBUG,
             __FILE__,
             $this->_line,
@@ -42,7 +44,9 @@ extends Plop_TestCase
     public function testDefaultArguments()
     {
         $values = $this->_record->asArray();
-        $this->assertSame('name',                   $values['name']);
+        $this->assertSame('loggerFile',             $values['loggerFile']);
+        $this->assertSame('loggerClass',            $values['loggerClass']);
+        $this->assertSame('loggerMethod',           $values['loggerMethod']);
         $this->assertSame('@ %(foo)s @',            $values['msg']);
         $this->assertSame(array('foo' => 'bar'),    $values['args']);
         $this->assertSame('DEBUG',                  $values['levelname']);
@@ -73,6 +77,8 @@ extends Plop_TestCase
 
         $record = new Plop_Record(
             'foo',
+            'foo2',
+            'foo3',
             Plop::ERROR,
             __FILE__,
             $line,
@@ -83,7 +89,9 @@ extends Plop_TestCase
         );
 
         $values = $record->asArray();
-        $this->assertSame('foo',                    $values['name']);
+        $this->assertSame('foo',                    $values['loggerFile']);
+        $this->assertSame('foo2',                   $values['loggerClass']);
+        $this->assertSame('foo3',                   $values['loggerMethod']);
         $this->assertSame('qux',                    $values['msg']);
         $this->assertSame(array('bar' => 'baz'),    $values['args']);
         $this->assertSame('ERROR',                  $values['levelname']);
@@ -114,7 +122,7 @@ extends Plop_TestCase
     /**
      * @covers Plop_Record::formatPercent
      */
-    public function testPercentFormatting()
+    public function testMessageFormatting()
     {
         $this->assertSame('foo', Plop_Record::formatPercent('foo'));
         $this->assertSame('foo', Plop_Record::formatPercent('foo', array()));
@@ -148,12 +156,12 @@ extends Plop_TestCase
      */
     public function testArrayAccess()
     {
-        $this->assertTrue(isset($this->_record['name']));
-        $this->assertSame('name', $this->_record['name']);
-        $this->_record['name'] = 'new name';
-        $this->assertSame('new name', $this->_record['name']);
-        unset($this->_record['name']);
-        $this->assertFalse(isset($this->_record['name']));
+        $this->assertTrue(isset($this->_record['loggerFile']));
+        $this->assertSame('loggerFile', $this->_record['loggerFile']);
+        $this->_record['loggerFile'] = __FILE__;
+        $this->assertSame(__FILE__, $this->_record['loggerFile']);
+        unset($this->_record['loggerFile']);
+        $this->assertFalse(isset($this->_record['loggerFile']));
     }
 
     /**

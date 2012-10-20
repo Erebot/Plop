@@ -24,7 +24,7 @@ require_once(
     DIRECTORY_SEPARATOR . 'HandlerAbstract.php'
 );
 
-class   HandlerAbstractTest
+class   Plop_HandlerAbstract_Test
 extends Plop_TestCase
 {
     public function setUp()
@@ -40,7 +40,7 @@ extends Plop_TestCase
     public function testDefaultArguments()
     {
         $handler = $this->getMock(
-            'Plop_HandlerAbstractStub',
+            'Plop_HandlerAbstract_Stub',
             array('_emit'),
             array()
         );
@@ -55,7 +55,7 @@ extends Plop_TestCase
     public function testDefaultArgumentsOverride()
     {
         $handler = $this->getMock(
-            'Plop_HandlerAbstractStub',
+            'Plop_HandlerAbstract_Stub',
             array('_emit'),
             array($this->_formatter)
         );
@@ -66,10 +66,10 @@ extends Plop_TestCase
     /**
      * @covers Plop_HandlerAbstract::handle
      */
-    public function testHandle()
+    public function testHandleMethod()
     {
         $handler = $this->getMock(
-            'Plop_HandlerAbstractStub',
+            'Plop_HandlerAbstract_Stub',
             array('_format', '_emit')
         );
         $handler

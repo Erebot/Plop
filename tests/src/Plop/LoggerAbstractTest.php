@@ -18,7 +18,7 @@
     along with Plop.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-class   LoggerAbstractTest
+class   Plop_LoggerAbstract_Test
 extends Plop_TestCase
 {
     public function setUp()
@@ -34,6 +34,8 @@ extends Plop_TestCase
                 'getFile',
                 'getClass',
                 'getMethod',
+                'getRecordFactory',
+                'setRecordFactory',
                 'addHandler',
                 'removeHandler',
                 'getHandlers',
@@ -89,7 +91,7 @@ extends Plop_TestCase
      * @covers Plop_LoggerAbstract::fatal
      * @dataProvider providerLevels
      */
-    public function testOtherArgs($method, $level)
+    public function testOtherArguments($method, $level)
     {
         $input  = 'Foo';
         $output = 'Bar';
@@ -109,7 +111,7 @@ extends Plop_TestCase
     /**
      * @covers Plop_LoggerAbstract::exception
      */
-    public function testExceptionMessageOnly()
+    public function testExceptionWithMessageOnly()
     {
         $input  = 'Foo';
         $output = 'Bar';
@@ -125,7 +127,7 @@ extends Plop_TestCase
     /**
      * @covers Plop_LoggerAbstract::exception
      */
-    public function testExceptionOtherArgs()
+    public function testExceptionWithOtherArguments()
     {
         $input  = 'Foo';
         $output = 'Bar';

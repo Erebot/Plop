@@ -1,24 +1,33 @@
 <?php
 /*
-    This file is part of Erebot.
+    This file is part of Plop, a simple logging library for PHP.
 
-    Erebot is free software: you can redistribute it and/or modify
+    Copyright © 2010-2012 François Poirotte
+
+    Plop is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    Erebot is distributed in the hope that it will be useful,
+    Plop is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with Erebot.  If not, see <http://www.gnu.org/licenses/>.
+    along with Plop.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 // Avoid harmless warning on some
 // badly-configured PHP installations.
 date_default_timezone_set('UTC');
+
+if (!defined('TESTENV_DIR')) {
+    if (getenv('TESTENV_DIR'))
+        define('TESTENV_DIR', getenv('TESTENV_DIR'));
+    else
+        define('TESTENV_DIR', dirname(__FILE__));
+}
 
 if ('@php_dir@' == '@'.'php_dir'.'@') {
     $base = dirname(dirname(TESTENV_DIR . DIRECTORY_SEPARATOR)) .
@@ -51,4 +60,6 @@ else {
     require('Erebot/Autoload.php');
     Erebot_Autoload::initialize('@php_dir@');
 }
+
+require(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'TestCase.php');
 

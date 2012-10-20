@@ -7,5 +7,15 @@ extends Plop_Logger
     {
         return parent::_callHandlers($record);
     }
+
+    public function emitWarningStub()
+    {
+        return parent::_emitWarning();
+    }
+
+    public function handleStub(Plop_RecordInterface $record)
+    {
+        return parent::_handle($record);
+    }
 }
 

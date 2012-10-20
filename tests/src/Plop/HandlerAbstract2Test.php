@@ -24,7 +24,7 @@ require_once(
     DIRECTORY_SEPARATOR . 'HandlerAbstract.php'
 );
 
-class   HandlerAbstract2Test
+class   Plop_HandlerAbstract2_Test
 extends Plop_TestCase
 {
     public function setUp()
@@ -33,7 +33,7 @@ extends Plop_TestCase
         $this->_record      = $this->getMock('Plop_RecordInterface');
         $this->_formatter   = $this->getMock('Plop_FormatterInterface');
         $this->_handler = $this->getMock(
-            'Plop_HandlerAbstractStub',
+            'Plop_HandlerAbstract_Stub',
             array('_emit')
         );
     }
@@ -42,7 +42,7 @@ extends Plop_TestCase
      * @covers Plop_HandlerAbstract::getLevel
      * @covers Plop_HandlerAbstract::setLevel
      */
-    public function testLevelSetter()
+    public function testLevelAccessors()
     {
         $newValue = Plop::INFO;
         $this->assertNotSame($newValue, $this->_handler->getLevel());
@@ -57,7 +57,7 @@ extends Plop_TestCase
      * @covers Plop_HandlerAbstract::getFormatter
      * @covers Plop_HandlerAbstract::setFormatter
      */
-    public function testFormatterSetter()
+    public function testFormatterAccessors()
     {
         $this->assertNotSame(
             $this->_formatter,
@@ -73,7 +73,7 @@ extends Plop_TestCase
     /**
      * @covers Plop_HandlerAbstract::_format
      */
-    public function testFormat()
+    public function testFormatMethod()
     {
         $value = 'Foo';
         $this->_formatter
@@ -83,5 +83,28 @@ extends Plop_TestCase
             ->will($this->returnValue($value));
         $this->_handler->setFormatter($this->_formatter);
         $this->assertSame($value, $this->_handler->formatStub($this->_record));
+    }
+
+    /**
+     * @covers Plop_HandlerAbstract::handleError
+     */
+    public function testErrorHandling()
+    {
+        $line       = __LINE__ + 1;
+        $exc        = new Plop_Exception('test');
+        $handler    = $this->getMock(
+            'Plop_HandlerAbstract_Stub',
+            array('_getStderr', '_emit')
+        );
+        $handler
+            ->expects($this->once())
+            ->method('_getStderr')
+            ->will($this->returnValue($this->stderrStream));
+
+        $this->expectStderrRegex("@exception 'Plop_Exception' with message 'test' in [^:]+:$line\n.*@m");
+        $this->assertSame(
+            $handler,
+            $handler->handleError($this->_record, $exc)
+        );
     }
 }

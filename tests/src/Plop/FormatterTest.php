@@ -24,14 +24,14 @@ require_once(
     DIRECTORY_SEPARATOR . 'Formatter.php'
 );
 
-class   FormatterTest
+class   Plop_Formatter_Test
 extends Plop_TestCase
 {
     public function setUp()
     {
         parent::setUp();
         $this->_record      = $this->getMock('Plop_RecordInterface');
-        $this->_formatter   = new Plop_FormatterStub();
+        $this->_formatter   = new Plop_Formatter_Stub();
     }
 
     /**
@@ -65,7 +65,7 @@ extends Plop_TestCase
      * @covers Plop_Formatter::getFormat
      * @covers Plop_Formatter::setFormat
      */
-    public function testFormatSetter()
+    public function testFormatAccessors()
     {
         $newFormat = '%(asctime)s';
         $this->assertNotEquals(Plop_Formatter::DEFAULT_FORMAT, $newFormat);
@@ -84,7 +84,7 @@ extends Plop_TestCase
      * @covers Plop_Formatter::getDateFormat
      * @covers Plop_Formatter::setDateFormat
      */
-    public function testDateFormatSetter()
+    public function testDateFormatAccessors()
     {
         $newFormat = 'U';
         $this->assertNotEquals(Plop_Formatter::DEFAULT_DATE_FORMAT, $newFormat);
@@ -103,7 +103,7 @@ extends Plop_TestCase
      * @covers Plop_Formatter::getPythonLike
      * @covers Plop_Formatter::setPythonLike
      */
-    public function testPythonStackTracesSetter()
+    public function testPythonStackTracesAccessors()
     {
         $this->assertFalse($this->_formatter->getPythonLike());
         $this->assertSame(
@@ -118,7 +118,7 @@ extends Plop_TestCase
      * @expectedException           Plop_Exception
      * @expectedExceptionMessage    Invalid value
      */
-    public function testPythonStackTracesSetter2()
+    public function testPythonStackTracesAccessors2()
     {
         $this->_formatter->setPythonLike('foo');
     }
@@ -217,7 +217,7 @@ extends Plop_TestCase
     /**
      * @covers Plop_Formatter::format
      */
-    public function testFormat()
+    public function testFormatMethod()
     {
         $formatter = $this->getMock(
             'Plop_Formatter',

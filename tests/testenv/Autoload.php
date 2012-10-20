@@ -1,4 +1,6 @@
 <?php
+
+/// @codeCoverageIgnore
 class Erebot_Autoload
 {
     /**
@@ -249,4 +251,5 @@ class Erebot_Autoload
 }
 
 Erebot_Autoload::initialize();
+
 

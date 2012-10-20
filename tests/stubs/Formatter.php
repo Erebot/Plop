@@ -1,6 +1,6 @@
 <?php
 
-class   Plop_FormatterStub
+class   Plop_Formatter_Stub
 extends Plop_Formatter
 {
     public function formatTimeStub(
@@ -8,12 +8,12 @@ extends Plop_Formatter
                                 $dateFormat = self::DEFAULT_DATE_FORMAT
     )
     {
-        return $this->_formatTime($record, $dateFormat);
+        return parent::_formatTime($record, $dateFormat);
     }
 
     public function formatExceptionStub(Exception $exception)
     {
-        return $this->_formatException($exception);
+        return parent::_formatException($exception);
     }
 }
 
