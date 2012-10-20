@@ -64,14 +64,12 @@ extends Plop_Handler_Stream
     {
         $this->_baseFilename    = $filename;
         $this->_mode            = $mode;
-        $this->_encoding        = $encoding;
         if ($delay) {
-            Plop_Handler::__construct();
-            $this->_stream = FALSE;
+            parent::__construct(FALSE, $encoding);
         }
         else {
             $stream = $this->_open();
-            parent::__construct($stream);
+            parent::__construct($stream, $encoding);
         }
     }
 
@@ -90,13 +88,7 @@ extends Plop_Handler_Stream
      */
     protected function _open()
     {
-        $stream = fopen($this->_baseFilename, $this->_mode);
-        if (function_exists('stream_encoding') &&
-            $this->_encoding !== NULL &&
-            $stream !== FALSE) {
-            stream_encoding($stream, $this->_encoding);
-        }
-        return $stream;
+        return fopen($this->_baseFilename, $this->_mode);;
     }
 
     /**
@@ -110,6 +102,7 @@ extends Plop_Handler_Stream
         if ($this->_stream) {
             $this->_flush();
             fclose($this->_stream);
+            $this->_stream = FALSE;
         }
     }
 }

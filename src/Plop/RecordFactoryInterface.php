@@ -29,9 +29,17 @@ interface   Plop_RecordFactoryInterface
     /**
      * Create a new log record.
      *
-     * \param string $id
-     *      Identifier for the logger that issued
-     *      the record.
+     * \param string $loggerFile
+     *      File associated with the logger that captured
+     *      the log.
+     *
+     * \param string $loggerClass
+     *      Class associated with the logger that captured
+     *      the log.
+     *
+     * \param string $loggerMethod
+     *      Method associated with the logger that captured
+     *      the log.
      *
      * \param int $level
      *      Level of the log record.
@@ -63,7 +71,9 @@ interface   Plop_RecordFactoryInterface
      *      The newly-created log record.
      */
     public function createRecord(
-                    $id,
+                    $loggerFile,
+                    $loggerClass,
+                    $loggerMethod,
                     $level,
                     $filename,
                     $lineno,

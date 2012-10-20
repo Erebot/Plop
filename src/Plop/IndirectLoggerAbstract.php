@@ -42,6 +42,7 @@ extends         Plop_LoggerAbstract
     {
         $logger = $this->_getIndirectLogger();
         $logger->log($level, $msg, $args, $exception);
+        return $this;
     }
 
     /// \copydoc Plop_LoggerInterface::getLevel().
@@ -85,6 +86,21 @@ extends         Plop_LoggerAbstract
     {
         $logger = $this->_getIndirectLogger();
         return $logger->getMethod();
+    }
+
+    /// \copydoc Plop_LoggerInterface::getRecordFactory().
+    public function getRecordFactory()
+    {
+        $logger = $this->_getIndirectLogger();
+        return $logger->getRecordFactory();
+    }
+
+    /// \copydoc Plop_LoggerInterface::setRecordFactory(Plop_RecordFactoryInterface $factory).
+    public function setRecordFactory(Plop_RecordFactoryInterface $factory)
+    {
+        $logger = $this->_getIndirectLogger();
+        $logger->setRecordFactory($factory);
+        return $this;
     }
 
     /// \copydoc Plop_LoggerInterface::addHandler().

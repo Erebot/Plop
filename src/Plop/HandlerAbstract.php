@@ -114,13 +114,28 @@ implements      Plop_HandlerInterface
         return $this;
     }
 
+    /**
+     * Return \a STDERR as a (closable) stream.
+     * This method only exists to provide an easy way
+     * to mock \a STDERR in unit tests.
+     *
+     * \retval resource
+     *      \a STDERR as a closable stream.
+     *
+     * @codeCoverageIgnore
+     */
+    protected function _getStderr()
+    {
+        return fopen('php://stderr', 'at');
+    }
+
     /// \copydoc Plop_HandlerInterface::handleError().
     public function handleError(
         Plop_RecordInterface    $record,
         Exception               $exception
     )
     {
-        $stderr = fopen('php://stderr', 'at');
+        $stderr = $this->_getStderr();
         fprintf($stderr, "%s\n", $exception);
         fclose($stderr);
         return $this;

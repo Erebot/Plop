@@ -22,6 +22,8 @@
  * \brief
  *      This exception is thrown by Plop whenever
  *      a problem is detected.
+ *
+ * @codeCoverageIgnore
  */
 class   Plop_Exception
 extends Exception

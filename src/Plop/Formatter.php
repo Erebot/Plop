@@ -26,6 +26,9 @@
 class       Plop_Formatter
 implements  Plop_FormatterInterface
 {
+    /// Default format for log messages.
+    const DEFAULT_FORMAT = '%(message)s';
+
     /// Default format for dates.
     const DEFAULT_DATE_FORMAT = "Y-m-d H:i:s,u";
 
@@ -45,8 +48,8 @@ implements  Plop_FormatterInterface
      *      (optional) The format specification
      *      for log records, which may contain
      *      percent-sequences.
-     *      The default is \verbatim %(message)s \endverbatim
-     *      which only outputs the log's messages.
+     *      Defaults to the value of the
+     *      Plop_Formatter::DEFAULT_FORMAT constant.
      *
      * \param string $dateFormat
      *      (optional) The format specification
@@ -54,6 +57,12 @@ implements  Plop_FormatterInterface
      *      The default is to use the value of the
      *      Plop_Formatter::DEFAULT_DATE_FORMAT
      *      constant.
+     *
+     * \param bool $pythonLike
+     *      (optional) Whether exceptions should be formatted
+     *      to resemble Python stack traces (\a TRUE) or if they
+     *      should keep their original PHP format (\a FALSE).
+     *      Defaults to \a FALSE (display PHP stack traces).
      *
      * \see
      *      Plop_RecordInterface::formatPercent()
@@ -66,13 +75,14 @@ implements  Plop_FormatterInterface
      *      for the \a $dateFormat parameter.
      */
     public function __construct(
-        $format     = '%(message)s',
-        $dateFormat = self::DEFAULT_DATE_FORMAT
+        $format     = self::DEFAULT_FORMAT,
+        $dateFormat = self::DEFAULT_DATE_FORMAT,
+        $pythonLike = FALSE
     )
     {
         $this->setFormat($format);
         $this->setDateFormat($dateFormat);
-        $this->_pythonLike = FALSE;
+        $this->setPythonLike($pythonLike);
     }
 
     /// \copydoc Plop_FormatterInterface::getFormat().
@@ -101,6 +111,41 @@ implements  Plop_FormatterInterface
         return $this;
     }
 
+    /**
+     * Return whether exceptions are rendered like
+     * Python stack traces or not.
+     *
+     * \retval bool
+     *      \a TRUE if the exceptions will look like
+     *      Python stack traces or \a FALSE if they
+     *      will look like regular PHP stack traces.
+     */
+    public function getPythonLike()
+    {
+        return $this->_pythonLike;
+    }
+
+    /**
+     * Set the format used to render exceptions.
+     *
+     * \param bool $pythonLike
+     *      If this is \a TRUE, exception stack traces
+     *      will be rendered using a format close to
+     *      the one Python uses. Otherwise, the original
+     *      (PHP) format is kept.
+     *
+     * \retval Plop_FormatterInterface
+     *      The formatter instance (ie. \a $this).
+     */
+    public function setPythonLike($pythonLike)
+    {
+        if (!is_bool($pythonLike)) {
+            throw new Plop_Exception('Invalid value');
+        }
+        $this->_pythonLike = $pythonLike;
+        return $this;
+    }
+
     /// \copydoc Plop_FormatterInterface::format().
     public function format(Plop_RecordInterface $record)
     {
@@ -119,10 +164,7 @@ implements  Plop_FormatterInterface
             }
         }
         if ($record['exc_text']) {
-            if (substr($s, -1) != "\n") {
-                $s .= "\n";
-            }
-            $s .= $record['exc_text'];
+            $s .= "\n" . $record['exc_text'];
         }
         return $s;
     }
@@ -186,8 +228,9 @@ implements  Plop_FormatterInterface
                 $origin .= $trace['function'].'()';
             if ($origin == '')
                 $origin = '???';
-            $traces[] = 'File "'.$trace['file'].'", line '.
-                $trace['line'].', in '.$origin;
+            $file = isset($trace['file']) ? $trace['file'] : '{main}';
+            $line = isset($trace['line']) ? $trace['line'] : 0;
+            $traces[] = "File \"$file\", line $line, in $origin";
         }
         $s .= implode("\n", array_reverse($traces))."\n";
         $s .=   "Exception '" . get_class($exception) .

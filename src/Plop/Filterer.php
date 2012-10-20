@@ -39,6 +39,7 @@ implements  Plop_FiltererInterface
     {
         if (!in_array($filter, $this->_filters, TRUE))
             $this->_filters[] = $filter;
+        return $this;
     }
 
     /// \copydoc Plop_FiltererInterface::removeFilter().
@@ -47,6 +48,7 @@ implements  Plop_FiltererInterface
         $key = array_search($filter, $this->_filters, TRUE);
         if ($key !== FALSE)
             unset($this->_filters[$key]);
+        return $this;
     }
 
     /// \copydoc Plop_FiltererInterface::getFilters().

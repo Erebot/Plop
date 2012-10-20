@@ -35,8 +35,17 @@ implements  Plop_RecordInterface
     /**
      * Construct a new log record.
      *
-     * \param string $name
-     *      The name of the logger that received the log.
+     * \param string $loggerFile
+     *      File associated with the logger that captured
+     *      the log.
+     *
+     * \param string $loggerClass
+     *      Class associated with the logger that captured
+     *      the log.
+     *
+     * \param string $loggerMethod
+     *      Method associated with the logger that captured
+     *      the log.
      *
      * \param int $level
      *      The level of the log.
@@ -63,14 +72,16 @@ implements  Plop_RecordInterface
      *      where the log was emitted.
      */
     public function __construct(
-        $name,
-        $level,
-        $pathname,
-        $lineno,
-        $msg,
-        array $args,
-        $exception,
-        $func = NULL
+                    $loggerFile,
+                    $loggerClass,
+                    $loggerMethod,
+                    $level,
+                    $pathname,
+                    $lineno,
+                    $msg,
+        array       $args,
+        Exception   $exception  = NULL,
+                    $func       = NULL
     )
     {
         static $pid = NULL;
@@ -78,34 +89,37 @@ implements  Plop_RecordInterface
             $pid = getmypid();
 
         $logging    = Plop::getInstance();
-        $ct         = explode(" ", microtime(FALSE));
-        $msecs      = (int) substr($ct[0]."000000", 2);
+        $ct         = explode(' ', microtime(FALSE));
+        $msecs      = (int) substr($ct[0] . '000000', 2);
         /// @FIXME: There must be a better way to do this!
-        $date       = new DateTime("@".$ct[1], new DateTimeZone("UTC"));
+        $date       = new DateTime('@' . $ct[1], new DateTimeZone('UTC'));
         $date       = new DateTime(
             sprintf(
-                "%s.%s",
-                $date->format("Y-m-d\\TH:i:s"),
+                '%s.%s',
+                $date->format('Y-m-d\\TH:i:s'),
                 substr($ct[0], 2)
             ),
-            new DateTimeZone("UTC")
+            new DateTimeZone('UTC')
         );
-        $created    = ((float) $date->format("U.u"));
-        $diff       = ($created - $logging->getCreationDate()) * 1000;
-
-        if (isset($_SERVER['argv'][0]))
+        $created        = ((float) $date->format('U.u'));
+        $diff           = ($created - $logging->getCreationDate()) * 1000;
+        if (isset($_SERVER['argv'][0])) {
             $processName = basename($_SERVER['argv'][0]);
-        else
+        }
+        else {
             $processName = '-';
+        }
 
-        $this->_dict['name']            = $name;
+        $this->_dict['loggerFile']      = $loggerFile;
+        $this->_dict['loggerClass']     = $loggerClass;
+        $this->_dict['loggerMethod']    = $loggerMethod;
         $this->_dict['msg']             = $msg;
         $this->_dict['args']            = $args;
         $this->_dict['levelname']       = $logging->getLevelName($level);
         $this->_dict['levelno']         = $level;
         $this->_dict['pathname']        = $pathname;
         $this->_dict['filename']        = $pathname;
-        $this->_dict['module']          = "Unknown module";
+        $this->_dict['module']          = 'Unknown module';
         $this->_dict['exc_info']        = $exception;
         $this->_dict['exc_text']        = NULL;
         $this->_dict['lineno']          = $lineno;
@@ -135,6 +149,8 @@ implements  Plop_RecordInterface
      *
      * \retval string
      *      Percent-prefixed version of the variable name.
+     *
+     * @codeCoverageIgnore
      */
     static private function _pctPrefix($a)
     {
@@ -150,6 +166,8 @@ implements  Plop_RecordInterface
      * \retval string
      *      Incremented and percent-prefixed version
      *      of the variable.
+     *
+     * @codeCoverageIgnore
      */
     static private function _increment($a)
     {
@@ -157,7 +175,7 @@ implements  Plop_RecordInterface
     }
 
     /// \copydoc Plop_RecordInterface::formatPercent().
-    static public function formatPercent($msg, array $args)
+    static public function formatPercent($msg, array $args = array())
     {
         preg_match_all('/(?<!%)(?:%%)*%\\(([^\\)]*)\\)/', $msg, $matches);
         // Only define the variables if there are any.
@@ -199,10 +217,12 @@ implements  Plop_RecordInterface
      *      -   levelname
      *      -   levelno
      *      -   lineno
+     *      -   loggerClass
+     *      -   loggerFile
+     *      -   loggerMethod
      *      -   module
      *      -   msecs
      *      -   msg
-     *      -   name
      *      -   pathname
      *      -   process
      *      -   processName

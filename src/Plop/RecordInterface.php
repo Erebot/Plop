@@ -52,20 +52,21 @@ extends     ArrayAccess,
      *      of this entry for more information).
      *
      * \param array $args
-     *      Associative array of values that may
-     *      be replaced dynamically in the message,
+     *      (optional) Associative array of values that will
+     *      be dynamically replaced in the message,
      *      using a formatting sequence based on this model:
      *      \verbatim %(name)<spec> \endverbatim
      *      where \a name is the key of the variable, taken from
      *      the \a $args parameter, and \a \<spec\> is a valid
      *      <a href="http://php.net/sprintf">sprintf()</a> format
-     *      specification, such as \verbatim %(foo)04d \endverbatim.
+     *      specification, such as \verbatim %(foo)04d \endverbatim
+     *      Defaults to an empty array.
      *
      * \retval string
      *      The message with all of its percent-sequences
      *      replaced with their proper value.
      */
-    static public function formatPercent($msg, array $args);
+    static public function formatPercent($msg, array $args = array());
 
     /**
      * The properties of this log record,

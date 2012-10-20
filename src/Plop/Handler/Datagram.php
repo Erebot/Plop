@@ -29,10 +29,6 @@ extends Plop_Handler_Socket
     /// \copydoc Plop_Handler_Socket::__construct($host, $port).
     public function __construct($host, $port)
     {
-        if (strpos(':', $host) !== FALSE) {
-            // IPv6 addresses must be enclosed in brackets.
-            $host = "[$host]";
-        }
         parent::__construct($host, $port);
         $this->_closeOnError = 0;
     }
@@ -40,10 +36,15 @@ extends Plop_Handler_Socket
     /**
      * Create a new socket.
      *
+     * \param int $timeout
+     *      (optional) Unused. This parameter exists
+     *      only for compatibility reasons with the
+     *      base class (Plop_Handler_Socket).
+     *
      * \retval resource
      *      The newly created socket.
      */
-    protected function _makeSocket()
+    protected function _makeSocket($timeout=1)
     {
         return fsockopen('udp://'.$this->_host, $this->_port);
     }

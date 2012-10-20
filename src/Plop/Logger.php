@@ -68,12 +68,17 @@ extends     Plop_LoggerAbstract
     public function __construct($file = NULL, $class = NULL, $method = NULL)
     {
         parent::__construct();
+        while (substr($file, -strlen(DIRECTORY_SEPARATOR)) ==
+            DIRECTORY_SEPARATOR) {
+            $file = (string) substr($file, 0, -strlen(DIRECTORY_SEPARATOR));
+        }
         $this->_file            = $file;
         $this->_class           = $class;
         $this->_method          = $method;
         $this->_level           = Plop::NOTSET;
         $this->_handlers        = array();
         $this->_emittedWarning  = FALSE;
+        $this->setRecordFactory(new Plop_RecordFactory());
     }
 
     /// \copydoc Plop_LoggerInterface::getFile().
@@ -94,6 +99,19 @@ extends     Plop_LoggerAbstract
         return $this->_method;
     }
 
+    /// \copydoc Plop_LoggerInterface::getRecordFactory().
+    public function getRecordFactory()
+    {
+        return $this->_recordFactory;
+    }
+
+    /// \copydoc Plop_LoggerInterface::setRecordFactory().
+    public function setRecordFactory(Plop_RecordFactoryInterface $factory)
+    {
+        $this->_recordFactory = $factory;
+        return $this;
+    }
+
     /// \copydoc Plop_LoggerInterface::log().
     public function log(
                     $level,
@@ -104,8 +122,10 @@ extends     Plop_LoggerAbstract
     {
         if ($this->isEnabledFor($level)) {
             $caller = Plop::findCaller();
-            $record = new Plop_Record(
-                $this->_method . ":" . $this->_class . ":" . $this->_file,
+            $record = $this->_recordFactory->createRecord(
+                $this->_file,
+                $this->_class,
+                $this->_method,
                 $level,
                 $caller['fn'] ? $caller['fn'] : '???',
                 $caller['lno'],
@@ -114,7 +134,7 @@ extends     Plop_LoggerAbstract
                 $exception,
                 $caller['func'] ? $caller['func'] : NULL
             );
-            $this->handle($record);
+            $this->_handle($record);
         }
         return $this;
     }
@@ -128,7 +148,7 @@ extends     Plop_LoggerAbstract
      * \retval Plop_LoggerInterface
      *      The logger instance (ie. \a $this).
      */
-    protected function handle(Plop_RecordInterface $record)
+    protected function _handle(Plop_RecordInterface $record)
     {
         if ($this->filter($record)) {
             $this->_callHandlers($record);
@@ -147,9 +167,9 @@ extends     Plop_LoggerAbstract
     /// \copydoc Plop_LoggerInterface::removeHandler().
     public function removeHandler(Plop_HandlerInterface $handler)
     {
-        $keys = array_keys($this->_handlers, $handler);
-        if ($keys[0] !== FALSE) {
-            unset($this->_filters[$keys[0]]);
+        $key = array_search($handler, $this->_handlers, TRUE);
+        if ($key !== FALSE) {
+            unset($this->_handlers[$key]);
         }
         return $this;
     }
@@ -172,25 +192,41 @@ extends     Plop_LoggerAbstract
      */
     protected function _callHandlers(Plop_RecordInterface $record)
     {
-        $found = 0;
         foreach ($this->_handlers as $handler) {
-            $found += 1;
             if ($record['levelno'] >= $handler->getLevel()) {
                 $handler->handle($record);
             }
         }
 
-        if (!$found && !$this->_emittedWarning) {
-            $stderr = fopen('php://stderr', 'at');
+        if (!count($this->_handlers) && !$this->_emittedWarning) {
+            $stderr = $this->_getStderr();
             fprintf(
                 $stderr,
-                'No handlers could be found for logger "%s"'."\n",
-                $this->_name
+                'No handlers could be found for logger ("%s" in "%s")' . "\n",
+                $this->_class .
+                ($this->_class === NULL || $this->_class === '' ? '' : '::') .
+                $this->_method,
+                $this->_file
             );
             fclose($stderr);
             $this->_emittedWarning = TRUE;
         }
         return $this;
+    }
+
+    /**
+     * Return \a STDERR as a (closable) stream.
+     * This method only exists to provide an easy way
+     * to mock \a STDERR in unit tests.
+     *
+     * \retval resource
+     *      \a STDERR as a closable stream.
+     *
+     * @codeCoverageIgnore
+     */
+    protected function _getStderr()
+    {
+        return fopen('php://stderr', 'at');
     }
 
     /// \copydoc Plop_LoggerInterface::getLevel().
@@ -203,7 +239,7 @@ extends     Plop_LoggerAbstract
     public function setLevel($level)
     {
         if (!is_int($level)) {
-            throw new Plop_Exception('Not a valid integer');
+            throw new Plop_Exception('Invalid value');
         }
         $this->_level = $level;
         return $this;
@@ -212,6 +248,9 @@ extends     Plop_LoggerAbstract
     /// \copydoc Plop_LoggerInterface::isEnabledFor().
     public function isEnabledFor($level)
     {
+        if (!is_int($level)) {
+            throw new Plop_Exception('Invalid value');
+        }
         return ($level >= $this->_level);
     }
 }

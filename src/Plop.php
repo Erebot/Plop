@@ -113,13 +113,14 @@ implements  ArrayAccess,
     protected function __construct()
     {
         $this->_loggers = array();
-        $rootLogger = new Plop_Logger(NULL, NULL, NULL);
-        $basicHandler = new Plop_Handler_Stream(STDERR);
-        $this[] = $rootLogger->addHandler(
-            $basicHandler->setFormatter(
-                new Plop_Formatter(self::BASIC_FORMAT)
-            )
-        );
+        $rootLogger     = new Plop_Logger(NULL, NULL, NULL);
+        $basicHandler   = new Plop_Handler_Stream(STDERR);
+        $this[]         =
+            $rootLogger->addHandler(
+                $basicHandler->setFormatter(
+                    new Plop_Formatter(self::BASIC_FORMAT)
+                )
+            );
         $this->_levelNames = array(
             self::NOTSET    => 'NOTSET',
             self::DEBUG     => 'DEBUG',
@@ -134,7 +135,7 @@ implements  ArrayAccess,
     /// This class is not clone-safe.
     public function __clone()
     {
-        throw new Plop_Exception('cloning this class is forbidden!');
+        throw new Plop_Exception('Cloning this class is forbidden');
     }
 
     /**
@@ -168,24 +169,24 @@ implements  ArrayAccess,
     /**
      * Set a (new) name for a given level.
      *
-     * \param int $level
-     *      Level to which a (new) name will be given.
-     *
      * \param string $levelName
-     *      New name for that level.
+     *      Name of the new level to register.
+     *
+     * \param int $levelValue
+     *      Value for the new level.
      *
      * \retval Plop
      *      The current logging service (ie. \a $this).
      */
-    public function addLevelName($level, $levelName)
+    public function addLevelName($levelName, $levelValue)
     {
-        if (!is_int($level)) {
+        if (!is_int($levelValue)) {
             throw new Plop_Exception('Invalid level value');
         }
         if (!is_string($levelName)) {
             throw new Plop_Exception('Invalid level name');
         }
-        $this->_levelNames[$level] = $levelName;
+        $this->_levelNames[$levelValue] = $levelName;
         return $this;
     }
 
@@ -340,7 +341,7 @@ implements  ArrayAccess,
      * \retval string
      *      The logger's identifier.
      */
-    protected function _getLoggerId(Plop_LoggerInterface $logger)
+    static protected function _getLoggerId(Plop_LoggerInterface $logger)
     {
         $method = $logger->getMethod();
         $class  = $logger->getClass();
@@ -393,16 +394,17 @@ implements  ArrayAccess,
             throw new Plop_Exception('Invalid logger');
         }
 
+        $id = self::_getLoggerId($logger);
         if (is_string($offset)) {
-            if ($offset != $this->_getLoggerId($logger)) {
-                throw new Plop_Exception('Invalid identifier');
+            if ($offset != $id) {
+                throw new Plop_Exception(
+                    "Invalid identifier (expected " .
+                    "'$id', got '$offset')"
+                );
             }
         }
-        else {
-            $offset = $this->_getLoggerId($logger);
-        }
 
-        $this->_loggers[$offset] = $logger;
+        $this->_loggers[$id] = $logger;
     }
 
     /**
@@ -423,15 +425,15 @@ implements  ArrayAccess,
     public function offsetGet($offset)
     {
         if (!is_string($offset)) {
-            throw new Plop_Exception('Invalid logger identifier');
+            throw new Plop_Exception('Invalid identifier');
         }
 
         $parts = explode(':', $offset, 3);
         if (count($parts) != 3) {
-            throw new Plop_Exception('Invalid logger identifier');
+            throw new Plop_Exception('Invalid identifier');
         }
         list($method, $class, $file) = $parts;
-        if (substr($file, -strlen(DIRECTORY_SEPARATOR)) ==
+        while (substr($file, -strlen(DIRECTORY_SEPARATOR)) ==
             DIRECTORY_SEPARATOR) {
             $file = (string) substr($file, 0, -strlen(DIRECTORY_SEPARATOR));
         }
@@ -452,8 +454,12 @@ implements  ArrayAccess,
 
         // File match.
         $parts = explode(DIRECTORY_SEPARATOR, $file);
-        while ($parts) {
+        while (count($parts)) {
             $offset = implode(DIRECTORY_SEPARATOR, $parts);
+            if ($offset == '') {
+                break;
+            }
+
             if (isset($this->_loggers["::$offset"])) {
                 return $this->_loggers["::$offset"];
             }
@@ -486,7 +492,7 @@ implements  ArrayAccess,
     public function offsetExists($offset)
     {
         if ($offset instanceof Plop_LoggerInterface) {
-            $offset = $this->_getLoggerId($logger);
+            $offset = self::_getLoggerId($offset);
         }
         if (!is_string($offset)) {
             throw new Plop_Exception('Invalid identifier');
@@ -511,10 +517,10 @@ implements  ArrayAccess,
     public function offsetUnset($offset)
     {
         if ($offset instanceof Plop_LoggerInterface) {
-            $offset = $this->_getLoggerId($logger);
+            $offset = self::_getLoggerId($offset);
         }
         if ($offset == "::") {
-            throw new Plop_Exception('The root logger cannot be unset!');
+            throw new Plop_Exception('The root logger cannot be unset');
         }
         unset($this->_loggers[$offset]);
     }
@@ -560,8 +566,13 @@ implements  ArrayAccess,
         $dir    = dirname(__FILE__) . DIRECTORY_SEPARATOR;
         $len    = strlen($dir);
         $max    = count($bt);
-        for ($i = 1; $i < $max && !strncmp($dir, $bt[$i]['file'], $len); $i++) {
-            ; // Skip frames until we get out of logging code.
+        for ($i = 0; $i < $max; $i++) {
+            if (isset($bt[$i]['file']) &&
+                strncmp($dir, $bt[$i]['file'], $len)) {
+                break;
+            }
+
+            // Skip frames until we get out of Plop's code.
         }
 
         if ($i == $max) {
@@ -576,8 +587,10 @@ implements  ArrayAccess,
         return array(
             'fn'    => $bt[$i]['file'],
             'lno'   => $bt[$i]['line'],
-            'func'  => ($i + 1 == $max ? NULL : $bt[$i + 1]['function']),
-            'class' => ($i + 1 == $max ? NULL : $bt[$i + 1]['class']),
+            'func'  => (!isset($bt[$i + 1]['function'])
+                        ? NULL : $bt[$i + 1]['function']),
+            'class' => (!isset($bt[$i + 1]['class'])
+                        ? NULL : $bt[$i + 1]['class']),
         );
     }
 }

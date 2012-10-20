@@ -67,6 +67,12 @@ extends Plop_HandlerAbstract
     public function __construct($host, $port)
     {
         parent::__construct();
+
+        if (strpos(':', $host) !== FALSE) {
+            // IPv6 addresses must be enclosed in brackets.
+            $host = "[$host]";
+        }
+
         $this->_host            = $host;
         $this->_port            = $port;
         $this->_socket          = FALSE;
@@ -95,7 +101,7 @@ extends Plop_HandlerAbstract
      */
     public function getCloseOnError()
     {
-        return $this->_createSocket;
+        return $this->_closeOnError;
     }
 
     /**
@@ -223,6 +229,8 @@ extends Plop_HandlerAbstract
      *
      * \retval resource
      *      The newly created socket.
+     *
+     * @codeCoverageIgnore
      */
     protected function _makeSocket($timeout=1)
     {
@@ -240,6 +248,8 @@ extends Plop_HandlerAbstract
      *
      * \retval int
      *      The current time, as a UNIX timestamp.
+     *
+     * @codeCoverageIgnore
      */
     protected function _getCurrentTime()
     {
@@ -290,8 +300,12 @@ extends Plop_HandlerAbstract
      * \param string $s
      *      The text to send over.
      *
-     * \return
-     *      This method does not return any value.
+     * \retval bool
+     *      Whether a connection could be established
+     *      and the data sent properly.
+     *
+     * \throws Plop_Exception
+     *      The connection was lost during the transmission.
      */
     protected function _send($s)
     {
@@ -300,18 +314,39 @@ extends Plop_HandlerAbstract
         }
 
         if (!$this->_socket) {
-            return;
+            return FALSE;
         }
 
-        $len = strlen($s);
-        for ($written = 0; $written < $len; $written += $fwrite) {
-            $fwrite = fwrite($this->_socket, substr($s, $written));
-            if ($fwrite === FALSE) {
-                fclose($this->_socket);
-                $this->_socket = FALSE;
-                return;
+        $written = 0;
+        while ($s != '') {
+            $written = $this->_write($s);
+            if ($written === FALSE) {
+                throw new Plop_Exception('Connection lost');
             }
+            $s = (string) substr($s, $written);
         }
+        return TRUE;
+    }
+
+    /**
+     * Write data to the underlying stream.
+     *
+     * \param string $s
+     *      Data to write.
+     *
+     * \retval FALSE|int
+     *      Return the number of bytes written
+     *      to the underlying stream (which can
+     *      be less than the length of the data
+     *      given due to buffering) or \a FALSE
+     *      in case of an error (eg. connection
+     *      lost).
+     *
+     * @codeCoverageIgnore
+     */
+    protected function _write($s)
+    {
+        return @fwrite($this->_socket, $s);
     }
 
     /**
@@ -345,7 +380,7 @@ extends Plop_HandlerAbstract
         if ($this->_closeOnError) {
             $this->_close();
         }
-        parent::handleError($record, $exception);
+        return parent::handleError($record, $exception);
     }
 
     /// \copydoc Plop_HandlerAbstract::_emit().
@@ -356,7 +391,7 @@ extends Plop_HandlerAbstract
             $this->_send($s);
         }
         catch (Exception $e) {
-            $this->_handleError($record, $e);
+            $this->handleError($record, $e);
         }
     }
 
@@ -366,7 +401,7 @@ extends Plop_HandlerAbstract
      * \return
      *      This method does not return any value.
      */
-    public function _close()
+    protected function _close()
     {
         if ($this->_socket) {
             fclose($this->_socket);

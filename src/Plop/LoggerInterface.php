@@ -102,6 +102,27 @@ interface   Plop_LoggerInterface
     public function getMethod();
 
     /**
+     * Return the factory used to produce
+     * log records.
+     *
+     * \retval Plop_RecordFactoryInterface
+     *      The factory used to produce records.
+     */
+    public function getRecordFactory();
+
+    /**
+     * Set the factory to use to produce
+     * new log records.
+     *
+     * \param Plop_RecordFactoryInterface $factory
+     *      The factory to use to produce records.
+     *
+     * \retval Plop_LoggerInterface
+     *      The logger instance (ie. \a $this).
+     */
+    public function setRecordFactory(Plop_RecordFactoryInterface $factory);
+
+    /**
      * Log a message with the Plop::DEBUG log level.
      *
      * \param string $msg

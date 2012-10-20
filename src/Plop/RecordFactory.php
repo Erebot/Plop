@@ -28,7 +28,9 @@ implements  Plop_RecordFactoryInterface
 {
     /// \copydoc Plop_RecordFactoryInterface::createRecord().
     public function createRecord(
-                    $id,
+                    $loggerFile,
+                    $loggerClass,
+                    $loggerMethod,
                     $level,
                     $filename,
                     $lineno,
@@ -39,7 +41,9 @@ implements  Plop_RecordFactoryInterface
     )
     {
         $record = new Plop_Record(
-            $id,
+            $loggerFile,
+            $loggerClass,
+            $loggerMethod,
             $level,
             $filename,
             $lineno,
