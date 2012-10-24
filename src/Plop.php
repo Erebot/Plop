@@ -397,10 +397,7 @@ implements  ArrayAccess,
         $id = self::_getLoggerId($logger);
         if (is_string($offset)) {
             if ($offset != $id) {
-                throw new Plop_Exception(
-                    "Invalid identifier (expected " .
-                    "'$id', got '$offset')"
-                );
+                throw new Plop_Exception('Identifier mismatch');
             }
         }
 

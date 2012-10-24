@@ -37,7 +37,8 @@ class Plop_Testenv_Socket
         return TRUE;
     }
 
-    public function stream_close() {
+    public function stream_close()
+    {
         return call_user_func(array($this->_mock, 'stream_close'));
     }
 }

@@ -43,6 +43,8 @@ extends Plop_Handler_Socket
      *
      * \retval resource
      *      The newly created socket.
+     *
+     * @codeCoverageIgnore
      */
     protected function _makeSocket($timeout=1)
     {

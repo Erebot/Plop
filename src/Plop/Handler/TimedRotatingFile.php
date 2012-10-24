@@ -104,11 +104,6 @@ extends Plop_Handler_RotatingAbstract
      *      The default value is 0, which disables deletion
      *      of old backups.
      *
-     * \param NULL|string $encoding
-     *      (optional) Encoding to use when writing
-     *      to the file. Defaults to \a NULL
-     *      (auto-detect).
-     *
      * \param bool $delay
      *      (optional) Whether to delay the actual
      *      opening of the file until the first write.
@@ -124,12 +119,11 @@ extends Plop_Handler_RotatingAbstract
         $when           = 'h',
         $interval       = 1,
         $backupCount    = 0,
-        $encoding       = NULL,
-        $delay          = 0,
+        $delay          = FALSE,
         $utc            = FALSE
     )
     {
-        parent::__construct($filename, 'a', $encoding, $delay);
+        parent::__construct($filename, 'a', $delay);
         $this->_when        = strtoupper($when);
         $this->_backupCount = $backupCount;
         $this->_utc         = $utc;
@@ -162,7 +156,7 @@ extends Plop_Handler_RotatingAbstract
                 throw new Plop_Exception(
                     sprintf(
                         'You must specify a day for weekly rollover '.
-                        'from 0 to 6 (0 is Monday): %s',
+                        'from 0 to 6 (0 is Monday), not %s',
                         $this->_when
                     )
                 );
@@ -173,7 +167,7 @@ extends Plop_Handler_RotatingAbstract
                 throw new Plop_Exception(
                     sprintf(
                         'Invalid day specified for weekly rollover: %s',
-                        $this->_when
+                        $this->_when[1]
                     )
                 );
             }
@@ -190,8 +184,16 @@ extends Plop_Handler_RotatingAbstract
                 )
             );
         }
+
+        if (!is_int($interval) || $interval < 1) {
+            throw new Plop_Exception(
+                'The interval should be an integer ' .
+                'greater than or equal to 1'
+            );
+        }
+
         $this->_interval    = $this->_interval * $interval;
-        $this->_rolloverAt  = $this->_computeRollover(time());
+        $this->_rolloverAt  = $this->_computeRollover($this->_getTime());
     }
 
     /**
@@ -220,11 +222,23 @@ extends Plop_Handler_RotatingAbstract
         return $currentTime + $this->_interval;
     }
 
+    /**
+     * Return the current time, as a UNIX timestamp.
+     *
+     * \retval int
+     *      Current time, as a UNIX timestamp.
+     *
+     * @codeCoverageIgnore
+     */
+    protected function _getTime()
+    {
+        return time();
+    }
+
     /// \copydoc Plop_Handler_RotatingAbstract::_shouldRollover().
     protected function _shouldRollover(Plop_RecordInterface $record)
     {
-        $t = time();
-        if ($t >= $this->_rolloverAt) {
+        if ($this->_getTime() >= $this->_rolloverAt) {
             return TRUE;
         }
         return FALSE;

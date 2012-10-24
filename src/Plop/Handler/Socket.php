@@ -68,7 +68,7 @@ extends Plop_HandlerAbstract
     {
         parent::__construct();
 
-        if (strpos(':', $host) !== FALSE) {
+        if (strpos($host, ':') !== FALSE) {
             // IPv6 addresses must be enclosed in brackets.
             $host = "[$host]";
         }

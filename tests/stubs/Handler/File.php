@@ -13,6 +13,11 @@ extends Plop_Handler_File
         return parent::_close();
     }
 
+    public function emitStub(Plop_RecordInterface $record)
+    {
+        return parent::_emit($record);
+    }
+
     public function getStreamStub()
     {
         return $this->_stream;

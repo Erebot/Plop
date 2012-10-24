@@ -40,11 +40,11 @@ extends Plop_HandlerAbstract
         'debug'     => LOG_DEBUG,
         'emerg'     => LOG_EMERG,
         'err'       => LOG_ERR,
-        'error'     => LOG_ERR,         # Deprecated
+        'error'     => LOG_ERR,         // Deprecated
         'info'      => LOG_INFO,
         'notice'    => LOG_NOTICE,
-        'panic'     => LOG_EMERG,       # Deprecated
-        'warn'      => LOG_WARNING,     # Deprecated
+        'panic'     => LOG_EMERG,       // Deprecated
+        'warn'      => LOG_WARNING,     // Deprecated
         'warning'   => LOG_WARNING,
     );
 
@@ -120,7 +120,7 @@ extends Plop_HandlerAbstract
         parent::__construct();
         $this->_address     = $address;
         $this->_facility    = $facility;
-        $this->_socket      = stream_socket_client($address);
+        $this->_socket      = $this->_makeSocket();
         if ($this->_socket === FALSE) {
             throw new Plop_Exception('Unable to connect to the syslog');
         }
@@ -130,6 +130,20 @@ extends Plop_HandlerAbstract
     public function __destruct()
     {
         $this->_close();
+    }
+
+    /**
+     * Create the socket used to communicate
+     * with the syslog.
+     *
+     * \retval resource
+     *      The newly-created socket.
+     *
+     * @codeCoverageIgnore
+     */
+    protected function _makeSocket()
+    {
+        return stream_socket_client($this->_address);
     }
 
     /**
@@ -147,10 +161,12 @@ extends Plop_HandlerAbstract
      */
     protected function _encodePriority($facility, $priority)
     {
-        if (is_string($facility))
+        if (is_string($facility)) {
             $facility = self::$_facilityNames[$facility];
-        if (is_string($priority))
+        }
+        if (is_string($priority)) {
             $priority = self::$_priorityNames[$priority];
+        }
         return ($facility << 3) | $priority;
     }
 
@@ -181,8 +197,9 @@ extends Plop_HandlerAbstract
      */
     protected function _mapPriority($levelName)
     {
-        if (isset(self::$_priorityMap[$levelName]))
+        if (isset(self::$_priorityMap[$levelName])) {
             return self::$_priorityMap[$levelName];
+        }
         return "warning";
     }
 
@@ -199,11 +216,15 @@ extends Plop_HandlerAbstract
             $msg
         );
 
-        try {
-            fwrite($this->_socket, $msg);
-        }
-        catch (Exception $e) {
-            $this->handleError($record, $e);
+        for ($written = 0; $written < strlen($msg); $written += $fwrite) {
+            $fwrite = @fwrite($this->_socket, substr($msg, $written));
+            if ($fwrite === FALSE) {
+                $this->handleError(
+                    $record,
+                    new Plop_Exception('Connection lost')
+                );
+                break;
+            }
         }
     }
 }

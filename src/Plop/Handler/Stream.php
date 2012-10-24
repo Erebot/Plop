@@ -38,17 +38,11 @@ extends Plop_HandlerAbstract
      * \param resource $stream
      *      (optional) The stream where log messages
      *      will be written. Defaults to \a STDERR.
-     *
-     * \param NULL|string $encoding
-     *      (optional) Encoding to use when writing
-     *      to the file. Defaults to \a NULL
-     *      (auto-detect).
      */
-    public function __construct($stream = STDERR, $encoding = NULL)
+    public function __construct($stream = STDERR)
     {
         parent::__construct();
         $this->_stream      = $stream;
-        $this->_encoding    = $encoding;
     }
 
     /**
@@ -66,9 +60,6 @@ extends Plop_HandlerAbstract
     protected function _emit(Plop_RecordInterface $record)
     {
         $msg = $this->_format($record);
-        if ($this->_encoding !== NULL) {
-            $msg = $msg; // @TODO implement recoding support.
-        }
         fprintf($this->_stream, "%s\n", $msg);
         $this->_flush();
     }

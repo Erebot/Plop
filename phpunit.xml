@@ -10,7 +10,11 @@
 
   <filter>
     <whitelist processUncoveredFilesFromWhitelist="false">
-      <directory>src/</directory>
+      <directory suffix=".php">src/</directory>
+      <exclude>
+        <directory suffix="Interface.php">src/</directory>
+        <file>src/Plop/Exception.php</file>
+      </exclude>
     </whitelist>
   </filter>
 

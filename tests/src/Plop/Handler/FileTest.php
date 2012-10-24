@@ -33,7 +33,7 @@ extends Plop_TestCase
         parent::setUp();
         $this->_handler = $this->getMock(
             'Plop_Handler_File_Stub',
-            array('_open', '_close', '_flush'),
+            array('_open', '_close', '_flush', '_format'),
             array(),
             '',
             FALSE
@@ -76,7 +76,7 @@ extends Plop_TestCase
         $this->_handler
             ->expects($this->never())
             ->method('_open');
-        $this->_handler->__construct('php://stderr', 'at', NULL, TRUE);
+        $this->_handler->__construct('php://stderr', 'at', TRUE);
     }
 
     /**
@@ -84,12 +84,36 @@ extends Plop_TestCase
      */
     public function testFileOpening()
     {
-        $this->_handler->__construct('php://stderr', 'a+b', 'utf-8', TRUE);
+        $this->_handler->__construct('php://stderr', 'a+b', TRUE);
         $this->assertFalse($this->_handler->getStreamStub());
         $stream = $this->_handler->openStub();
         $this->assertNotSame(FALSE, $stream);
 
         $metadata = stream_get_meta_data($stream);
         $this->assertSame('a+b', $metadata['mode']);
+    }
+
+    /**
+     * @covers Plop_Handler_File::_emit
+     */
+    public function testEmitMethod()
+    {
+        $this->_handler
+            ->expects($this->once())
+            ->method('_open')
+            ->will($this->returnValue($this->stderrStream));
+        $this->_handler
+            ->expects($this->once())
+            ->method('_format')
+            ->will($this->returnValue('abc'));
+        $this->expectStderrString("abc\n");
+        $this->_handler->__construct('php://stderr', 'at', TRUE);
+        $this->assertFalse($this->_handler->getStreamStub());
+
+        $this->_handler->emitStub($this->_record);
+        $this->assertSame(
+            $this->stderrStream,
+            $this->_handler->getStreamStub()
+        );
     }
 }

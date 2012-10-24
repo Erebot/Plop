@@ -55,11 +55,6 @@ extends Plop_Handler_RotatingAbstract
      *      (optional) Mode to use when opening
      *      the file. Defauts to "at" (append).
      *
-     * \param NULL|string $encoding
-     *      (optional) Encoding to use when writing
-     *      to the file. Defaults to \a NULL
-     *      (auto-detect).
-     *
      * \param bool $delay
      *      (optional) Whether to delay the actual
      *      opening of the file until the first write.
@@ -67,7 +62,7 @@ extends Plop_Handler_RotatingAbstract
      *
      * \note
      *      Depending on your installation, values bigger
-     *      than 1\<\<31 (2GB) for the \a $maxBytes parameter
+     *      than 1\<\<31 (2 GB) for the \a $maxBytes parameter
      *      may not work correctly.
      */
     public function __construct(
@@ -75,14 +70,13 @@ extends Plop_Handler_RotatingAbstract
         $maxBytes       = 0,
         $backupCount    = 0,
         $mode           = 'a',
-        $encoding       = NULL,
         $delay          = 0
     )
     {
         if ($maxBytes > 0) {
             $mode = 'a';
         }
-        parent::__construct($filename, $mode, $encoding, $delay);
+        parent::__construct($filename, $mode, $delay);
         $this->_maxBytes    = $maxBytes;
         $this->_backupCount = $backupCount;
     }

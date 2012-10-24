@@ -32,9 +32,6 @@ extends Plop_Handler_Stream
     /// Opening mode for the log file.
     protected $_mode;
 
-    /// Encoding to use when writing to the file.
-    protected $_encoding;
-
     /**
      * Construct a new instance of this handler.
      *
@@ -45,11 +42,6 @@ extends Plop_Handler_Stream
      *      (optional) Mode to use when opening
      *      the file. Defauts to "at" (append).
      *
-     * \param NULL|string $encoding
-     *      (optional) Encoding to use when writing
-     *      to the file. Defaults to \a NULL
-     *      (auto-detect).
-     *
      * \param bool $delay
      *      (optional) Whether to delay the actual
      *      opening of the file until the first write.
@@ -58,18 +50,17 @@ extends Plop_Handler_Stream
     public function __construct(
         $filename,
         $mode       = 'at',
-        $encoding   = NULL,
         $delay      = FALSE
     )
     {
         $this->_baseFilename    = $filename;
         $this->_mode            = $mode;
         if ($delay) {
-            parent::__construct(FALSE, $encoding);
+            parent::__construct(FALSE);
         }
         else {
             $stream = $this->_open();
-            parent::__construct($stream, $encoding);
+            parent::__construct($stream);
         }
     }
 
@@ -88,7 +79,16 @@ extends Plop_Handler_Stream
      */
     protected function _open()
     {
-        return fopen($this->_baseFilename, $this->_mode);;
+        return fopen($this->_baseFilename, $this->_mode);
+    }
+
+    /// \copydoc Plop_HandlerAbstract::_emit().
+    protected function _emit(Plop_RecordInterface $record)
+    {
+        if (!$this->_stream) {
+            $this->_stream = $this->_open();
+        }
+        parent::_emit($record);
     }
 
     /**

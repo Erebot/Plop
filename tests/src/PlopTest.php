@@ -76,7 +76,7 @@ extends Plop_TestCase
     /**
      * @covers                      Plop::offsetSet
      * @expectedException           Plop_Exception
-     * @expectedExceptionMessage    Invalid identifier (expected '::', got 'foo')
+     * @expectedExceptionMessage    Identifier mismatch
      */
     public function testOffsetSetter2()
     {

@@ -52,15 +52,12 @@ extends Plop_TestCase
      */
     public function testLogging()
     {
-        // Return LATIN SMALL LETTER E WITH ACUTE (as UTF-8 data).
         $this->_handler
             ->expects($this->once())
             ->method('_format')
             ->with($this->_record)
-            ->will($this->returnValue("\xC3\xA9"));
+            ->will($this->returnValue('abc'));
         $this->_handler->emitStub($this->_record);
-
-        // The same text must be written to the stream (as ISO-8859-1 data).
-        $this->expectStderrString("\xE9\n");
+        $this->expectStderrString("abc\n");
     }
 }
