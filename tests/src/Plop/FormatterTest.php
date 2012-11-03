@@ -249,8 +249,7 @@ extends Plop_TestCase
 
         // Take into account the differences in PHPUnit's API
         // between 3.4.x & 3.5.x+.
-        $reflector = new ReflectionObject($this->_record);
-        if ($reflector->hasMethod('staticExpects')) {
+        if (is_callable(array($this->_record, 'staticExpects'))) {
             $this->_record->staticExpects($this->any())
                 ->method('formatPercent')
                 ->will($this->returnCallback(
