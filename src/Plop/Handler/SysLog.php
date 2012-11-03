@@ -61,14 +61,6 @@ extends Plop_HandlerAbstract
         'syslog'    => LOG_SYSLOG,
         'user'      => LOG_USER,
         'uucp'      => LOG_UUCP,
-        'local0'    => LOG_LOCAL0,
-        'local1'    => LOG_LOCAL1,
-        'local2'    => LOG_LOCAL2,
-        'local3'    => LOG_LOCAL3,
-        'local4'    => LOG_LOCAL4,
-        'local5'    => LOG_LOCAL5,
-        'local6'    => LOG_LOCAL6,
-        'local7'    => LOG_LOCAL7,
     );
 
     /**
@@ -117,6 +109,19 @@ extends Plop_HandlerAbstract
         $facility   = LOG_USER
     )
     {
+        if (defined('LOG_LOCAL0') && !isset(self::$_facilityNames['local0'])) {
+            self::$_facilityNames += array(
+                'local0'    => LOG_LOCAL0,
+                'local1'    => LOG_LOCAL1,
+                'local2'    => LOG_LOCAL2,
+                'local3'    => LOG_LOCAL3,
+                'local4'    => LOG_LOCAL4,
+                'local5'    => LOG_LOCAL5,
+                'local6'    => LOG_LOCAL6,
+                'local7'    => LOG_LOCAL7,
+            );
+        }
+
         parent::__construct();
         $this->_address     = $address;
         $this->_facility    = $facility;
