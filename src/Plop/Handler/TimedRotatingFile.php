@@ -284,7 +284,7 @@ extends Plop_Handler_RotatingAbstract
     /// \copydoc Plop_Handler_RotatingAbstract::_doRollover().
     protected function _doRollover()
     {
-        if ($this->_stream) {
+        if (is_resource($this->_stream)) {
             fclose($this->_stream);
         }
         $t = $this->_rolloverAt - $this->_interval;

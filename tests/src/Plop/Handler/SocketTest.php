@@ -25,6 +25,12 @@ require_once(
     DIRECTORY_SEPARATOR . 'Socket.php'
 );
 
+require_once(
+    dirname(dirname(dirname(dirname(__FILE__)))) .
+    DIRECTORY_SEPARATOR . 'stubs' .
+    DIRECTORY_SEPARATOR . 'RecordInterface.php'
+);
+
 class   Plop_Handler_Socket_Test
 extends Plop_TestCase
 {
@@ -46,7 +52,7 @@ extends Plop_TestCase
             ),
             array('::1', 1234)
         );
-        $this->_record  = $this->getMock('Plop_RecordInterface');
+        $this->_record  = $this->getMock('Plop_RecordInterface_Stub');
     }
 
     public function tearDown()
@@ -333,7 +339,7 @@ extends Plop_TestCase
     public function testMakePickleMethod()
     {
         $record  = $this->getMock(
-            'Plop_RecordInterface',
+            'Plop_RecordInterface_Stub',
             array(),
             array(),
             'Plop_Record_Mock'

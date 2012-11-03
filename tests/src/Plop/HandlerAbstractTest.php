@@ -24,13 +24,19 @@ require_once(
     DIRECTORY_SEPARATOR . 'HandlerAbstract.php'
 );
 
+require_once(
+    dirname(dirname(dirname(__FILE__))) .
+    DIRECTORY_SEPARATOR . 'stubs' .
+    DIRECTORY_SEPARATOR . 'RecordInterface.php'
+);
+
 class   Plop_HandlerAbstract_Test
 extends Plop_TestCase
 {
     public function setUp()
     {
         parent::setUp();
-        $this->_record      = $this->getMock('Plop_RecordInterface');
+        $this->_record      = $this->getMock('Plop_RecordInterface_Stub');
         $this->_formatter   = $this->getMock('Plop_FormatterInterface');
     }
 

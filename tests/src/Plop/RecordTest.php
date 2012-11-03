@@ -172,7 +172,7 @@ extends Plop_TestCase
     {
         $file   = '...........................' .
                   '.........../tests/src/Plop/RecordTest.php';
-        $data = 'C:11:"Plop_Record":779:{a:21:{s:4:"name";s:4:"name";' .
+        $data = 'C:11:"Plop_Record":755:{a:21:{s:4:"name";s:4:"name";' .
                 's:3:"msg";s:11:"@ %(foo)s @";s:4:"args";a:1:{s:3:"foo";' .
                 's:3:"bar";}s:9:"levelname";s:5:"DEBUG";s:7:"levelno";' .
                 'i:10;s:8:"pathname";s:68:"...........................' .
@@ -181,11 +181,11 @@ extends Plop_TestCase
                 'tests/src/Plop/RecordTest.php";s:6:"module";' .
                 's:14:"Unknown module";s:8:"exc_info";N;s:8:"exc_text";N;' .
                 's:6:"lineno";i:33;s:8:"funcName";N;s:5:"msecs";' .
-                'i:21691000000000;s:7:"created";d:1349290255.2169099;' .
+                'i:21691000000000;s:7:"created";d:1349290255;' .
                 's:11:"createdDate";O:8:"DateTime":3:{s:4:"date";' .
                 's:19:"2012-10-03 18:50:55";s:13:"timezone_type";i:3;' .
                 's:8:"timezone";s:3:"UTC";}s:15:"relativeCreated";' .
-                'd:84.235906600952148;s:6:"thread";N;s:10:"threadName";N;' .
+                'd:84;s:6:"thread";N;s:10:"threadName";N;' .
                 's:7:"process";i:3930;s:11:"processName";s:7:"phpunit";' .
                 's:8:"hostname";s:6:"naraku";}}';
  

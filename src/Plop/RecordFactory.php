@@ -36,8 +36,8 @@ implements  Plop_RecordFactoryInterface
                     $lineno,
                     $msg,
         array       $args,
-        Exception   $exception = NULL,
-                    $func
+                    $func,
+        Exception   $exception = NULL
     )
     {
         $record = new Plop_Record(

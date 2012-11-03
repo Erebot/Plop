@@ -131,8 +131,8 @@ extends     Plop_LoggerAbstract
                 $caller['lno'],
                 $msg,
                 $args,
-                $exception,
-                $caller['func'] ? $caller['func'] : NULL
+                $caller['func'] ? $caller['func'] : NULL,
+                $exception
             );
             $this->_handle($record);
         }

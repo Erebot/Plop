@@ -25,6 +25,12 @@ require_once(
     DIRECTORY_SEPARATOR . 'TimedRotatingFile.php'
 );
 
+require_once(
+    dirname(dirname(dirname(dirname(__FILE__)))) .
+    DIRECTORY_SEPARATOR . 'stubs' .
+    DIRECTORY_SEPARATOR . 'RecordInterface.php'
+);
+
 class   Plop_Handler_TimedRotatingFile_Test
 extends Plop_TestCase
 {
@@ -49,7 +55,7 @@ extends Plop_TestCase
             ->expects($this->once())
             ->method('_open')
             ->will($this->returnValue($this->stderrStream));
-        $this->_record  = $this->getMock('Plop_RecordInterface');
+        $this->_record  = $this->getMock('Plop_RecordInterface_Stub');
     }
 
     public function tearDown()

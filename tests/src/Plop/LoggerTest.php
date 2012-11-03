@@ -24,6 +24,12 @@ require_once(
     DIRECTORY_SEPARATOR . 'Logger.php'
 );
 
+require_once(
+    dirname(dirname(dirname(__FILE__))) .
+    DIRECTORY_SEPARATOR . 'stubs' .
+    DIRECTORY_SEPARATOR . 'RecordInterface.php'
+);
+
 class   Plop_Logger_Test
 extends Plop_TestCase
 {
@@ -32,7 +38,7 @@ extends Plop_TestCase
         parent::setUp();
         $this->_logger = new Plop_Logger();
         $this->_factory = $this->getMock('Plop_RecordFactoryInterface');
-        $this->_record  = $this->getMock('Plop_RecordInterface');
+        $this->_record  = $this->getMock('Plop_RecordInterface_Stub');
         $this->_handler = $this->getMock('Plop_HandlerInterface');
     }
 

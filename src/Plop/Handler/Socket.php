@@ -403,10 +403,10 @@ extends Plop_HandlerAbstract
      */
     protected function _close()
     {
-        if ($this->_socket) {
+        if (is_resource($this->_socket)) {
             fclose($this->_socket);
-            $this->_socket = FALSE;
         }
+        $this->_socket = FALSE;
     }
 }
 

@@ -63,7 +63,9 @@ extends Plop_HandlerAbstract
      */
     protected function _flush()
     {
-        fflush($this->_stream);
+        if (is_resource($this->_stream)) {
+            fflush($this->_stream);
+        }
     }
 
     /// \copydoc Plop_HandlerAbstract::_emit().

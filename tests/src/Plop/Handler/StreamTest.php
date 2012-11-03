@@ -25,6 +25,12 @@ require_once(
     DIRECTORY_SEPARATOR . 'Stream.php'
 );
 
+require_once(
+    dirname(dirname(dirname(dirname(__FILE__)))) .
+    DIRECTORY_SEPARATOR . 'stubs' .
+    DIRECTORY_SEPARATOR . 'RecordInterface.php'
+);
+
 class   Plop_Handler_Stream_Test
 extends Plop_TestCase
 {
@@ -36,7 +42,7 @@ extends Plop_TestCase
             array('_format'),
             array($this->stderrStream, 'ISO-8859-1')
         );
-        $this->_record  = $this->getMock('Plop_RecordInterface');
+        $this->_record  = $this->getMock('Plop_RecordInterface_Stub');
     }
 
     public function tearDown()

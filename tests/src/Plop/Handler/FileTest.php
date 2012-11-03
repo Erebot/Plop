@@ -25,6 +25,12 @@ require_once(
     DIRECTORY_SEPARATOR . 'File.php'
 );
 
+require_once(
+    dirname(dirname(dirname(dirname(__FILE__)))) .
+    DIRECTORY_SEPARATOR . 'stubs' .
+    DIRECTORY_SEPARATOR . 'RecordInterface.php'
+);
+
 class   Plop_Handler_File_Test
 extends Plop_TestCase
 {
@@ -38,7 +44,7 @@ extends Plop_TestCase
             '',
             FALSE
         );
-        $this->_record  = $this->getMock('Plop_RecordInterface');
+        $this->_record  = $this->getMock('Plop_RecordInterface_Stub');
     }
 
     public function tearDown()

@@ -58,14 +58,14 @@ interface   Plop_RecordFactoryInterface
      *      Associative array of additional information
      *      to keep in the log record.
      *
+     * \param string $func
+     *      Name of the function that emitted the log.
+     *
      * \param Exception|NULL $exception
      *      Either an exception that will be logged
      *      together with the rest of the record,
      *      or \a NULL in case there is no exception
      *      to log.
-     *
-     * \param string $func
-     *      Name of the function that emitted the log.
      *
      * \retval Plop_RecordInterface
      *      The newly-created log record.
@@ -79,8 +79,8 @@ interface   Plop_RecordFactoryInterface
                     $lineno,
                     $msg,
         array       $args,
-        Exception   $exception = NULL,
-                    $func
+                    $func,
+        Exception   $exception = NULL
     );
 }
 

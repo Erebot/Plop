@@ -36,8 +36,8 @@ extends Plop_TestCase
             __LINE__,
             'test',
             array(),
-            NULL,
-            __METHOD__
+            __METHOD__,
+            NULL
         );
         $this->assertTrue($record instanceof Plop_RecordInterface);
     }

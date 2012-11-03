@@ -18,6 +18,12 @@
     along with Plop.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+require_once(
+    dirname(dirname(dirname(__FILE__))) .
+    DIRECTORY_SEPARATOR . 'stubs' .
+    DIRECTORY_SEPARATOR . 'RecordInterface.php'
+);
+
 class   Plop_IndirectLoggerAbstract_Test
 extends Plop_TestCase
 {
@@ -50,7 +56,7 @@ extends Plop_TestCase
     {
         $handler    = $this->getMock('Plop_HandlerInterface');
         $filter     = $this->getMock('Plop_FilterInterface');
-        $record     = $this->getMock('Plop_RecordInterface');
+        $record     = $this->getMock('Plop_RecordInterface_Stub');
         $factory    = $this->getMock('Plop_RecordFactoryInterface');
 
         return array(

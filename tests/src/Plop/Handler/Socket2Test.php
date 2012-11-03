@@ -25,14 +25,21 @@ require_once(
     DIRECTORY_SEPARATOR . 'Socket.php'
 );
 
+require_once(
+    dirname(dirname(dirname(dirname(__FILE__)))) .
+    DIRECTORY_SEPARATOR . 'stubs' .
+    DIRECTORY_SEPARATOR . 'RecordInterface.php'
+);
+
 class   Plop_Handler_Socket2_Test
 extends Plop_TestCase
 {
     public function setUp()
     {
         parent::setUp();
+        $this->_closed = FALSE;
 
-        $this->_record  = $this->getMock('Plop_RecordInterface');
+        $this->_record  = $this->getMock('Plop_RecordInterface_Stub');
         $this->_handler = $this->getMock(
             'Plop_Handler_Socket_Stub',
             array('_getStderr', '_makeSocket'),
@@ -51,6 +58,11 @@ extends Plop_TestCase
         $this->_socket = fopen('mock://', 'a+t', FALSE, $context);
         stream_wrapper_unregister('mock');
 
+        $this->_streamMock
+            ->expects($this->any())
+            ->method('stream_close')
+            ->will($this->returnCallback(array($this, 'stream_close')));
+
         $this->_handler
             ->expects($this->once())
             ->method('_makeSocket')
@@ -63,8 +75,18 @@ extends Plop_TestCase
 
     public function tearDown()
     {
+        // This is necessary to avoid a segfault under PHP 5.2.x.
+        if (is_resource($this->_socket)) {
+            fclose($this->_socket);
+        }
         unset($this->_handler);
         parent::tearDown();
+    }
+
+    public function stream_close()
+    {
+        $this->_closed = TRUE;
+        return TRUE;
     }
 
     /**
@@ -74,13 +96,9 @@ extends Plop_TestCase
     public function testErrorHandling()
     {
         $exc = new Plop_Exception('');
-        $this->_streamMock
-            ->expects($this->never())
-            ->method('stream_close')
-            ->will($this->returnValue(TRUE));
-
         $this->_handler->createSocketStub();
         $this->_handler->handleError($this->_record, $exc);
+        $this->assertFalse($this->_closed);
     }
 
     /**
@@ -91,12 +109,8 @@ extends Plop_TestCase
     {
         $exc = new Plop_Exception('');
         $this->_handler->setCloseOnError(TRUE);
-        $this->_streamMock
-            ->expects($this->once())
-            ->method('stream_close')
-            ->will($this->returnValue(TRUE));
-
         $this->_handler->createSocketStub();
         $this->_handler->handleError($this->_record, $exc);
+        $this->assertTrue($this->_closed);
     }
 }

@@ -24,13 +24,20 @@ require_once(
     DIRECTORY_SEPARATOR . 'Formatter.php'
 );
 
+require_once(
+    dirname(dirname(dirname(__FILE__))) .
+    DIRECTORY_SEPARATOR . 'stubs' .
+    DIRECTORY_SEPARATOR . 'RecordInterface.php'
+);
+
 class   Plop_Formatter_Test
 extends Plop_TestCase
 {
     public function setUp()
     {
         parent::setUp();
-        $this->_record      = $this->getMock('Plop_RecordInterface');
+        $this->_record      = $this->getMock('Plop_RecordInterface_Stub');
+        $this->_helper      = $this->getMock('Plop_RecordInterface_Helper');
         $this->_formatter   = new Plop_Formatter_Stub();
     }
 
@@ -240,7 +247,20 @@ extends Plop_TestCase
             ->method('asArray')
             ->will($this->returnValue(array()));
 
-        $this->_record->staticExpects($this->once())
+        // Take into account the differences in PHPUnit's API
+        // between 3.4.x & 3.5.x+.
+        $reflector = new ReflectionObject($this->_record);
+        if ($reflector->hasMethod('staticExpects')) {
+            $this->_record->staticExpects($this->any())
+                ->method('formatPercent')
+                ->will($this->returnCallback(
+                    array($this->_helper, 'formatPercent')
+                ));
+        }
+        else {
+            $this->_record->setFormatPercentHelper($this->_helper);
+        }
+        $this->_helper->expects($this->once())
             ->method('formatPercent')
             ->with('%(asctime)s - %(message)s', array())
             ->will($this->returnValue('Bar'));

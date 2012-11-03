@@ -25,6 +25,12 @@ require_once(
     DIRECTORY_SEPARATOR . 'SysLog.php'
 );
 
+require_once(
+    dirname(dirname(dirname(dirname(__FILE__)))) .
+    DIRECTORY_SEPARATOR . 'stubs' .
+    DIRECTORY_SEPARATOR . 'RecordInterface.php'
+);
+
 class   Plop_Handler_SysLog_Test
 extends Plop_TestCase
 {
@@ -40,14 +46,13 @@ extends Plop_TestCase
                 '_mapPriority',
                 '_emit',
                 '_format',
-                'handleError',
+                '_getStderr',
             ),
             array(),
             '',
             FALSE
         );
-        $this->_record = $this->getMock('Plop_RecordInterface');
-        $this->_checkCalled = FALSE;
+        $this->_record = $this->getMock('Plop_RecordInterface_Stub');
     }
 
     public function tearDown()
@@ -173,9 +178,6 @@ extends Plop_TestCase
             ->method('_makeSocket')
             ->will($this->returnValue($this->stderrStream));
         $this->_handler
-            ->expects($this->never())
-            ->method('handleError');
-        $this->_handler
             ->expects($this->once())
             ->method('_format')
             ->with($this->_record)
@@ -195,14 +197,10 @@ extends Plop_TestCase
      */
     public function testEmitMethod2()
     {
-#        $this->_handler
-#            ->expects($this->once())
-#            ->method('_makeSocket')
-#            ->will($this->returnValue($this->stderrStream));
         $this->_handler
             ->expects($this->once())
-            ->method('handleError')
-            ->will($this->returnCallback(array($this, 'checkEmit')));
+            ->method('_getStderr')
+            ->will($this->returnValue($this->stderrStream));
         $this->_handler
             ->expects($this->once())
             ->method('_format')
@@ -212,16 +210,12 @@ extends Plop_TestCase
             ->expects($this->once())
             ->method('_encodePriority')
             ->will($this->returnValue(42));
+        $this->expectStderrRegex(
+            "/^exception 'Plop_Exception' with ".
+            "message 'Connection lost' in .*$/m"
+        );
 
         $this->_handler->__construct();
         $this->_handler->emitStub($this->_record);
-        $this->assertTrue($this->_checkCalled);
-    }
-
-    public function checkEmit($record, $exc)
-    {
-        $this->assertSame($this->_record, $record);
-        $this->assertSame('Connection lost', $exc->getMessage());
-        $this->_checkCalled = TRUE;
     }
 }

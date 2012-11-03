@@ -99,11 +99,11 @@ extends Plop_Handler_Stream
      */
     protected function _close()
     {
-        if ($this->_stream) {
+        if (is_resource($this->_stream)) {
             $this->_flush();
             fclose($this->_stream);
-            $this->_stream = FALSE;
         }
+        $this->_stream = FALSE;
     }
 }
 

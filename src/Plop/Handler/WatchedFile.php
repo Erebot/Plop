@@ -66,8 +66,10 @@ extends Plop_Handler_File
             );
         }
         if ($changed && $this->_stream !== FALSE) {
-            fflush($this->_stream);
-            fclose($this->_stream);
+            if (is_resource($this->_stream)) {
+                fflush($this->_stream);
+                fclose($this->_stream);
+            }
             $this->_open();
             if (!$stats)
                 $stats = stat($this->_baseFilename);

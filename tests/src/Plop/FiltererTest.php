@@ -24,6 +24,12 @@ require_once(
     DIRECTORY_SEPARATOR . 'Filterer.php'
 );
 
+require_once(
+    dirname(dirname(dirname(__FILE__))) .
+    DIRECTORY_SEPARATOR . 'stubs' .
+    DIRECTORY_SEPARATOR . 'RecordInterface.php'
+);
+
 class   Plop_Filterer_Test
 extends Plop_TestCase
 {
@@ -32,7 +38,7 @@ extends Plop_TestCase
         parent::setUp();
         $this->_filterer    = new Plop_Filterer_Stub();
         $this->_filter      = $this->getMock('Plop_FilterInterface');
-        $this->_record      = $this->getMock('Plop_RecordInterface');
+        $this->_record      = $this->getMock('Plop_RecordInterface_Stub');
     }
 
     /**
