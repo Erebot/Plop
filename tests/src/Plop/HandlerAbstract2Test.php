@@ -107,7 +107,10 @@ extends Plop_TestCase
             ->method('_getStderr')
             ->will($this->returnValue($this->stderrStream));
 
-        $this->expectStderrRegex("@exception 'Plop_Exception' with message 'test' in [^:]+:$line\n.*@m");
+        $this->expectStderrRegex(
+            "#exception 'Plop_Exception' with message" .
+            " 'test' in [^\\r\\n]+:$line(\\r\\n?|\\n).*#m"
+        );
         $this->assertSame(
             $handler,
             $handler->handleError($this->_record, $exc)

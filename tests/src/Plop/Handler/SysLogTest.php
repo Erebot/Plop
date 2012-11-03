@@ -118,17 +118,9 @@ extends Plop_TestCase
      */
     public function testPriorityEncoding()
     {
-        $value = $this->_handler->encodePriorityStub(LOG_USER, LOG_CRIT);
-        $this->assertSame((8 << 3) + 2, $value);
-    }
-
-    /**
-     * @covers Plop_Handler_SysLog::_encodePriority
-     */
-    public function testPriorityEncoding2()
-    {
-        $value = $this->_handler->encodePriorityStub('user', 'crit');
-        $this->assertSame((8 << 3) + 2, $value);
+        $value1 = $this->_handler->encodePriorityStub(LOG_USER, LOG_CRIT);
+        $value2 = $this->_handler->encodePriorityStub('user', 'crit');
+        $this->assertSame($value1, $value2);
     }
 
     /**
