@@ -1,0 +1,196 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Usage &mdash; Plop 1.0.0dev701 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0.0dev701',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Plop 1.0.0dev701 documentation"
+          href="_static/opensearch.xml"/>
+    <link rel="top" title="Plop 1.0.0dev701 documentation" href="index.html" />
+    <link rel="next" title="Contributing" href="Contribute.html" />
+    <link rel="prev" title="Installation" href="Installation.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="Contribute.html" title="Contributing"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="Installation.html" title="Installation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Plop 1.0.0dev701 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <blockquote>
+<div></div></blockquote>
+<div class="section" id="usage">
+<span id="using-plop"></span><h1><a class="toc-backref" href="#id1">Usage</a><a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
+<p>Using Plop usually involves 3 steps, detailed below.</p>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#usage" id="id1">Usage</a><ul>
+<li><a class="reference internal" href="#loading-plop-s-classes" id="id2">Loading Plop&#8217;s classes</a></li>
+<li><a class="reference internal" href="#configuring-plop" id="id3">Configuring Plop</a></li>
+<li><a class="reference internal" href="#logging-some-messages" id="id4">Logging some messages</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="loading-plop-s-classes">
+<h2><a class="toc-backref" href="#id2">Loading Plop&#8217;s classes</a><a class="headerlink" href="#loading-plop-s-classes" title="Permalink to this headline">¶</a></h2>
+<p>The way to load Plop&#8217;s classes depends on the installation method selected:</p>
+<ul>
+<li><p class="first">For the PHAR installation method, add this snippet near the top of
+your main PHP file:</p>
+<div class="highlight-inline-php"><div class="highlight"><pre><span class="k">require_once</span><span class="p">(</span><span class="s1">&#39;path/to/Plop-latest.phar&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>(adjust the path with the name of the PHAR archive you downloaded)</p>
+</li>
+<li><p class="first">For the Composer installation method, add this snippet instead near
+the top of your main PHP file:</p>
+<div class="highlight-inline-php"><div class="highlight"><pre><span class="k">require_once</span><span class="p">(</span><span class="s1">&#39;path/to/vendor/autoload.php&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">For the PEAR installation method or for an installation from sources,</p>
+<div class="highlight-inline-php"><div class="highlight"><pre><span class="k">require_once</span><span class="p">(</span><span class="s1">&#39;Plop/Autoloader.php&#39;</span><span class="p">);</span>
+<span class="nx">Plop_Autoloader</span><span class="o">::</span><span class="na">register</span><span class="p">();</span>
+</pre></div>
+</div>
+<p>Also, make sure the full path to your PEAR installation&#8217;s <tt class="docutils literal"><span class="pre">php_dir</span></tt>
+(or to Plop&#8217;s <tt class="file docutils literal"><span class="pre">src/</span></tt> directory in case you installed it from sources)
+is part of your PHP installation&#8217;s <tt class="docutils literal"><span class="pre">include_path</span></tt>.</p>
+<p>On Linux, you may use the following command to display your PHP
+installation&#8217;s <tt class="docutils literal"><span class="pre">include_path</span></tt>:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="gp">me@home:~$</span> php -r <span class="s1">&#39;echo ini_get(&quot;include_path&quot;) . PHP_EOL;&#39;</span>
+</pre></div>
+</div>
+<p>On Windows, you may use this command instead (assuming <tt class="file docutils literal"><span class="pre">php.exe</span></tt>
+is located somewhere on your <span class="target" id="index-0"></span><tt class="xref std std-envvar docutils literal"><span class="pre">PATH</span></tt>) to do the same:</p>
+<div class="highlight-bat"><div class="highlight"><pre>C:\WINDOWS<span class="p">&gt;</span> <span class="n">php</span> -r <span class="s2">&quot;echo ini_get(&#39;include_path&#39;) . PHP_EOL;&quot;</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</div>
+<div class="section" id="configuring-plop">
+<h2><a class="toc-backref" href="#id3">Configuring Plop</a><a class="headerlink" href="#configuring-plop" title="Permalink to this headline">¶</a></h2>
+<p>&#64;TODO</p>
+</div>
+<div class="section" id="logging-some-messages">
+<h2><a class="toc-backref" href="#id4">Logging some messages</a><a class="headerlink" href="#logging-some-messages" title="Permalink to this headline">¶</a></h2>
+<p>Logging messages with Plop usually only involves the following sequence:</p>
+<div class="highlight-inline-php"><div class="highlight"><pre><span class="c1">// First, grab an instance of Plop.</span>
+<span class="c1">// Plop uses a singleton pattern, so the same instance will be returned</span>
+<span class="c1">// every time you use this method, no matter where you&#39;re calling it from.</span>
+<span class="nv">$logging</span> <span class="o">=</span> <span class="nx">Plop</span><span class="o">::</span><span class="na">getInstance</span><span class="p">();</span>
+
+<span class="c1">// Now, send a log.</span>
+<span class="c1">// Various log levels are available by default:</span>
+<span class="c1">// debug, info, warning, error &amp; critical.</span>
+<span class="nv">$logging</span><span class="o">-&gt;</span><span class="na">debug</span><span class="p">(</span><span class="s1">&#39;Hello world&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Log messages may contain variables, which will be replaced with their actual
+value when the logging method is called. This comes handy when you need to
+apply <abbr title="Internationalization">I18N</abbr> methods on the messages. Eg.</p>
+<div class="highlight-inline-php"><div class="highlight"><pre><span class="nv">$logging</span> <span class="o">=</span> <span class="nx">Plop</span><span class="o">::</span><span class="na">getInstance</span><span class="p">();</span>
+<span class="nv">$logging</span><span class="o">-&gt;</span><span class="na">error</span><span class="p">(</span>
+    <span class="nx">_</span><span class="p">(</span><span class="s1">&#39;Sorry %(nick)s, now is not the time for that!&#39;</span><span class="p">),</span>
+    <span class="k">array</span><span class="p">(</span>
+        <span class="s1">&#39;nick&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Ash&#39;</span><span class="p">,</span>
+    <span class="p">)</span>
+<span class="p">);</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Usage</a><ul>
+<li><a class="reference internal" href="#loading-plop-s-classes">Loading Plop&#8217;s classes</a></li>
+<li><a class="reference internal" href="#configuring-plop">Configuring Plop</a></li>
+<li><a class="reference internal" href="#logging-some-messages">Logging some messages</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="Installation.html"
+                        title="previous chapter">Installation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="Contribute.html"
+                        title="next chapter">Contributing</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="Contribute.html" title="Contributing"
+             >next</a></li>
+        <li class="right" >
+          <a href="Installation.html" title="Installation"
+             >previous</a> |</li>
+        <li><a href="index.html">Plop 1.0.0dev701 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Erebot.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

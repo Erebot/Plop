@@ -1,0 +1,221 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Prerequisites &mdash; Plop 1.0.0dev701 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0.0dev701',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Plop 1.0.0dev701 documentation"
+          href="_static/opensearch.xml"/>
+    <link rel="top" title="Plop 1.0.0dev701 documentation" href="index.html" />
+    <link rel="next" title="Installation" href="Installation.html" />
+    <link rel="prev" title="Welcome to Plop’s documentation!" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="Installation.html" title="Installation"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to Plop’s documentation!"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Plop 1.0.0dev701 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <blockquote>
+<div></div></blockquote>
+<div class="section" id="prerequisites">
+<span id="id1"></span><h1><a class="toc-backref" href="#id2">Prerequisites</a><a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h1>
+<p>This page assumes that the reader has a working PHP setup (either installed
+using some distribution&#8217;s package manager or manually) and lists
+the dependencies required to use Plop.
+In case you compiled PHP yourself, you may need to recompile it to include
+additional extensions (see the list of required PHP dependencies in the section
+entitled <a class="reference internal" href="#getting-started">Getting started</a> for more information).</p>
+<p>As of this writing, Plop is known to work on PHP versions ranging from
+PHP 5.2.1 up to PHP 5.4.8. Also, Plop should run correctly on both
+Windows (XP or later) and Linux (most distros).
+The code is tested using an automated process on Windows XP (32 bits),
+Debian Stable (64 bits) and CentOS 6 (64 bits), as reflected by our
+<a class="reference external" href="https://buildbot.erebot.net/components/">Continuous Integration server</a>.</p>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#prerequisites" id="id2">Prerequisites</a><ul>
+<li><a class="reference internal" href="#getting-started" id="id3">Getting started</a></li>
+<li><a class="reference internal" href="#running-plop-from-a-phar" id="id4">Running Plop from a PHAR</a></li>
+<li><a class="reference internal" href="#checking-whether-these-requirements-are-fulfilled" id="id5">Checking whether these requirements are fulfilled</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="getting-started">
+<h2><a class="toc-backref" href="#id3">Getting started</a><a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h2>
+<p>To use Plop in your project, you only need a version of PHP compiled with the
+following extensions:</p>
+<ul class="simple">
+<li>pcre</li>
+<li>sockets</li>
+<li>SPL</li>
+</ul>
+</div>
+<div class="section" id="running-plop-from-a-phar">
+<h2><a class="toc-backref" href="#id4">Running Plop from a PHAR</a><a class="headerlink" href="#running-plop-from-a-phar" title="Permalink to this headline">¶</a></h2>
+<p>If you want to use Plop from a PHP ARchive (phar), the following additional
+extensions are required:</p>
+<ul class="simple">
+<li>openssl</li>
+<li>Phar</li>
+<li>SimpleXML</li>
+</ul>
+</div>
+<div class="section" id="checking-whether-these-requirements-are-fulfilled">
+<h2><a class="toc-backref" href="#id5">Checking whether these requirements are fulfilled</a><a class="headerlink" href="#checking-whether-these-requirements-are-fulfilled" title="Permalink to this headline">¶</a></h2>
+<p>You can check whether your version of PHP contains all the necessary extensions
+by running the following command, which will list all the extensions currently
+enabled for your installation:</p>
+<blockquote>
+<div><div class="highlight-console"><div class="highlight"><pre>
+</pre></div>
+</div>
+<p><a class="reference external" href="mailto:me&#37;&#52;&#48;home">me<span>&#64;</span>home</a>:~$ php -m
+[PHP Modules]
+bcmath
+bz2
+calendar
+Core
+ctype
+date
+dom
+ereg
+gd
+gettext
+gmp
+iconv
+intl
+json
+libxml
+mbstring
+mysql
+mysqli
+mysqlnd
+openssl
+pcntl
+pcre
+PDO
+pdo_mysql
+pdo_sqlite
+Phar
+posix
+readline
+Reflection
+session
+SimpleXML
+soap
+sockets
+SPL
+sqlite3
+standard
+sysvmsg
+sysvsem
+sysvshm
+tokenizer
+xdebug
+xml
+xmlreader
+xmlwriter
+xsl
+zip
+zlib</p>
+<p>[Zend Modules]
+Xdebug</p>
+</div></blockquote>
+<p>You may also consult the output of <tt class="docutils literal"><span class="pre">phpinfo()</span></tt> for the same purpose.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Prerequisites</a><ul>
+<li><a class="reference internal" href="#getting-started">Getting started</a></li>
+<li><a class="reference internal" href="#running-plop-from-a-phar">Running Plop from a PHAR</a></li>
+<li><a class="reference internal" href="#checking-whether-these-requirements-are-fulfilled">Checking whether these requirements are fulfilled</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Welcome to Plop&#8217;s documentation!</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="Installation.html"
+                        title="next chapter">Installation</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="Installation.html" title="Installation"
+             >next</a></li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to Plop’s documentation!"
+             >previous</a> |</li>
+        <li><a href="index.html">Plop 1.0.0dev701 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Erebot.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
