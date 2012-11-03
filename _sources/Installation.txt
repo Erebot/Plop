@@ -33,17 +33,17 @@ Just use whatever tool your distribution provides to manage PEAR packages:
 You can install (**as a privileged user**) either the latest stable release
 using a command such as:
 
-..  sourcecode:: bash
+..  sourcecode:: console
 
-    $ pear channel-discover pear.erebot.net
-    $ pear install erebot/Plop
+    root@home:~# pear channel-discover pear.erebot.net
+    root@home:~# pear install erebot/Plop
 
 ... or you can install the latest unstable version instead, using:
 
 ..  sourcecode:: bash
 
-    $ pear channel-discover pear.erebot.net
-    $ pear install erebot/Plop-alpha
+    root@home:~# pear channel-discover pear.erebot.net
+    root@home:~# pear install erebot/Plop-alpha
 
 Please note that the ``channel-discover`` command needs to be run only once
 (pear and pyrus will refuse to discover a PEAR channel more than once anyway).
@@ -120,8 +120,8 @@ Installing Plop as a PHAR archive only involves a few steps:
 
         $ php -f Plop-latest.phar
 
-    (replace *Plop-latest.phar* with the actual name of the PHAR archive you
-    just downloaded in case it was different)
+    (replace :file:`Plop-latest.phar` with the actual name of the PHAR archive
+    you just downloaded in case it was different)
 
     The command should return without any error. If error messages are issued,
     try to fix your installation using the information given by those messages.
