@@ -181,7 +181,7 @@ extends Plop_TestCase
                 'tests/src/Plop/RecordTest.php";s:6:"module";' .
                 's:14:"Unknown module";s:8:"exc_info";N;s:8:"exc_text";N;' .
                 's:6:"lineno";i:33;s:8:"funcName";N;s:5:"msecs";' .
-                'i:21691000000000;s:7:"created";d:1349290255;' .
+                'd:21691000000000;s:7:"created";d:1349290255;' .
                 's:11:"createdDate";O:8:"DateTime":3:{s:4:"date";' .
                 's:19:"2012-10-03 18:50:55";s:13:"timezone_type";i:3;' .
                 's:8:"timezone";s:3:"UTC";}s:15:"relativeCreated";' .
