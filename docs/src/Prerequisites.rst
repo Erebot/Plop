@@ -51,58 +51,58 @@ enabled for your installation:
 
     ..  sourcecode:: console
 
-    me@home:~$ php -m
-    [PHP Modules]
-    bcmath
-    bz2
-    calendar
-    Core
-    ctype
-    date
-    dom
-    ereg
-    gd
-    gettext
-    gmp
-    iconv
-    intl
-    json
-    libxml
-    mbstring
-    mysql
-    mysqli
-    mysqlnd
-    openssl
-    pcntl
-    pcre
-    PDO
-    pdo_mysql
-    pdo_sqlite
-    Phar
-    posix
-    readline
-    Reflection
-    session
-    SimpleXML
-    soap
-    sockets
-    SPL
-    sqlite3
-    standard
-    sysvmsg
-    sysvsem
-    sysvshm
-    tokenizer
-    xdebug
-    xml
-    xmlreader
-    xmlwriter
-    xsl
-    zip
-    zlib
+        me@home:~$ php -m
+        [PHP Modules]
+        bcmath
+        bz2
+        calendar
+        Core
+        ctype
+        date
+        dom
+        ereg
+        gd
+        gettext
+        gmp
+        iconv
+        intl
+        json
+        libxml
+        mbstring
+        mysql
+        mysqli
+        mysqlnd
+        openssl
+        pcntl
+        pcre
+        PDO
+        pdo_mysql
+        pdo_sqlite
+        Phar
+        posix
+        readline
+        Reflection
+        session
+        SimpleXML
+        soap
+        sockets
+        SPL
+        sqlite3
+        standard
+        sysvmsg
+        sysvsem
+        sysvshm
+        tokenizer
+        xdebug
+        xml
+        xmlreader
+        xmlwriter
+        xsl
+        zip
+        zlib
 
-    [Zend Modules]
-    Xdebug
+        [Zend Modules]
+        Xdebug
 
 You may also consult the output of ``phpinfo()`` for the same purpose.
 
