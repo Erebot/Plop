@@ -114,7 +114,7 @@ implements  ArrayAccess,
     {
         $this->_loggers = array();
         $rootLogger     = new Plop_Logger(NULL, NULL, NULL);
-        $basicHandler   = new Plop_Handler_Stream(STDERR);
+        $basicHandler   = new Plop_Handler_Stream(fopen('php://stderr', 'w'));
         $this[]         =
             $rootLogger->addHandler(
                 $basicHandler->setFormatter(

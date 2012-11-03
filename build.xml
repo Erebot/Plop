@@ -12,9 +12,5 @@
         <include name="**/*.php"/>
     </fileset>
 
-    <target name="doc_html" description="">
-        <exec command="doxygen" dir="." passthru="true" checkreturn="true"/>
-    </target>
-
     <import file="buildenv/build.xml"/>
 </project>

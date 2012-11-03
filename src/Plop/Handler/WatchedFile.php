@@ -33,15 +33,14 @@ extends Plop_Handler_File
     /// Inode number of the watched file.
     protected $_ino;
 
-    /// \copydoc Plop_Handler_File::__construct($filename, $mode, $encoding, $delay).
+    /// \copydoc Plop_Handler_File::__construct($filename, $mode, $delay).
     public function __construct(
         $filename,
         $mode       = 'at',
-        $encoding   = NULL,
         $delay      = FALSE
     )
     {
-        parent::__construct($filename, $mode, $encoding, $delay);
+        parent::__construct($filename, $mode, $delay);
         if (!file_exists($filename)) {
             $this->_dev = $this->_ino = -1;
         }

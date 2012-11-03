@@ -89,7 +89,9 @@ extends Plop_TestCase
     public function testOffsetSetter3()
     {
         $this->_plop['::'] = $this->_logger;
+        $this->assertSame($this->_logger, $this->_plop['::']);
         $this->_plop[] = $this->_logger;
+        $this->assertSame($this->_logger, $this->_plop['::']);
     }
 
     /**

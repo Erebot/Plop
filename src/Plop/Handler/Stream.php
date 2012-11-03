@@ -32,6 +32,9 @@ extends Plop_HandlerAbstract
     /// The stream where log messages will be write to.
     protected $_stream;
 
+    /// A stream referencing \a STDERR.
+    static protected $_stderr = NULL;
+
     /**
      * Create a new instance of this handler.
      *
@@ -39,8 +42,15 @@ extends Plop_HandlerAbstract
      *      (optional) The stream where log messages
      *      will be written. Defaults to \a STDERR.
      */
-    public function __construct($stream = STDERR)
+    public function __construct($stream = NULL)
     {
+        if ($stream === NULL) {
+            if (self::$_stderr === NULL) {
+                self::$_stderr = fopen('php://stderr', 'w');
+            }
+            $stream = self::$_stderr;
+        }
+
         parent::__construct();
         $this->_stream      = $stream;
     }
