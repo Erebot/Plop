@@ -325,10 +325,24 @@ implements  ArrayAccess,
      *          (Plop::getInstance())->getLogger();
      *      \endcode
      *      with the appropriate arguments.
+     *
+     * \note
+     *      You may register several loggers at the same
+     *      time with this method. Just pass each logger
+     *      to register as an argument to this method.
      */
-    public function addLogger(Plop_LoggerInterface $logger)
+    public function addLogger(Plop_LoggerInterface $logger /*, ... */)
     {
-        $this[] = $logger;
+        $loggers = func_get_args();
+        foreach ($loggers as $logger) {
+            if (!($logger instanceof Plop_LoggerInterface)) {
+                throw new Plop_Exception('Not a logger');
+            }
+        }
+
+        foreach ($loggers as $logger) {
+            $this[] = $logger;
+        }
         return $this;
     }
 
