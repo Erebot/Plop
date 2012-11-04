@@ -20,9 +20,9 @@
     },
     "require": {
         "php": ">=5.2.1",
-        "php-pcre": "*",
-        "php-socket": "*",
-        "php-spl": "*"
+        "ext-pcre": "*",
+        "ext-socket": "*",
+        "ext-spl": "*"
     },
     "autoload": {
         "psr-0": {
