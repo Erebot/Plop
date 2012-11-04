@@ -21,7 +21,7 @@
     "require": {
         "php": ">=5.2.1",
         "ext-pcre": "*",
-        "ext-socket": "*",
+        "ext-sockets": "*",
         "ext-spl": "*"
     },
     "autoload": {
