@@ -103,22 +103,6 @@ extends         Plop_LoggerAbstract
         return $this;
     }
 
-    /// \copydoc Plop_LoggerInterface::addHandler().
-    public function addHandler(Plop_HandlerInterface $handler)
-    {
-        $logger = $this->_getIndirectLogger();
-        $logger->addHandler($handler);
-        return $this;
-    }
-
-    /// \copydoc Plop_LoggerInterface::removeHandler().
-    public function removeHandler(Plop_HandlerInterface $handler)
-    {
-        $logger = $this->_getIndirectLogger();
-        $logger->removeHandler($handler);
-        return $this;
-    }
-
     /// \copydoc Plop_LoggerInterface::getHandlers().
     public function getHandlers()
     {
@@ -126,34 +110,27 @@ extends         Plop_LoggerAbstract
         return $logger->getHandlers();
     }
 
-    /// \copydoc Plop_FiltererInterface::addFilter().
-    public function addFilter(Plop_FilterInterface $filter)
+    /// \copydoc Plop_LoggerInterface::setHandlers().
+    public function setHandlers(Plop_HandlersCollectionInterface $handlers)
     {
         $logger = $this->_getIndirectLogger();
-        $logger->addFilter($filter);
+        $logger->setHandlers($handlers);
         return $this;
     }
 
-    /// \copydoc Plop_FiltererInterface::removeFilter().
-    public function removeFilter(Plop_FilterInterface $filter)
-    {
-        $logger = $this->_getIndirectLogger();
-        $logger->removeFilter($filter);
-        return $this;
-    }
-
-    /// \copydoc Plop_FiltererInterface::getFilters().
+    /// \copydoc Plop_LoggerInterface::getFilters().
     public function getFilters()
     {
         $logger = $this->_getIndirectLogger();
         return $logger->getFilters();
     }
 
-    /// \copydoc Plop_FiltererInterface::filter().
-    public function filter(Plop_RecordInterface $record)
+    /// \copydoc Plop_HandlerInterface::setFilters().
+    public function setFilters(Plop_FiltersCollectionInterface $filters)
     {
         $logger = $this->_getIndirectLogger();
-        return $logger->filter($record);
+        $logger->setFilters($filters);
+        return $this;
     }
 
     /**

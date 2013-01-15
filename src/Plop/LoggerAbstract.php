@@ -24,7 +24,6 @@
  *      to create new loggers.
  */
 abstract class  Plop_LoggerAbstract
-extends         Plop_Filterer
 implements      Plop_LoggerInterface
 {
     /// \copydoc Plop_LoggerInterface::debug().

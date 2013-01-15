@@ -45,21 +45,6 @@ extends Plop_TestCase
     }
 
     /**
-     * @covers Plop_HandlerAbstract::getLevel
-     * @covers Plop_HandlerAbstract::setLevel
-     */
-    public function testLevelAccessors()
-    {
-        $newValue = Plop::INFO;
-        $this->assertNotSame($newValue, $this->_handler->getLevel());
-        $this->assertSame(
-            $this->_handler,
-            $this->_handler->setLevel($newValue)
-        );
-        $this->assertSame($newValue, $this->_handler->getLevel());
-    }
-
-    /**
      * @covers Plop_HandlerAbstract::getFormatter
      * @covers Plop_HandlerAbstract::setFormatter
      */

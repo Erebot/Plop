@@ -50,7 +50,6 @@ extends Plop_TestCase
             array('_emit'),
             array()
         );
-        $this->assertSame(Plop::NOTSET, $handler->getLevel());
         $formatter = $handler->getFormatter();
         $this->assertSame('Plop_Formatter', get_class($formatter));
     }
@@ -65,7 +64,6 @@ extends Plop_TestCase
             array('_emit'),
             array($this->_formatter)
         );
-        $this->assertSame(Plop::NOTSET, $handler->getLevel());
         $this->assertSame($this->_formatter, $handler->getFormatter());
     }
 

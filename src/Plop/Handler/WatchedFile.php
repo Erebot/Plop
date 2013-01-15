@@ -55,8 +55,8 @@ extends Plop_Handler_File
     protected function _emit(Plop_RecordInterface $record)
     {
         if (!file_exists($this->_baseFilename)) {
-            $stats = NULL;
-            $changed = 1;
+            $stats      = NULL;
+            $changed    = TRUE;
         }
         else {
             $stats = stat($this->_baseFilename);
@@ -71,8 +71,9 @@ extends Plop_Handler_File
                 fclose($this->_stream);
             }
             $this->_open();
-            if (!$stats)
+            if (!$stats) {
                 $stats = stat($this->_baseFilename);
+            }
             $this->_dev = $stats['dev'];
             $this->_ino = $stats['ino'];
         }

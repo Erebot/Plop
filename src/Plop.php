@@ -71,7 +71,8 @@
  *          Plop_Handler_SysLog::DEFAULT_ADDRESS,
  *          LOG_DAEMON
  *      );
- *      $logger->addHandler($handler->setLevel(Plop::WARNING));
+ *      $handlers = $logger->getHandlers();
+ *      $handlers[] = $handler->setLevel(Plop::WARNING);
  *  \endcode
  */
 class       Plop
@@ -115,12 +116,11 @@ implements  ArrayAccess,
         $this->_loggers = array();
         $rootLogger     = new Plop_Logger(NULL, NULL, NULL);
         $basicHandler   = new Plop_Handler_Stream(fopen('php://stderr', 'w'));
-        $this[]         =
-            $rootLogger->addHandler(
-                $basicHandler->setFormatter(
-                    new Plop_Formatter(self::BASIC_FORMAT)
-                )
-            );
+        $this[]         = $rootLogger;
+        $handlers       = $rootLogger->getHandlers();
+        $handlers[]     = $basicHandler->setFormatter(
+                            new Plop_Formatter(self::BASIC_FORMAT)
+                        );
         $this->_levelNames = array(
             self::NOTSET    => 'NOTSET',
             self::DEBUG     => 'DEBUG',
@@ -540,7 +540,7 @@ implements  ArrayAccess,
     protected function _getIndirectLogger()
     {
         $caller = self::findCaller();
-        return $this["${caller['func']}:${caller['class']}:${caller['fn']}"];
+        return $this["{$caller['func']}:{$caller['class']}:{$caller['fn']}"];
     }
 
     /**

@@ -26,14 +26,13 @@
  *  Subclasses must implement the _emit() method.
  */
 abstract class  Plop_HandlerAbstract
-extends         Plop_Filterer
 implements      Plop_HandlerInterface
 {
-    /// Minimal level for log records this handler accepts to handle.
-    protected $_level;
-
     /// Formatter object to use for this handler.
     protected $_formatter;
+
+    /// An object handling a collection of filters.
+    protected $_filters;
 
     /**
      * Create a new handler that accepts any log record.
@@ -42,28 +41,24 @@ implements      Plop_HandlerInterface
      *      (optional) The formatter this handler will use
      *      to render records. By default, a new instance
      *      of Plop_Formatter is created.
+     *
+     * \param Plop_FiltersCollectionInterface $filters
+     *      (optional) A collection of filters to associate
+     *      with this handler. Defaults to an empty list.
      */
-    public function __construct(Plop_FormatterInterface $formatter = NULL)
+    public function __construct(
+        Plop_FormatterInterface         $formatter  = NULL,
+        Plop_FiltersCollectionInterface $filters    = NULL
+    )
     {
-        parent::__construct();
         if ($formatter === NULL) {
             $formatter = new Plop_Formatter();
         }
-        $this->setLevel(Plop::NOTSET);
+        if ($filters === NULL) {
+            $filters = new Plop_FiltersCollection();
+        }
         $this->setFormatter($formatter);
-    }
-
-    /// \copydoc Plop_HandlerInterface::getLevel().
-    public function getLevel()
-    {
-        return $this->_level;
-    }
-
-    /// \copydoc Plop_HandlerInterface::setLevel().
-    public function setLevel($level)
-    {
-        $this->_level = $level;
-        return $this;
+        $this->_filters = $filters;
     }
 
     /// \copydoc Plop_HandlerInterface::getFormatter().
@@ -76,6 +71,19 @@ implements      Plop_HandlerInterface
     public function setFormatter(Plop_FormatterInterface $formatter)
     {
         $this->_formatter = $formatter;
+        return $this;
+    }
+
+    /// \copydoc Plop_HandlerInterface::getFilters().
+    public function getFilters()
+    {
+        return $this->_filters;
+    }
+
+    /// \copydoc Plop_HandlerInterface::setFilters().
+    public function setFilters(Plop_FiltersCollectionInterface $filters)
+    {
+        $this->_filters = $filters;
         return $this;
     }
 

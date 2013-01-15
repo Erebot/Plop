@@ -85,8 +85,9 @@ implements  Plop_RecordInterface
     )
     {
         static $pid = NULL;
-        if ($pid === NULL)
+        if ($pid === NULL) {
             $pid = getmypid();
+        }
 
         $logging    = Plop::getInstance();
         $ct         = explode(' ', microtime(FALSE));
@@ -109,6 +110,8 @@ implements  Plop_RecordInterface
         else {
             $processName = '-';
         }
+        // Represent the date using the local timezone (if configured).
+        $date->setTimeZone(new DateTimeZone(@date_default_timezone_get()));
 
         $this->_dict['loggerFile']      = $loggerFile;
         $this->_dict['loggerClass']     = $loggerClass;
@@ -128,8 +131,8 @@ implements  Plop_RecordInterface
         $this->_dict['created']         = $created;
         $this->_dict['createdDate']     = $date;
         $this->_dict['relativeCreated'] = $diff;
-        $this->_dict['thread']          = NULL;
-        $this->_dict['threadName']      = NULL;
+        $this->_dict['threadId']        = NULL;
+        $this->_dict['threadCreatorId'] = NULL;
         $this->_dict['process']         = $pid;
         $this->_dict['processName']     = $processName;
         $this->_dict['hostname']        = php_uname('n');
@@ -227,8 +230,8 @@ implements  Plop_RecordInterface
      *      -   process
      *      -   processName
      *      -   relativeCreated
-     *      -   thread
-     *      -   threadName
+     *      -   threadId
+     *      -   threadCreatorId
      *
      *      Additional properties may be available.
      *

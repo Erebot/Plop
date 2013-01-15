@@ -123,6 +123,50 @@ interface   Plop_LoggerInterface
     public function setRecordFactory(Plop_RecordFactoryInterface $factory);
 
     /**
+     * Get the collection of filters currently
+     * associated with this logger.
+     *
+     * \retval Plop_FiltersCollectionInterface
+     *      Collection of filters associated with this logger.
+     */
+    public function getFilters();
+
+    /**
+     * Set the collection of filters associated
+     * with this logger.
+     *
+     * \param Plop_FiltererInterface $filters
+     *      New collection of filters to associate
+     *      with this logger.
+     *
+     * \retval Plop_LoggerInterface
+     *      The logger instance (ie. \a $this).
+     */
+    public function setFilters(Plop_FiltersCollectionInterface $filters);
+
+    /**
+     * Get the collection of handlers currently
+     * associated with this logger.
+     *
+     * \retval Plop_HandlersCollectionInterface
+     *      Collection of handlers associated with this logger.
+     */
+    public function getHandlers();
+
+    /**
+     * Set the collection of handlers associated
+     * with this logger.
+     *
+     * \param Plop_HandlersCollectionInterface $handlers
+     *      New collection of handlers to associate
+     *      with this logger.
+     *
+     * \retval Plop_LoggerInterface
+     *      The logger instance (ie. \a $this).
+     */
+    public function setHandlers(Plop_HandlersCollectionInterface $handlers);
+
+    /**
      * Log a message with the Plop::DEBUG log level.
      *
      * \param string $msg
@@ -442,37 +486,5 @@ interface   Plop_LoggerInterface
         array       $args       = array(),
         Exception   $exception  = NULL
     );
-
-    /**
-     * Associate a new handler with this logger.
-     *
-     * \param Plop_HandlerInterface $handler
-     *      The new handler to associate with this logger.
-     *
-     * \retval Plop_LoggerInterface
-     *      The logger instance (ie. \a $this).
-     */
-    public function addHandler(Plop_HandlerInterface $handler);
-
-    /**
-     * Deassociate a handler with this logger.
-     *
-     * \param Plop_HandlerInterface $handler
-     *      The handler to deassociate with this logger.
-     *
-     * \retval Plop_LoggerInterface
-     *      The logger instance (ie. \a $this).
-     */
-    public function removeHandler(Plop_HandlerInterface $handler);
-
-    /**
-     * Return a list of handlers currently
-     * associated with this logger.
-     *
-     * \retval array
-     *      List of handlers currently associated
-     *      with this logger.
-     */
-    public function getHandlers();
 }
 

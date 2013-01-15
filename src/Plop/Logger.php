@@ -37,11 +37,14 @@ extends     Plop_LoggerAbstract
     /// Minimum level at which this logger will accept log entries.
     protected $_level;
 
-    /// A list with the handlers currently associated with this logger.
+    /// A collection of handlers currently associated with this logger.
     protected $_handlers;
 
     /// Whether a warning has been emitted about this logger having no handlers.
     protected $_emittedWarning;
+
+    /// An object handling a collection of filters.
+    protected $_filters;
 
     /**
      * Construct a new logger with no attached handlers
@@ -64,10 +67,29 @@ extends     Plop_LoggerAbstract
      *      this logger relates to. The default is \a NULL
      *      (meaning this logger is not related to any
      *      specific method or function).
+     *
+     * \param Plop_HandlersCollectionInterface $handlers
+     *      (optional) A collection of handlers to associate
+     *      with this logger. Defaults to an empty list.
+     *
+     * \param Plop_FiltersCollectionInterface $filters
+     *      (optional) A collection of filters to associate
+     *      with this logger. Defaults to an empty list.
      */
-    public function __construct($file = NULL, $class = NULL, $method = NULL)
+    public function __construct(
+                                            $file       = NULL,
+                                            $class      = NULL,
+                                            $method     = NULL,
+        Plop_HandlersCollectionInterface    $handlers   = NULL,
+        Plop_FiltersCollectionInterface     $filters    = NULL
+    )
     {
-        parent::__construct();
+        if ($handlers === NULL) {
+            $handlers = new Plop_HandlersCollection();
+        }
+        if ($filters === NULL) {
+            $filters = new Plop_FiltersCollection();
+        }
         while (substr($file, -strlen(DIRECTORY_SEPARATOR)) ==
             DIRECTORY_SEPARATOR) {
             $file = (string) substr($file, 0, -strlen(DIRECTORY_SEPARATOR));
@@ -76,8 +98,9 @@ extends     Plop_LoggerAbstract
         $this->_class           = $class;
         $this->_method          = $method;
         $this->_level           = Plop::NOTSET;
-        $this->_handlers        = array();
+        $this->_handlers        = $handlers;
         $this->_emittedWarning  = FALSE;
+        $this->_filters         = $filters;
         $this->setRecordFactory(new Plop_RecordFactory());
     }
 
@@ -109,6 +132,32 @@ extends     Plop_LoggerAbstract
     public function setRecordFactory(Plop_RecordFactoryInterface $factory)
     {
         $this->_recordFactory = $factory;
+        return $this;
+    }
+
+    /// \copydoc Plop_LoggerInterface::getFilters().
+    public function getFilters()
+    {
+        return $this->_filters;
+    }
+
+    /// \copydoc Plop_LoggerInterface::setFilters().
+    public function setFilters(Plop_FiltersCollectionInterface $filters)
+    {
+        $this->_filters = $filters;
+        return $this;
+    }
+
+    /// \copydoc Plop_LoggerInterface::getHandlers().
+    public function getHandlers()
+    {
+        return $this->_handlers;
+    }
+
+    /// \copydoc Plop_LoggerInterface::setHandlers().
+    public function setHandlers(Plop_HandlersCollectionInterface $handlers)
+    {
+        $this->_handlers = $handlers;
         return $this;
     }
 
@@ -150,34 +199,10 @@ extends     Plop_LoggerAbstract
      */
     protected function _handle(Plop_RecordInterface $record)
     {
-        if ($this->filter($record)) {
+        if ($this->_filters->filter($record)) {
             $this->_callHandlers($record);
         }
         return $this;
-    }
-
-    /// \copydoc Plop_LoggerInterface::addHandler().
-    public function addHandler(Plop_HandlerInterface $handler)
-    {
-        if (!in_array($handler, $this->_handlers, TRUE))
-            $this->_handlers[] = $handler;
-        return $this;
-    }
-
-    /// \copydoc Plop_LoggerInterface::removeHandler().
-    public function removeHandler(Plop_HandlerInterface $handler)
-    {
-        $key = array_search($handler, $this->_handlers, TRUE);
-        if ($key !== FALSE) {
-            unset($this->_handlers[$key]);
-        }
-        return $this;
-    }
-
-    /// \copydoc Plop_LoggerInterface::getHandlers().
-    public function getHandlers()
-    {
-        return $this->_handlers;
     }
 
     /**
@@ -192,12 +217,6 @@ extends     Plop_LoggerAbstract
      */
     protected function _callHandlers(Plop_RecordInterface $record)
     {
-        foreach ($this->_handlers as $handler) {
-            if ($record['levelno'] >= $handler->getLevel()) {
-                $handler->handle($record);
-            }
-        }
-
         if (!count($this->_handlers) && !$this->_emittedWarning) {
             $stderr = $this->_getStderr();
             fprintf(
@@ -210,7 +229,10 @@ extends     Plop_LoggerAbstract
             );
             fclose($stderr);
             $this->_emittedWarning = TRUE;
+            return $this;
         }
+
+        $this->_handlers->handle($record);
         return $this;
     }
 

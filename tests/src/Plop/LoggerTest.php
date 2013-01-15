@@ -36,10 +36,10 @@ extends Plop_TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->_logger = new Plop_Logger();
-        $this->_factory = $this->getMock('Plop_RecordFactoryInterface');
-        $this->_record  = $this->getMock('Plop_RecordInterface_Stub');
-        $this->_handler = $this->getMock('Plop_HandlerInterface');
+        $this->_logger      = new Plop_Logger();
+        $this->_factory     = $this->getMock('Plop_RecordFactoryInterface');
+        $this->_record      = $this->getMock('Plop_RecordInterface_Stub');
+        $this->_handler     = $this->getMock('Plop_HandlerInterface');
     }
 
     /**
@@ -54,7 +54,7 @@ extends Plop_TestCase
         $this->assertSame(NULL, $this->_logger->getClass());
         $this->assertSame(NULL, $this->_logger->getMethod());
         $this->assertSame(Plop::NOTSET, $this->_logger->getLevel());
-        $this->assertSame(array(), $this->_logger->getHandlers());
+        $this->assertSame(0, count($this->_logger->getHandlers()));
     }
 
     /**
@@ -75,7 +75,7 @@ extends Plop_TestCase
         $this->assertSame(__CLASS__, $logger->getClass());
         $this->assertSame(__METHOD__, $logger->getMethod());
         $this->assertSame(Plop::NOTSET, $this->_logger->getLevel());
-        $this->assertSame(array(), $this->_logger->getHandlers());
+        $this->assertSame(0, count($this->_logger->getHandlers()));
     }
 
     /**
@@ -91,38 +91,6 @@ extends Plop_TestCase
             $this->_logger->setRecordFactory($this->_factory)
         );
         $this->assertSame($this->_factory, $this->_logger->getRecordFactory());
-    }
-
-    /**
-     * @covers Plop_Logger::getHandlers
-     * @covers Plop_Logger::addHandler
-     * @covers Plop_Logger::removeHandler
-     */
-    public function testHandlers()
-    {
-        $this->assertSame(array(), $this->_logger->getHandlers());
-        $this->assertSame(
-            $this->_logger,
-            $this->_logger->addHandler($this->_handler)
-        );
-        $this->assertSame(
-            $this->_logger,
-            $this->_logger->addHandler($this->_handler)
-        );
-        $this->assertSame(
-            array($this->_handler),
-            $this->_logger->getHandlers()
-        );
-
-        $this->assertSame(
-            $this->_logger,
-            $this->_logger->removeHandler($this->_handler)
-        );
-        $this->assertSame(
-            $this->_logger,
-            $this->_logger->removeHandler($this->_handler)
-        );
-        $this->assertSame(array(), $this->_logger->getHandlers());
     }
 
     /**
@@ -167,96 +135,18 @@ extends Plop_TestCase
     }
 
     /**
-     * @covers Plop_Logger::_callHandlers
-     */
-    public function testHandlersCalling()
-    {
-        // If no handler has been registered, emit a warning.
-        $logger = $this->getMock('Plop_Logger_Stub', array('_getStderr'));
-        $logger
-            ->expects($this->once())
-            ->method('_getStderr')
-            ->will($this->returnValue($this->stderrStream));
-
-        // The warning may only be emitted once.
-        // So we call the method twice and check the final output.
-        $logger->callHandlersStub($this->_record);
-        $logger->callHandlersStub($this->_record);
-        $this->expectStderrString(
-            'No handlers could be found for logger ("" in "")' . "\n"
-        );
-    }
-
-    /**
-     * @covers Plop_Logger::_callHandlers
-     */
-    public function testHandlersCalling2()
-    {
-        // If the log's level is greater or equal tp an handler's level,
-        // the handler is called and not warning is emitted.
-        $logger = $this->getMock('Plop_Logger_Stub', array('_getStderr'));
-        $logger
-            ->expects($this->never())
-            ->method('_getStderr')
-            ->will($this->returnValue($this->stderrStream));
-        $this->_handler
-            ->expects($this->once())
-            ->method('getLevel')
-            ->will($this->returnValue(10));
-        $this->_record
-            ->expects($this->once())
-            ->method('offsetGet')
-            ->with('levelno')
-            ->will($this->returnValue(20));
-        $this->_handler
-            ->expects($this->once())
-            ->method('handle')
-            ->with($this->_record);
-
-        $logger->addHandler($this->_handler);
-        $logger->callHandlersStub($this->_record);
-    }
-
-    /**
-     * @covers Plop_Logger::_callHandlers
-     */
-    public function testHandlersCalling3()
-    {
-        // The handlers never gets called if the log's level
-        // is less than its own level.
-        $logger = $this->getMock('Plop_Logger_Stub', array('_getStderr'));
-        $logger
-            ->expects($this->never())
-            ->method('_getStderr')
-            ->will($this->returnValue($this->stderrStream));
-        $this->_handler
-            ->expects($this->once())
-            ->method('getLevel')
-            ->will($this->returnValue(20));
-        $this->_record
-            ->expects($this->once())
-            ->method('offsetGet')
-            ->with('levelno')
-            ->will($this->returnValue(10));
-        $this->_handler
-            ->expects($this->never())
-            ->method('handle');
-
-        $logger->addHandler($this->_handler);
-        $logger->callHandlersStub($this->_record);
-    }
-
-    /**
      * @covers Plop_Logger::_handle
      */
     public function testHandleMethod()
     {
+        $filters     = $this->getMock('Plop_FiltersCollectionInterface');
         $logger = $this->getMock(
             'Plop_Logger_Stub',
-            array('filter', '_callHandlers')
+            array('_callHandlers'),
+            array(NULL, NULL, NULL, NULL, $filters)
         );
 
-        $logger
+        $filters
             ->expects($this->once())
             ->method('filter')
             ->with($this->_record)
@@ -274,12 +164,14 @@ extends Plop_TestCase
      */
     public function testHandleMethod2()
     {
+        $filters     = $this->getMock('Plop_FiltersCollectionInterface');
         $logger = $this->getMock(
             'Plop_Logger_Stub',
-            array('filter', '_callHandlers')
+            array('_callHandlers'),
+            array(NULL, NULL, NULL, NULL, $filters)
         );
 
-        $logger
+        $filters
             ->expects($this->once())
             ->method('filter')
             ->with($this->_record)

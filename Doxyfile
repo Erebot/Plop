@@ -6,4 +6,4 @@ IGNORE_PREFIX          = $ \
 ALIASES               += "codeCoverageIgnore="
 ALIASES               += "codeCoverageIgnoreStart="
 ALIASES               += "codeCoverageIgnoreEnd="
-
+INPUT                 += docs/additions/

@@ -35,8 +35,11 @@ implements  Plop_FormatterInterface
     /// General format for log records.
     protected $_format;
 
-    /// Format to use for dates.
+    /// Format to use for dates/times.
     protected $_dateFormat;
+
+    /// Timezone to use to represent dates/times.
+    protected $_timezone;
 
     /// Whether _formatException() generates Python-like traces.
     protected $_pythonLike;
@@ -58,6 +61,12 @@ implements  Plop_FormatterInterface
      *      Plop_Formatter::DEFAULT_DATE_FORMAT
      *      constant.
      *
+     * \param DateTimeZone|string $timezone
+     *      (optional) Timezone to use when formatting dates/times.
+     *      This must be a valid timezone (see http://php.net/timezones.php).
+     *      Defaults to using the default timezone, as returned by
+     *      \a date_default_timezone_get().
+     *
      * \param bool $pythonLike
      *      (optional) Whether exceptions should be formatted
      *      to resemble Python stack traces (\a TRUE) or if they
@@ -77,11 +86,22 @@ implements  Plop_FormatterInterface
     public function __construct(
         $format     = self::DEFAULT_FORMAT,
         $dateFormat = self::DEFAULT_DATE_FORMAT,
+        $timezone   = NULL,
         $pythonLike = FALSE
     )
     {
+        if ($timezone !== NULL) {
+            if (is_string($timezone)) {
+                $timezone = new DateTimeZone($timezone);
+            }
+            else if (!is_object($timezone) ||
+                     !($timezone instanceof DateTimeZone)) {
+                throw new Plop_Exception('Invalid timezone');
+            }
+        }
         $this->setFormat($format);
         $this->setDateFormat($dateFormat);
+        $this->setTimeZone($timezone);
         $this->setPythonLike($pythonLike);
     }
 
@@ -108,6 +128,19 @@ implements  Plop_FormatterInterface
     public function setDateFormat($dateFormat)
     {
         $this->_dateFormat = $dateFormat;
+        return $this;
+    }
+
+    /// \copydoc Plop_FormatterInterface::getTimezone().
+    public function getTimezone()
+    {
+        return $this->_timezone;
+    }
+
+    /// \copydoc Plop_FormatterInterface::setTimezone().
+    public function setTimezone(DateTimeZone $timezone = NULL)
+    {
+        $this->_timezone = $timezone;
         return $this;
     }
 
@@ -191,7 +224,11 @@ implements  Plop_FormatterInterface
                                 $dateFormat = self::DEFAULT_DATE_FORMAT
     )
     {
-        return $record['createdDate']->format((string) $dateFormat);
+        $date = clone $record['createdDate'];
+        if ($this->_timezone !== NULL) {
+            $date->setTimeZone($this->_timezone);
+        }
+        return $date->format((string) $dateFormat);
     }
 
     /**

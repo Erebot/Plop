@@ -64,6 +64,33 @@ interface Plop_FormatterInterface
     public function setDateFormat($dateFormat);
 
     /**
+     * Return the timezone object used to format
+     * dates/times.
+     *
+     * \retval DateTimeZone
+     *      Timezone object used to format dates/times.
+     *
+     * \retval NULL
+     *      Returned when no particular timezone is used
+     *      to format dates/times (ie. the local timezone
+     *      is used).
+     */
+    public function getTimezone();
+
+    /**
+     * Set the timezone to use to format dates/times.
+     *
+     * \param DateTimeZone|NULL $timezone
+     *      (optional) Timezone to use to format dates/times.
+     *      If \a NULL or omitted, the defaut (local) timezone
+     *      is used.
+     *
+     * \retval Plop_FormatterInterface
+     *      The formatter instance (ie. \a $this).
+     */
+    public function setTimezone(DateTimeZone $timezone = NULL);
+
+    /**
      * Format a record.
      *
      * \param Plop_RecordInterface $record

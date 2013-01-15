@@ -20,41 +20,11 @@
 
 /**
  * \brief
- *      Interface for a class that supports records filtering.
+ *      Interface for a collection of filters.
  */
-interface Plop_FiltererInterface
+interface   Plop_FiltersCollectionInterface
+extends     Plop_CollectionInterface
 {
-    /**
-     * Add a filter.
-     *
-     * \param Plop_FilterInterface $filter
-     *      New filter to apply.
-     *
-     * \retval Plop_FiltererInterface
-     *      The filterer instance (ie. \a $this).
-     */
-    public function addFilter(Plop_FilterInterface $filter);
-
-    /**
-     * Remove a filter.
-     *
-     * \param Plop_FilterInterface $filter
-     *      The filter to remove.
-     *
-     * \retval Plop_FiltererInterface
-     *      The filterer instance (ie. \a $this).
-     */
-    public function removeFilter(Plop_FilterInterface $filter);
-
-    /**
-     * Return a list of currently active filters
-     * for this instance.
-     *
-     * \retval array
-     *      List of currently active filters.
-     */
-    public function getFilters();
-
     /**
      * Apply the filters and return a flag indicating
      * whether the given record should be handled or

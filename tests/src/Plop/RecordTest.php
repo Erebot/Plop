@@ -58,8 +58,8 @@ extends Plop_TestCase
         $this->assertSame(NULL,                     $values['exc_text']);
         $this->assertSame($this->_line,             $values['lineno']);
         $this->assertSame(NULL,                     $values['funcName']);
-        $this->assertSame(NULL,                     $values['thread']);
-        $this->assertSame(NULL,                     $values['threadName']);
+        $this->assertSame(NULL,                     $values['threadId']);
+        $this->assertSame(NULL,                     $values['threadCreatorId']);
         $this->assertSame(getmypid(),               $values['process']);
         $this->assertSame(php_uname('n'),           $values['hostname']);
     }
@@ -103,8 +103,8 @@ extends Plop_TestCase
         $this->assertSame(NULL,                     $values['exc_text']);
         $this->assertSame($line,                    $values['lineno']);
         $this->assertSame(__METHOD__,               $values['funcName']);
-        $this->assertSame(NULL,                     $values['thread']);
-        $this->assertSame(NULL,                     $values['threadName']);
+        $this->assertSame(NULL,                     $values['threadId']);
+        $this->assertSame(NULL,                     $values['threadCreatorId']);
         $this->assertSame(getmypid(),               $values['process']);
         $this->assertSame('-',                      $values['processName']);
         $this->assertSame(php_uname('n'),           $values['hostname']);
@@ -172,7 +172,7 @@ extends Plop_TestCase
     {
         $file   = '...........................' .
                   '.........../tests/src/Plop/RecordTest.php';
-        $data = 'C:11:"Plop_Record":755:{a:21:{s:4:"name";s:4:"name";' .
+        $data = 'C:11:"Plop_Record":762:{a:21:{s:4:"name";s:4:"name";' .
                 's:3:"msg";s:11:"@ %(foo)s @";s:4:"args";a:1:{s:3:"foo";' .
                 's:3:"bar";}s:9:"levelname";s:5:"DEBUG";s:7:"levelno";' .
                 'i:10;s:8:"pathname";s:68:"...........................' .
@@ -185,7 +185,7 @@ extends Plop_TestCase
                 's:11:"createdDate";O:8:"DateTime":3:{s:4:"date";' .
                 's:19:"2012-10-03 18:50:55";s:13:"timezone_type";i:3;' .
                 's:8:"timezone";s:3:"UTC";}s:15:"relativeCreated";' .
-                'd:84;s:6:"thread";N;s:10:"threadName";N;' .
+                'd:84;s:8:"threadId";N;s:15:"threadCreatorId";N;' .
                 's:7:"process";i:3930;s:11:"processName";s:7:"phpunit";' .
                 's:8:"hostname";s:6:"naraku";}}';
  
@@ -203,8 +203,8 @@ extends Plop_TestCase
         $this->assertSame(NULL,                     $values['exc_text']);
         $this->assertSame(33,                       $values['lineno']);
         $this->assertSame(NULL,                     $values['funcName']);
-        $this->assertSame(NULL,                     $values['thread']);
-        $this->assertSame(NULL,                     $values['threadName']);
+        $this->assertSame(NULL,                     $values['threadId']);
+        $this->assertSame(NULL,                     $values['threadCreatorId']);
         $this->assertSame(3930,                     $values['process']);
         $this->assertSame('naraku',                 $values['hostname']);
         $this->assertSame($data, serialize($record));

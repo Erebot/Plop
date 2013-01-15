@@ -336,9 +336,6 @@ extends Plop_TestCase
         $handlers = $logger->getHandlers();
         $this->assertSame(1, count($handlers));
         $this->assertTrue($handlers[0] instanceof Plop_Handler_Stream);
-        $this->assertTrue(
-            $handlers[0]->getFormatter() instanceof Plop_Formatter
-        );
         $this->assertSame(Plop::NOTSET,     $plop->getLevelValue('NOTSET'));
         $this->assertSame(Plop::DEBUG,      $plop->getLevelValue('DEBUG'));
         $this->assertSame(Plop::INFO,       $plop->getLevelValue('INFO'));

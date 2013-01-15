@@ -25,29 +25,6 @@
 interface Plop_HandlerInterface
 {
     /**
-     * Return the minimum level a log record must have
-     * to be handled by this class.
-     *
-     * \retval int
-     *      Minimum level at which log records
-     *      will be accepted.
-     */
-    public function getLevel();
-
-    /**
-     * Set the minimum level a log record must have
-     * to be handled by this class.
-     *
-     * \param int $level
-     *      The new minimum level at which log records
-     *      will be accepted.
-     *
-     * \retval Plop_HandlerInterface
-     *      The handler instance (ie. \a $this).
-     */
-    public function setLevel($level);
-
-    /**
      * Return the formatter used by this handler.
      *
      * \retval Plop_FormatterInterface
@@ -66,6 +43,28 @@ interface Plop_HandlerInterface
      *      The handler instance (ie. \a $this).
      */
     public function setFormatter(Plop_FormatterInterface $formatter);
+
+    /**
+     * Get the collection of filters currently
+     * associated with this handler.
+     *
+     * \retval Plop_FiltersCollectionInterface
+     *      Collection of filters associated with this handler.
+     */
+    public function getFilters();
+
+    /**
+     * Set the collection of filters associated
+     * with this handler.
+     *
+     * \param Plop_FiltersCollectionInterface $filters
+     *      New collection of filters to associate
+     *      with this handler.
+     *
+     * \retval Plop_HandlerInterface
+     *      The handler instance (ie. \a $this).
+     */
+    public function setFilters(Plop_FiltersCollectionInterface $filters);
 
     /**
      * Handle a log record.

@@ -54,6 +54,7 @@ extends Plop_TestCase
             Plop_Formatter::DEFAULT_DATE_FORMAT,
             $this->_formatter->getDateFormat()
         );
+        $this->assertSame(NULL, $this->_formatter->getTimezone());
         $this->assertFalse($this->_formatter->getPythonLike());
     }
 
@@ -62,9 +63,18 @@ extends Plop_TestCase
      */
     public function testDefaultArgumentsOverride()
     {
-        $formatter = new Plop_Formatter('%(asctime)s', 'U', TRUE);
+        $timezone = $this->getMock(
+            'DateTimeZone',
+            array(),
+            array(),
+            '',
+            FALSE
+        );
+
+        $formatter = new Plop_Formatter('%(asctime)s', 'U', $timezone, TRUE);
         $this->assertSame('%(asctime)s', $formatter->getFormat());
         $this->assertSame('U', $formatter->getDateFormat());
+        $this->assertSame($timezone, $formatter->getTimezone());
         $this->assertTrue($formatter->getPythonLike());
     }
 

@@ -55,7 +55,6 @@ extends Plop_TestCase
     public function providerActions()
     {
         $handler    = $this->getMock('Plop_HandlerInterface');
-        $filter     = $this->getMock('Plop_FilterInterface');
         $record     = $this->getMock('Plop_RecordInterface_Stub');
         $factory    = $this->getMock('Plop_RecordFactoryInterface');
 
@@ -73,16 +72,6 @@ extends Plop_TestCase
 
             array('getRecordFactory', array(), FALSE, $factory),
             array('setRecordFactory', array($factory), TRUE, NULL),
-
-            array('addHandler', array($handler), TRUE, NULL),
-            array('removeHandler', array($handler), TRUE, NULL),
-            array('getHandlers', array(), FALSE, array($handler)),
-
-            array('addFilter', array($filter), TRUE, NULL),
-            array('removeFilter', array($filter), TRUE, NULL),
-            array('getFilters', array(), FALSE, array($filter)),
-            array('filter', array($record), FALSE, TRUE),
-            array('filter', array($record), FALSE, FALSE),
         );
     }
 
@@ -97,13 +86,6 @@ extends Plop_TestCase
      * @covers Plop_IndirectLoggerAbstract::getMethod
      * @covers Plop_IndirectLoggerAbstract::getRecordFactory
      * @covers Plop_IndirectLoggerAbstract::setRecordFactory
-     * @covers Plop_IndirectLoggerAbstract::addHandler
-     * @covers Plop_IndirectLoggerAbstract::removeHandler
-     * @covers Plop_IndirectLoggerAbstract::getHandlers
-     * @covers Plop_IndirectLoggerAbstract::addFilter
-     * @covers Plop_IndirectLoggerAbstract::removeFilter
-     * @covers Plop_IndirectLoggerAbstract::getFilters
-     * @covers Plop_IndirectLoggerAbstract::filter
      */
     public function testActions($method, $args, $chainable, $output)
     {
