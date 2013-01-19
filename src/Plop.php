@@ -107,6 +107,8 @@ implements  ArrayAccess,
     protected $_levelNames;
     /// Date and time when the logging service was initialized.
     protected $_created;
+    /// An object responsible for removing common prefixes from files.
+    protected $_prefixStripper;
 
     /**
      * Create a new instance of the logging service.
@@ -129,7 +131,8 @@ implements  ArrayAccess,
             self::ERROR     => 'ERROR',
             self::CRITICAL  => 'CRITICAL',
         );
-        $this->_created = microtime(TRUE);
+        $this->_created         = microtime(TRUE);
+        $this->_prefixStripper  = new Plop_PrefixesCollection();
     }
 
     /// This class is not clone-safe.
@@ -239,6 +242,17 @@ implements  ArrayAccess,
         }
         $key = array_search($levelName, $this->_levelNames, TRUE);
         return (int) $key; // FALSE is silently converted to 0.
+    }
+
+    public function getPrefixes()
+    {
+        return $this->_prefixStripper;
+    }
+
+    public function setPrefixes(Plop_PrefixesCollectionInterface $prefixes)
+    {
+        $this->_prefixStripper = $prefixes;
+        return $this;
     }
 
     /**
@@ -444,6 +458,8 @@ implements  ArrayAccess,
             throw new Plop_Exception('Invalid identifier');
         }
         list($method, $class, $file) = $parts;
+        $file = $this->_prefixStripper->stripLongestPrefix($file);
+
         while (substr($file, -strlen(DIRECTORY_SEPARATOR)) ==
             DIRECTORY_SEPARATOR) {
             $file = (string) substr($file, 0, -strlen(DIRECTORY_SEPARATOR));
@@ -457,7 +473,7 @@ implements  ArrayAccess,
         // File + class match.
         // Note: for functions, this is actually a file match,
         //       which is redundant with the loop afterwards,
-        //       but that's okay 'cause the performance penalty
+        //       but that's okay 'cause the performance hit
         //       ain't that big.
         if (isset($this->_loggers[":$class:$file"])) {
             return $this->_loggers[":$class:$file"];
