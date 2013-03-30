@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Usage &mdash; Plop 1.0.0dev749 documentation</title>
+    <title>Usage &mdash; Plop 1.0.0dev750 documentation</title>
     
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '1.0.0dev749',
+        VERSION:     '1.0.0dev750',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,9 +25,9 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Search within Plop 1.0.0dev749 documentation"
+          title="Search within Plop 1.0.0dev750 documentation"
           href="_static/opensearch.xml"/>
-    <link rel="top" title="Plop 1.0.0dev749 documentation" href="index.html" />
+    <link rel="top" title="Plop 1.0.0dev750 documentation" href="index.html" />
     <link rel="next" title="Contributing" href="Contribute.html" />
     <link rel="prev" title="Installation" href="Installation.html" /> 
   </head>
@@ -41,7 +41,7 @@
         <li class="right" >
           <a href="Installation.html" title="Installation"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Plop 1.0.0dev749 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Plop 1.0.0dev750 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -53,27 +53,23 @@
   <blockquote>
 <div></div></blockquote>
 <div class="section" id="usage">
-<span id="using-plop"></span><h1><a class="toc-backref" href="#id9">Usage</a><a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
+<span id="using-plop"></span><h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
 <p>Using Plop usually involves 3 steps, detailed below.</p>
-<div class="contents topic" id="contents">
-<p class="topic-title first">Contents</p>
+<div class="contents local topic" id="contents">
 <ul class="simple">
-<li><a class="reference internal" href="#usage" id="id9">Usage</a><ul>
-<li><a class="reference internal" href="#loading-plop-s-classes" id="id10">Loading Plop&#8217;s classes</a></li>
-<li><a class="reference internal" href="#configuring-plop" id="id11">Configuring Plop</a><ul>
-<li><a class="reference internal" href="#loggers" id="id12">Loggers</a></li>
-<li><a class="reference internal" href="#filters" id="id13">Filters</a></li>
-<li><a class="reference internal" href="#handlers" id="id14">Handlers</a></li>
-<li><a class="reference internal" href="#formatters" id="id15">Formatters</a></li>
+<li><a class="reference internal" href="#loading-plop-s-classes" id="id9">Loading Plop&#8217;s classes</a></li>
+<li><a class="reference internal" href="#configuring-plop" id="id10">Configuring Plop</a><ul>
+<li><a class="reference internal" href="#loggers" id="id11">Loggers</a></li>
+<li><a class="reference internal" href="#filters" id="id12">Filters</a></li>
+<li><a class="reference internal" href="#handlers" id="id13">Handlers</a></li>
+<li><a class="reference internal" href="#formatters" id="id14">Formatters</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#logging-some-messages" id="id16">Logging some messages</a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#logging-some-messages" id="id15">Logging some messages</a></li>
 </ul>
 </div>
 <div class="section" id="loading-plop-s-classes">
-<h2><a class="toc-backref" href="#id10">Loading Plop&#8217;s classes</a><a class="headerlink" href="#loading-plop-s-classes" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id9">Loading Plop&#8217;s classes</a><a class="headerlink" href="#loading-plop-s-classes" title="Permalink to this headline">¶</a></h2>
 <p>The way to load Plop&#8217;s classes depends on the installation method selected:</p>
 <ul>
 <li><p class="first">For the PHAR installation method, add this snippet near the top of
@@ -111,11 +107,11 @@ is located somewhere on your <span class="target" id="index-0"></span><tt class=
 </ul>
 </div>
 <div class="section" id="configuring-plop">
-<h2><a class="toc-backref" href="#id11">Configuring Plop</a><a class="headerlink" href="#configuring-plop" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id10">Configuring Plop</a><a class="headerlink" href="#configuring-plop" title="Permalink to this headline">¶</a></h2>
 <p>There are 4 different types of objects that you can configure in Plop.
 Each one is described below.</p>
 <div class="section" id="loggers">
-<span id="id1"></span><h3><a class="toc-backref" href="#id12">Loggers</a><a class="headerlink" href="#loggers" title="Permalink to this headline">¶</a></h3>
+<span id="id1"></span><h3><a class="toc-backref" href="#id11">Loggers</a><a class="headerlink" href="#loggers" title="Permalink to this headline">¶</a></h3>
 <p>A logger intercepts logging messages for a given method, class, file
 or directory. This is decided at construction time based on the arguments
 passed to <a class="reference external" href="https://ci.erebot.net/doc/api/Plop/html/classPlop__Logger.html#ae1273b35869fab2c2e5198de3601ed5e">Plop_Logger::__construct()</a>.</p>
@@ -177,7 +173,7 @@ to work. Plop&#8217;s main class (<a class="reference external" href="https://ci
 </div>
 </div>
 <div class="section" id="filters">
-<span id="id2"></span><h3><a class="toc-backref" href="#id13">Filters</a><a class="headerlink" href="#filters" title="Permalink to this headline">¶</a></h3>
+<span id="id2"></span><h3><a class="toc-backref" href="#id12">Filters</a><a class="headerlink" href="#filters" title="Permalink to this headline">¶</a></h3>
 <p>Filters are associated with either <a class="reference internal" href="#loggers"><em>loggers</em></a> or
 <a class="reference internal" href="#handlers"><em>handlers</em></a> through an object implementing
 <a class="reference external" href="https://ci.erebot.net/doc/api/Plop/html/interfacePlop__FiltersCollectionInterface.html">Plop_FiltersCollectionInterface</a> (usually an instance of
@@ -223,7 +219,7 @@ collection.</dd>
 </div>
 </div>
 <div class="section" id="handlers">
-<span id="id3"></span><h3><a class="toc-backref" href="#id14">Handlers</a><a class="headerlink" href="#handlers" title="Permalink to this headline">¶</a></h3>
+<span id="id3"></span><h3><a class="toc-backref" href="#id13">Handlers</a><a class="headerlink" href="#handlers" title="Permalink to this headline">¶</a></h3>
 <p>Handlers are associated with <a class="reference internal" href="#loggers"><em>loggers</em></a> through an object
 implementing <a class="reference external" href="https://ci.erebot.net/doc/api/Plop/html/interfacePlop__HandlersCollectionInterface.html">Plop_HandlersCollectionInterface</a> (usually an instance of
 <a class="reference external" href="https://ci.erebot.net/doc/api/Plop/html/classPlop__HandlersCollection.html">Plop_HandlersCollection</a>) and are used to define the treatment applied
@@ -260,7 +256,7 @@ used in a collection.</dd>
 </div>
 </div>
 <div class="section" id="formatters">
-<span id="id4"></span><h3><a class="toc-backref" href="#id15">Formatters</a><a class="headerlink" href="#formatters" title="Permalink to this headline">¶</a></h3>
+<span id="id4"></span><h3><a class="toc-backref" href="#id14">Formatters</a><a class="headerlink" href="#formatters" title="Permalink to this headline">¶</a></h3>
 <p>Each <a class="reference internal" href="#handlers"><em>handler</em></a> has an associated formatter, which is used
 when a record needs formatting.
 A formatter defines how the final message will look like.</p>
@@ -316,7 +312,7 @@ types of date/time formatting.</dd>
 </div>
 </div>
 <div class="section" id="logging-some-messages">
-<h2><a class="toc-backref" href="#id16">Logging some messages</a><a class="headerlink" href="#logging-some-messages" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id15">Logging some messages</a><a class="headerlink" href="#logging-some-messages" title="Permalink to this headline">¶</a></h2>
 <p>Logging messages with Plop usually only involves the following sequence:</p>
 <div class="highlight-inline-php"><div class="highlight"><pre><span class="c1">// First, grab an instance of Plop.</span>
 <span class="c1">// Plop uses a singleton pattern, so the same instance will be returned</span>
@@ -398,7 +394,7 @@ apply <abbr title="Internationalization">I18N</abbr> methods on the messages. Eg
         <li class="right" >
           <a href="Installation.html" title="Installation"
              >previous</a> |</li>
-        <li><a href="index.html">Plop 1.0.0dev749 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Plop 1.0.0dev750 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

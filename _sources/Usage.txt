@@ -5,7 +5,7 @@ Usage
 
 Using Plop usually involves 3 steps, detailed below.
 
-..  contents::
+..  contents:: :local:
 
 
 Loading Plop's classes
