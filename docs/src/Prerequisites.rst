@@ -17,7 +17,7 @@ The code is tested using an automated process on Windows XP (32 bits),
 Debian Stable (64 bits) and CentOS 6 (64 bits), as reflected by our
 `Continuous Integration server`_.
 
-..  contents::
+..  contents:: :local:
 
 
 Getting started

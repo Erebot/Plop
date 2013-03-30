@@ -4,14 +4,16 @@ Installation
 This pages contains instructions on how to install Plop on your machine.
 There are several ways to achieve that. Each method is described below.
 
-..  contents::
+..  contents:: :local:
 
 ..  note::
+
     For users of PHP >= 5.3.0, we recommend using the `PHAR installation`_
     method or the `composer installation`_ method, depending on whether
     your project already uses `Composer`_ or not.
 
 ..  note::
+
     For users of PHP < 5.3.0, we recommend that you install Plop
     using its `PEAR channel`_. The `PEAR installation`_ method will result
     in a system-wide installation which can be upgraded very easily later.
@@ -68,6 +70,7 @@ Installing Plop as a PHAR archive only involves a few steps:
 1.  Make sure your installation fulfills all of the `prerequisites`_.
 
     ..  note::
+
         As all of Plop's PHAR archives (core and modules) are digitally
         signed, you must make sure the OpenSSL extension is enabled on your
         PHP installation. Failure to do so will result in an error when trying
@@ -80,6 +83,7 @@ Installing Plop as a PHAR archive only involves a few steps:
     https://pear.erebot.net/get/Plop-latest.phar.pubkey.
 
 ..  note::
+
     The whole installation process using PHAR archives can be automated
     using the following commands:
 
@@ -90,6 +94,7 @@ Installing Plop as a PHAR archive only involves a few steps:
             https://pear.erebot.net/get/Plop-latest.phar.pubkey
 
 ..  warning::
+
     Even though the command above should work on most installations,
     a few known problems may occur due to incompatibilities with certain
     PHP features and extensions. To avoid such issues, it is usually a good
@@ -189,6 +194,7 @@ the tools provided by your distribution:
     $ urpmi git
 
 ..  note::
+
     Windows users may be interested in installing `Git for Windows`_ to get
     an equivalent git client. Also, make sure that :program:`git` is present
     on your account's :envvar:`PATH`. If not, you'll have to replace

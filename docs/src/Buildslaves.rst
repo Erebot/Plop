@@ -8,18 +8,20 @@ the online documentation, packaging the project, etc.
 If you wish to contribute a machine for the project, this page explains how to
 do so.
 
-..  contents::
+..  contents:: :local:
 
 Foreword
 --------
 
 ..  note::
+
     Even though a buildslave can do many things, we only discuss use of
     buildslaves to run unit tests in the context of this page. That's because
     we do not intend to make remote machines handle critical tasks such as
     packaging that involve digital signatures.
 
 ..  warning::
+
     When running a buildslave, some PHP code will be run on your system without
     requiring any prior confirmation. This may represent a risk for your
     machine. Even though we do our best to prevent malicious code execution
@@ -85,6 +87,7 @@ used. In the example above, the main version is '3', which refers to
 PHP 5.4.0-debug.
 
 ..  note::
+
     The versions may be numbered from 1 to 10 **with no gap in between**.
     Any gap in the numbering will result in the versions following the gap
     to not be tested at all.
@@ -95,6 +98,7 @@ PHP 5.4.0-debug.
     limit.
 
 ..  warning::
+
     At a minimum, you must define at least 3 variables (:envvar:`PHP1_PATH`,
     :envvar:`PHP1_DESC` and :envvar:`PHP_MAIN`, where :envvar:`PHP_MAIN`
     equals "1").
