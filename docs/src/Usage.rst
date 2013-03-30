@@ -322,7 +322,7 @@ Logging messages with Plop usually only involves the following sequence:
 
 Log messages may contain variables, which will be replaced with their actual
 value when the logging method is called. This comes handy when you need to
-apply :abbr:`I18N (Internationalization)` methods on the messages. Eg.
+apply :abbr:`I18N (Internationalization)` methods on the messages. E.g.
 
 ..  sourcecode:: inline-php
 
