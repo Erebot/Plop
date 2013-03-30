@@ -18,6 +18,11 @@
     along with Plop.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/**
+ * \brief
+ *      A class that can be used to remove a prefix
+ *      from a file's path.
+ */
 class       Plop_PrefixesCollection
 implements  Plop_PrefixesCollectionInterface
 {
@@ -94,14 +99,19 @@ implements  Plop_PrefixesCollectionInterface
         }
     }
 
+    /// \copydoc Plop_PrefixesCollectionInterface::stripLongestPrefix().
     public function stripLongestPrefix($path)
     {
+        // The prefixes are stored in a hashtable based on their length.
+        // We loop over that hashtable, starting with the longest prefixes
+        // first, until we find a prefix that matches the one in the path.
         foreach (array_reverse($this->_prefixes, TRUE) as $len => $prefixes) {
-            foreach ($prefixes as $prefix) {
+            foreach ($prefixes as &$prefix) {
                 if (!strncmp($path, $prefix, $len)) {
                     return (string) substr($path, $len);
                 }
             }
+            unset($prefix);
         }
         return $path;
     }

@@ -18,9 +18,25 @@
     along with Plop.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/**
+ * \brief
+ *      Interface for a collection of prefixes
+ *      that must be stripped.
+ */
 interface   Plop_PrefixesCollectionInterface
 extends     Plop_CollectionInterface
 {
+    /**
+     * Loop over the prefixes registered in this collection
+     * and strip the longest prefix that is used in the given
+     * path.
+     *
+     * \param string $path
+     *      Path whose prefix will be stripped.
+     *
+     * \retval string
+     *      The path with its prefix stripped.
+     */
     public function stripLongestPrefix($path);
 }
 
