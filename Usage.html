@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Usage &mdash; Plop 1.0.0dev708 documentation</title>
+    <title>Usage &mdash; Plop 1.0.0dev749 documentation</title>
     
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '1.0.0dev708',
+        VERSION:     '1.0.0dev749',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,9 +25,9 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Search within Plop 1.0.0dev708 documentation"
+          title="Search within Plop 1.0.0dev749 documentation"
           href="_static/opensearch.xml"/>
-    <link rel="top" title="Plop 1.0.0dev708 documentation" href="index.html" />
+    <link rel="top" title="Plop 1.0.0dev749 documentation" href="index.html" />
     <link rel="next" title="Contributing" href="Contribute.html" />
     <link rel="prev" title="Installation" href="Installation.html" /> 
   </head>
@@ -41,7 +41,7 @@
         <li class="right" >
           <a href="Installation.html" title="Installation"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Plop 1.0.0dev708 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Plop 1.0.0dev749 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -53,21 +53,27 @@
   <blockquote>
 <div></div></blockquote>
 <div class="section" id="usage">
-<span id="using-plop"></span><h1><a class="toc-backref" href="#id1">Usage</a><a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
+<span id="using-plop"></span><h1><a class="toc-backref" href="#id9">Usage</a><a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
 <p>Using Plop usually involves 3 steps, detailed below.</p>
 <div class="contents topic" id="contents">
 <p class="topic-title first">Contents</p>
 <ul class="simple">
-<li><a class="reference internal" href="#usage" id="id1">Usage</a><ul>
-<li><a class="reference internal" href="#loading-plop-s-classes" id="id2">Loading Plop&#8217;s classes</a></li>
-<li><a class="reference internal" href="#configuring-plop" id="id3">Configuring Plop</a></li>
-<li><a class="reference internal" href="#logging-some-messages" id="id4">Logging some messages</a></li>
+<li><a class="reference internal" href="#usage" id="id9">Usage</a><ul>
+<li><a class="reference internal" href="#loading-plop-s-classes" id="id10">Loading Plop&#8217;s classes</a></li>
+<li><a class="reference internal" href="#configuring-plop" id="id11">Configuring Plop</a><ul>
+<li><a class="reference internal" href="#loggers" id="id12">Loggers</a></li>
+<li><a class="reference internal" href="#filters" id="id13">Filters</a></li>
+<li><a class="reference internal" href="#handlers" id="id14">Handlers</a></li>
+<li><a class="reference internal" href="#formatters" id="id15">Formatters</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#logging-some-messages" id="id16">Logging some messages</a></li>
 </ul>
 </li>
 </ul>
 </div>
 <div class="section" id="loading-plop-s-classes">
-<h2><a class="toc-backref" href="#id2">Loading Plop&#8217;s classes</a><a class="headerlink" href="#loading-plop-s-classes" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id10">Loading Plop&#8217;s classes</a><a class="headerlink" href="#loading-plop-s-classes" title="Permalink to this headline">¶</a></h2>
 <p>The way to load Plop&#8217;s classes depends on the installation method selected:</p>
 <ul>
 <li><p class="first">For the PHAR installation method, add this snippet near the top of
@@ -105,11 +111,212 @@ is located somewhere on your <span class="target" id="index-0"></span><tt class=
 </ul>
 </div>
 <div class="section" id="configuring-plop">
-<h2><a class="toc-backref" href="#id3">Configuring Plop</a><a class="headerlink" href="#configuring-plop" title="Permalink to this headline">¶</a></h2>
-<p>&#64;TODO</p>
+<h2><a class="toc-backref" href="#id11">Configuring Plop</a><a class="headerlink" href="#configuring-plop" title="Permalink to this headline">¶</a></h2>
+<p>There are 4 different types of objects that you can configure in Plop.
+Each one is described below.</p>
+<div class="section" id="loggers">
+<span id="id1"></span><h3><a class="toc-backref" href="#id12">Loggers</a><a class="headerlink" href="#loggers" title="Permalink to this headline">¶</a></h3>
+<p>A logger intercepts logging messages for a given method, class, file
+or directory. This is decided at construction time based on the arguments
+passed to <a class="reference external" href="https://ci.erebot.net/doc/api/Plop/html/classPlop__Logger.html#ae1273b35869fab2c2e5198de3601ed5e">Plop_Logger::__construct()</a>.</p>
+<p>Internally, Plop builds up a hierarchy of loggers like so:</p>
+<div class="highlight-python"><pre>root-level logger
+    directory-level logger
+        file-level logger
+            class-level logger
+                method/function-level logger</pre>
+</div>
+<p>Logging messages &#8220;bubble up&#8221;. That is, Plop first looks for a method or
+function-level logger to handle the message. If none can be found, it looks
+for a class-level logger (in case the message was emitted from a method).
+Then it looks for a file-level logger, then a logger for the directory
+containing the file, then a logger for that directory&#8217;s parent, etc. until
+it reaches the root-level logger, which always exists.</p>
+<p>Whichever logger is found first will be the one to handle the message.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The root-level logger (root logger) comes pre-configured with a handler
+that logs messages to <tt class="docutils literal"><span class="pre">STDERR</span></tt> using basic formatting.</p>
+</div>
+<p>Several aspects of a logger can be configured, such as:</p>
+<ul class="simple">
+<li>The logging level. Whenever a message is received whose level is lower
+than the logger&#8217;s logging level, the message is ignored, <strong>but</strong> no other
+logger will be called to handle the message (effectively preventing the
+message from bubbling further).</li>
+<li>The record factory. This factory is used to create records of logging
+messages, intended to keep track of the message&#8217;s contextual information.
+This factory must implement the <a class="reference external" href="https://ci.erebot.net/doc/api/Plop/html/interfacePlop__RecordFactoryInterface.html">Plop_RecordFactoryInterface</a>
+interface and is usually an instance of <a class="reference external" href="https://ci.erebot.net/doc/api/Plop/html/classPlop__RecordFactory.html">Plop_RecordFactory</a>.</li>
+<li><a class="reference internal" href="#filters"><em>Filters</em></a>.</li>
+<li><a class="reference internal" href="#handlers"><em>Handlers</em></a>.</li>
+</ul>
+<p>Once a logger has been created and configured, you can tell Plop about it,
+using the following code snippet:</p>
+<div class="highlight-inline-php"><div class="highlight"><pre><span class="nv">$logging</span> <span class="o">=</span> <span class="nx">Plop</span><span class="o">::</span><span class="na">getInstance</span><span class="p">();</span>
+<span class="nv">$logging</span><span class="p">[]</span> <span class="o">=</span> <span class="nv">$newlyCreatedLogger</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>This will add the logger to the list of loggers already known to Plop.
+If a logger had already been registered in Plop with the same &#8220;identity&#8221;
+(file/directory, class and method names), it will be replaced with the new one.</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference external" href="https://ci.erebot.net/doc/api/Plop/html/interfacePlop__LoggerInterface.html">Plop_LoggerInterface</a></dt>
+<dd>Detailed API documentation on the interface implemented by loggers.</dd>
+<dt><a class="reference external" href="https://ci.erebot.net/doc/api/Plop/html/classPlop__LoggerAbstract.html">Plop_LoggerAbstract</a></dt>
+<dd>An abstract class that can be useful when implementing your own logger.</dd>
+<dt><a class="reference external" href="https://ci.erebot.net/doc/api/Plop/html/classPlop__IndirectLoggerAbstract.html">Plop_IndirectLoggerAbstract</a></dt>
+<dd>An abstract class that can be useful when implementing an indirect
+logger. An indirect logger is a logger which relies on another logger
+to work. Plop&#8217;s main class (<a class="reference external" href="https://ci.erebot.net/doc/api/Plop/html/classPlop.html">Plop</a>) is an example of such a logger.</dd>
+<dt><a class="reference external" href="https://ci.erebot.net/doc/api/Plop/html/classPlop__Logger.html">Plop_Logger</a></dt>
+<dd>The most commonly found type of loggers.</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="filters">
+<span id="id2"></span><h3><a class="toc-backref" href="#id13">Filters</a><a class="headerlink" href="#filters" title="Permalink to this headline">¶</a></h3>
+<p>Filters are associated with either <a class="reference internal" href="#loggers"><em>loggers</em></a> or
+<a class="reference internal" href="#handlers"><em>handlers</em></a> through an object implementing
+<a class="reference external" href="https://ci.erebot.net/doc/api/Plop/html/interfacePlop__FiltersCollectionInterface.html">Plop_FiltersCollectionInterface</a> (usually an instance of
+<a class="reference external" href="https://ci.erebot.net/doc/api/Plop/html/classPlop__FiltersCollection.html">Plop_FiltersCollection</a>) and are used to restrict what messages will be
+handled.
+They are applied once the message has been turned into a log record
+and work by defining various criteria such a record must respect.</p>
+<p>If a record respects all of the criteria given in the collection, the
+<a class="reference internal" href="#handlers"><em>handlers</em></a> associated with the logger are called in turn
+to do their work.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The &#8220;level&#8221; associated with a logger acts like a lightweight filter.
+In fact, the same effect could be obtained by defining a collection
+containing an instance of <a class="reference external" href="https://ci.erebot.net/doc/api/Plop/html/classPlop__Filter__Level.html">Plop_Filter_Level</a> with the level
+desired.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Not all handlers make use of filters. Therefore, depending on the handlers
+used, it is possible that the filters will be ignored entirely.</p>
+</div>
+<p>To associate a new filter with a logger or handler, use the following code
+snippet:</p>
+<div class="highlight-inline-php"><div class="highlight"><pre><span class="nv">$filters</span> <span class="o">=</span> <span class="nv">$logger_or_handler</span><span class="o">-&gt;</span><span class="na">getFilters</span><span class="p">();</span>
+<span class="nv">$filters</span><span class="p">[]</span> <span class="o">=</span> <span class="nv">$newFilter</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Please note that this will <strong>not</strong> replace existing filters.
+Records will still have to pass the previous filters, but they will also
+have to pass the new filter before they can be handled.</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference external" href="https://ci.erebot.net/doc/api/Plop/html/interfacePlop__FiltersCollectionInterface.html">Plop_FiltersCollectionInterface</a></dt>
+<dd>Detailed API documentation for the interface representing a collection
+of filters.</dd>
+<dt><a class="reference external" href="https://ci.erebot.net/doc/api/Plop/html/interfacePlop__FilterInterface.html">Plop_FilterInterface</a></dt>
+<dd>Detailed API documentation for the interface implemented by all filters.
+This page also references all the filters that can be used in a
+collection.</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="handlers">
+<span id="id3"></span><h3><a class="toc-backref" href="#id14">Handlers</a><a class="headerlink" href="#handlers" title="Permalink to this headline">¶</a></h3>
+<p>Handlers are associated with <a class="reference internal" href="#loggers"><em>loggers</em></a> through an object
+implementing <a class="reference external" href="https://ci.erebot.net/doc/api/Plop/html/interfacePlop__HandlersCollectionInterface.html">Plop_HandlersCollectionInterface</a> (usually an instance of
+<a class="reference external" href="https://ci.erebot.net/doc/api/Plop/html/classPlop__HandlersCollection.html">Plop_HandlersCollection</a>) and are used to define the treatment applied
+to log records.</p>
+<p>Various types of handlers exist that can be used to log message to different
+locations such as the system&#8217;s event logger (syslog), a (rotated) file,
+a network socket, ...</p>
+<p>Like with loggers, several aspects of a handler can be configured:</p>
+<ul class="simple">
+<li><a class="reference internal" href="#formatters"><em>Its associated formatter</em></a>.</li>
+<li><a class="reference internal" href="#filters"><em>Filters</em></a>.</li>
+</ul>
+<p>To associate a new handler with a logger, use the following code snippet:</p>
+<div class="highlight-inline-php"><div class="highlight"><pre><span class="nv">$handlers</span> <span class="o">=</span> <span class="nv">$logger</span><span class="o">-&gt;</span><span class="na">getHandlers</span><span class="p">();</span>
+<span class="nv">$handlers</span><span class="p">[]</span> <span class="o">=</span> <span class="nv">$newHandler</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Please note that this will <strong>not</strong> replace existing handlers.
+Also, both the previously defined handlers and the newly added one
+will be called when a log record must be handled.</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference external" href="https://ci.erebot.net/doc/api/Plop/html/interfacePlop__HandlersCollectionInterface.html">Plop_HandlersCollectionInterface</a></dt>
+<dd>Detailed API documentation for the interface representing a collection
+of handlers.</dd>
+<dt><a class="reference external" href="https://ci.erebot.net/doc/api/Plop/html/classPlop__HandlerAbstract.html">Plop_HandlerAbstract</a></dt>
+<dd>An abstract class that can be useful when implementing a new handler.</dd>
+<dt><a class="reference external" href="https://ci.erebot.net/doc/api/Plop/html/interfacePlop__HandlerInterface.html">Plop_HandlerInterface</a></dt>
+<dd>Detailed API documentation for the interface implemented by all
+handlers. This page also references all the handlers that can be
+used in a collection.</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="formatters">
+<span id="id4"></span><h3><a class="toc-backref" href="#id15">Formatters</a><a class="headerlink" href="#formatters" title="Permalink to this headline">¶</a></h3>
+<p>Each <a class="reference internal" href="#handlers"><em>handler</em></a> has an associated formatter, which is used
+when a record needs formatting.
+A formatter defines how the final message will look like.</p>
+<p>There are a few things about a formatter that you can configure:</p>
+<ul>
+<li><p class="first">The main format. This string serves as a pattern for the final message.</p>
+<p>When using an instance of <a class="reference external" href="https://ci.erebot.net/doc/api/Plop/html/classPlop__Formatter.html">Plop_Formatter</a> as the formatter,
+it may contain <a class="reference external" href="http://docs.python.org/2/library/stdtypes.html#string-formatting">Python-like string formats</a> using the syntax for
+dictionaries.</p>
+<p>That is, it may contain something like the following:</p>
+<div class="highlight-python"><pre>[%(asctime)s] %(levelname)s - %(message)s</pre>
+</div>
+<p>The default format in that case is defined in
+<a class="reference external" href="https://ci.erebot.net/doc/api/Plop/html/classPlop__Formatter.html#a92cbae86df2d5af74ee0318ac926298e">Plop_Formatter::DEFAULT_FORMAT</a>.</p>
+<p>Several pre-defined formats exist that depend on the particular
+implementation used to represent records.
+For example, <a class="reference external" href="https://ci.erebot.net/doc/api/Plop/html/classPlop__Record.html">Plop_Record</a> closely follows the formats defined
+by <a class="reference external" href="http://docs.python.org/2/library/logging.html#logrecord-attributes">Python&#8217;s logging module</a> whenever they are applicable.</p>
+</li>
+<li><p class="first">The format for dates and times.</p>
+<p>When using an instance of <a class="reference external" href="https://ci.erebot.net/doc/api/Plop/html/classPlop__Formatter.html">Plop_Formatter</a> as the formatter,
+it uses the formatting options from PHP&#8217;s <a class="reference external" href="http://www.php.net/function.date.php">date()</a> function.
+Also, the default format for dates and times is then defined in
+<a class="reference external" href="https://ci.erebot.net/doc/api/Plop/html/classPlop__Formatter.html#ab26d8f557150413a04c67428c24cef3c">Plop_Formatter::DEFAULT_DATE_FORMAT</a>.</p>
+</li>
+<li><p class="first">The current timezone as a <a class="reference external" href="http://www.php.net/class.datetimezone.php">DateTimeZone</a> object.
+This information is used when formatting dates and times for log records
+that were created in a timezone that does not match the local timezone.</p>
+</li>
+</ul>
+<p>To associate a new formatter with a handler, use the following code snippet:</p>
+<div class="highlight-inline-php"><div class="highlight"><pre><span class="nv">$handler</span><span class="o">-&gt;</span><span class="na">setFormatter</span><span class="p">(</span><span class="nv">$newFormatter</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Please note that this <strong>will</strong> replace any formatter previously in place.</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference external" href="https://ci.erebot.net/doc/api/Plop/html/interfacePlop__FormatterInterface.html">Plop_FormatterInterface</a></dt>
+<dd>Detailed API documentation for the interface implemented by all
+formatters.</dd>
+<dt><a class="reference external" href="https://ci.erebot.net/doc/api/Plop/html/classPlop__Formatter.html">Plop_Formatter</a></dt>
+<dd>The most common implementation of formatters.</dd>
+<dt><a class="reference external" href="https://ci.erebot.net/doc/api/Plop/html/classPlop__Record.html">Plop_Record</a></dt>
+<dd>The most common implementation for log records.</dd>
+<dt><a class="reference external" href="http://www.php.net/class.datetime.php#datetime.constants.types">http://www.php.net/class.datetime.php#datetime.constants.types</a></dt>
+<dd>PHP&#8217;s predefined constants to represent several popular
+types of date/time formatting.</dd>
+<dt><a class="reference external" href="http://php.net/timezones.php">http://php.net/timezones.php</a></dt>
+<dd>List of timezone identifiers supported by PHP.</dd>
+</dl>
+</div>
+</div>
 </div>
 <div class="section" id="logging-some-messages">
-<h2><a class="toc-backref" href="#id4">Logging some messages</a><a class="headerlink" href="#logging-some-messages" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id16">Logging some messages</a><a class="headerlink" href="#logging-some-messages" title="Permalink to this headline">¶</a></h2>
 <p>Logging messages with Plop usually only involves the following sequence:</p>
 <div class="highlight-inline-php"><div class="highlight"><pre><span class="c1">// First, grab an instance of Plop.</span>
 <span class="c1">// Plop uses a singleton pattern, so the same instance will be returned</span>
@@ -147,7 +354,13 @@ apply <abbr title="Internationalization">I18N</abbr> methods on the messages. Eg
   <ul>
 <li><a class="reference internal" href="#">Usage</a><ul>
 <li><a class="reference internal" href="#loading-plop-s-classes">Loading Plop&#8217;s classes</a></li>
-<li><a class="reference internal" href="#configuring-plop">Configuring Plop</a></li>
+<li><a class="reference internal" href="#configuring-plop">Configuring Plop</a><ul>
+<li><a class="reference internal" href="#loggers">Loggers</a></li>
+<li><a class="reference internal" href="#filters">Filters</a></li>
+<li><a class="reference internal" href="#handlers">Handlers</a></li>
+<li><a class="reference internal" href="#formatters">Formatters</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#logging-some-messages">Logging some messages</a></li>
 </ul>
 </li>
@@ -185,7 +398,7 @@ apply <abbr title="Internationalization">I18N</abbr> methods on the messages. Eg
         <li class="right" >
           <a href="Installation.html" title="Installation"
              >previous</a> |</li>
-        <li><a href="index.html">Plop 1.0.0dev708 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Plop 1.0.0dev749 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
