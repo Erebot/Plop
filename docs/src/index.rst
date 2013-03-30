@@ -17,10 +17,10 @@ Contents:
     Contribute
     License
 
-Current status on http://travis-ci.org/:
+Current status on http://travis-ci.org/: |travis|
 
-..  image:: https://secure.travis-ci.org/Erebot/Plop.png
-    :alt: unknown
+..  |travis| image:: https://secure.travis-ci.org/Erebot/Plop.png
+    :alt: Unknown
     :target: http://travis-ci.org/#!/Erebot/Plop
 
 
