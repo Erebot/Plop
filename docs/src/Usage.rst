@@ -66,9 +66,9 @@ Each one is described below.
 Loggers
 ~~~~~~~
 
-A logger intercepts logging messages for a given method, class, file
-or directory. This is decided at construction time based on the arguments
-passed to :api:`Plop_Logger::__construct`.
+A logger intercepts log messages for a given method, class, file or directory.
+This is decided at construction time based on the arguments passed to
+:api:`Plop_Logger::__construct`.
 
 Internally, Plop builds up a hierarchy of loggers like so::
 
@@ -78,7 +78,7 @@ Internally, Plop builds up a hierarchy of loggers like so::
                 class-level logger
                     method/function-level logger
 
-Logging messages "bubble up". That is, Plop first looks for a method or
+Log messages "bubble up". That is, Plop first looks for a method or
 function-level logger to handle the message. If none can be found, it looks
 for a class-level logger (in case the message was emitted from a method).
 Then it looks for a file-level logger, then a logger for the directory
@@ -306,7 +306,7 @@ Please note that this **will** replace any formatter previously in place.
 Logging some messages
 ---------------------
 
-Logging messages with Plop usually only involves the following sequence:
+Log messages with Plop usually only involves the following sequence:
 
 ..  sourcecode:: inline-php
 
