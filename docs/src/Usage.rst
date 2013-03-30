@@ -306,7 +306,7 @@ Please note that this **will** replace any formatter previously in place.
 Logging some messages
 ---------------------
 
-Log messages with Plop usually only involves the following sequence:
+Logging messages with Plop usually only involves the following sequence:
 
 ..  sourcecode:: inline-php
 
