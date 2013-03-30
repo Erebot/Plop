@@ -199,7 +199,7 @@ the tools provided by your distribution:
     an equivalent git client. Also, make sure that :program:`git` is present
     on your account's :envvar:`PATH`. If not, you'll have to replace
     :command:`git` by the full path to :file:`git.exe` on every invocation
-    (eg. :command:`"C:\Program Files\Git\bin\git.exe" clone ...`)
+    (e.g. :command:`"C:\Program Files\Git\bin\git.exe" clone ...`)
 
 Also, make sure you have all the `required dependencies`_ installed as well.
 Now, retrieve Plop's code from its repository, using the following command:

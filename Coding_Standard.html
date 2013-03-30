@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Coding standard &mdash; Plop 1.0.0dev752 documentation</title>
+    <title>Coding standard &mdash; Plop 1.0.0dev753 documentation</title>
     
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '1.0.0dev752',
+        VERSION:     '1.0.0dev753',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,15 +25,15 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Search within Plop 1.0.0dev752 documentation"
+          title="Search within Plop 1.0.0dev753 documentation"
           href="_static/opensearch.xml"/>
-    <link rel="top" title="Plop 1.0.0dev752 documentation" href="index.html" /> 
+    <link rel="top" title="Plop 1.0.0dev753 documentation" href="index.html" /> 
   </head>
   <body>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
-        <li><a href="index.html">Plop 1.0.0dev752 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Plop 1.0.0dev753 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -375,7 +375,7 @@ or <strong>refers to an interface</strong>.</p>
 <span class="cp">?&gt;</span><span class="x"></span>
 </pre></div>
 </div>
-<p>For classes provided by PHP or one of its extensions (eg. <a class="reference external" href="http://php.net/DOMDocument">DOMDocument</a>),
+<p>For classes provided by PHP or one of its extensions (e.g. <a class="reference external" href="http://php.net/DOMDocument">DOMDocument</a>),
 consider writing an interface for it and use that as a type-hint.</p>
 <p>Using an interface instead of a class name in the type-hint makes it easier
 to use a class that provides the same features (the same API) through
@@ -592,7 +592,7 @@ Use the regular forms <tt class="docutils literal"><span class="pre">/*</span> <
 </div>
 <div class="section" id="filesystem-paths">
 <span id="cs-fs-paths"></span><h2><a class="toc-backref" href="#id14">Filesystem paths</a><a class="headerlink" href="#filesystem-paths" title="Permalink to this headline">¶</a></h2>
-<p>Never use any OS-specific directory separator (eg. &#8220;/&#8221;) directly to concatenate
+<p>Never use any OS-specific directory separator (e.g. &#8220;/&#8221;) directly to concatenate
 parts of a path together. Always use the <tt class="docutils literal"><span class="pre">DIRECTORY_SEPARATOR</span></tt> constant
 instead as it will take care of abstracting differences in the separator used
 by each OS for you.</p>
@@ -688,7 +688,7 @@ In particular, for one-line PHP blocks:</p>
 <div class="section" id="example-urls">
 <h2><a class="toc-backref" href="#id18">Example URLs</a><a class="headerlink" href="#example-urls" title="Permalink to this headline">¶</a></h2>
 <p>Use <tt class="docutils literal"><span class="pre">example.com</span></tt> as the domain for all example URLs, per <span class="target" id="index-1"></span><a class="rfc reference external" href="http://tools.ietf.org/html/rfc2606.html"><strong>RFC 2606</strong></a>.
-You may also refer to subdomains of this domain, eg. <tt class="docutils literal"><span class="pre">irc.example.com</span></tt>.</p>
+You may also refer to subdomains of this domain, e.g. <tt class="docutils literal"><span class="pre">irc.example.com</span></tt>.</p>
 </div>
 <div class="section" id="naming-conventions-functions-constants-global-variables-classes-files">
 <span id="naming-conventions"></span><h2><a class="toc-backref" href="#id19">Naming Conventions (Functions, Constants, Global Variables, Classes, Files)</a><a class="headerlink" href="#naming-conventions-functions-constants-global-variables-classes-files" title="Permalink to this headline">¶</a></h2>
@@ -759,9 +759,9 @@ For example, all classes providing handlers start with the prefix
 <tt class="samp docutils literal"><span class="pre">Plop_Handler_</span><em><span class="pre">HandlerName</span></em></tt>.
 See also <a class="reference internal" href="#cs-naming-files"><em>Files</em></a> for implications.</p>
 <p>For an interface, the text <tt class="docutils literal"><span class="pre">Interface</span></tt> should always appear in the
-interface&#8217;s name, preferably at the end (eg. <tt class="docutils literal"><span class="pre">Plop_FooInterface</span></tt>).
+interface&#8217;s name, preferably at the end (e.g. <tt class="docutils literal"><span class="pre">Plop_FooInterface</span></tt>).
 If you prefer to use a separate directory where all the interfaces are stored,
-this is also permitted (eg. <tt class="docutils literal"><span class="pre">Plop_Interface_Handler_Foo</span></tt>).</p>
+this is also permitted (e.g. <tt class="docutils literal"><span class="pre">Plop_Interface_Handler_Foo</span></tt>).</p>
 </div>
 <div class="section" id="class-methods-and-properties">
 <h3><a class="toc-backref" href="#id22">Class methods and properties</a><a class="headerlink" href="#class-methods-and-properties" title="Permalink to this headline">¶</a></h3>
@@ -776,7 +776,7 @@ Properties should be considered internal to a class.</p>
 declaration must not be used.</p>
 <p>The use of <tt class="docutils literal"><span class="pre">private</span></tt> class methods and properties should be avoided—use
 <tt class="docutils literal"><span class="pre">protected</span></tt> instead, so that another class could extend your class and change
-the behaviour of a method if necessary (eg. for unit testing purposes).</p>
+the behaviour of a method if necessary (e.g. for unit testing purposes).</p>
 <p>Use an underscore prefix for <tt class="docutils literal"><span class="pre">protected</span></tt> and <tt class="docutils literal"><span class="pre">private</span></tt> methods
 and properties so as to make them easily identifiable.</p>
 <p>You may use extra spaces before a property&#8217;s name to line up all properties
@@ -992,7 +992,7 @@ PEAR packages on your machine:</p>
     <div class="related">
       <h3>Navigation</h3>
       <ul>
-        <li><a href="index.html">Plop 1.0.0dev752 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Plop 1.0.0dev753 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

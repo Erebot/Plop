@@ -75,7 +75,7 @@ added at the very beginning of the buildslave's :file:`buildbot.tac` file:
 The :envvar:`PHPx_PATH` environment variables specify additional directories
 to add to the :envvar:`PATH` environment variable when using the PHP version
 with identifier ``x``. You may specify multiple paths by using the appropriate
-separator for your operating system (eg. colon on Linux, semi-colon on Windows).
+separator for your operating system (e.g. colon on Linux, semi-colon on Windows).
 
 The :envvar:`PHPx_DESC` lines specify the name of the executable to use to run
 the PHP version with identifier ``x``.

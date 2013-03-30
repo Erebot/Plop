@@ -358,7 +358,7 @@ or **refers to an interface**.
         }
     ?>
 
-For classes provided by PHP or one of its extensions (eg. `DOMDocument`_),
+For classes provided by PHP or one of its extensions (e.g. `DOMDocument`_),
 consider writing an interface for it and use that as a type-hint.
 
 Using an interface instead of a class name in the type-hint makes it easier
@@ -608,7 +608,7 @@ For example,
 Filesystem paths
 ----------------
 
-Never use any OS-specific directory separator (eg. "/") directly to concatenate
+Never use any OS-specific directory separator (e.g. "/") directly to concatenate
 parts of a path together. Always use the ``DIRECTORY_SEPARATOR`` constant
 instead as it will take care of abstracting differences in the separator used
 by each OS for you.
@@ -716,7 +716,7 @@ Example URLs
 ------------
 
 Use ``example.com`` as the domain for all example URLs, per :rfc:`2606`.
-You may also refer to subdomains of this domain, eg. ``irc.example.com``.
+You may also refer to subdomains of this domain, e.g. ``irc.example.com``.
 
 
 .. _`naming-conventions`:
@@ -792,9 +792,9 @@ For example, all classes providing handlers start with the prefix
 See also :ref:`cs-naming-files` for implications.
 
 For an interface, the text ``Interface`` should always appear in the
-interface's name, preferably at the end (eg. ``Plop_FooInterface``).
+interface's name, preferably at the end (e.g. ``Plop_FooInterface``).
 If you prefer to use a separate directory where all the interfaces are stored,
-this is also permitted (eg. ``Plop_Interface_Handler_Foo``).
+this is also permitted (e.g. ``Plop_Interface_Handler_Foo``).
 
 Class methods and properties
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -813,7 +813,7 @@ declaration must not be used.
 
 The use of ``private`` class methods and properties should be avoided |---| use
 ``protected`` instead, so that another class could extend your class and change
-the behaviour of a method if necessary (eg. for unit testing purposes).
+the behaviour of a method if necessary (e.g. for unit testing purposes).
 
 Use an underscore prefix for ``protected`` and ``private`` methods
 and properties so as to make them easily identifiable.
