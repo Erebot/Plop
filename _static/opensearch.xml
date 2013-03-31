@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
   <ShortName>Plop</ShortName>
-  <Description>Search Plop 1.0.0dev754 documentation</Description>
+  <Description>Search Plop 1.0.0dev755 documentation</Description>
   <InputEncoding>utf-8</InputEncoding>
   <Url type="text/html" method="get"
        template="http://erebot.github.com/Plop/search.html?q={searchTerms}&amp;check_keywords=yes&amp;area=default"/>
-  <LongName>Plop 1.0.0dev754 documentation</LongName>
+  <LongName>Plop 1.0.0dev755 documentation</LongName>
   
 </OpenSearchDescription>
