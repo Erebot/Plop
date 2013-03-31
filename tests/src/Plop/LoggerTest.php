@@ -55,6 +55,21 @@ extends Plop_TestCase
         $this->assertSame(NULL, $this->_logger->getMethod());
         $this->assertSame(Plop::NOTSET, $this->_logger->getLevel());
         $this->assertSame(0, count($this->_logger->getHandlers()));
+        $this->assertSame(0, count($this->_logger->getFilters()));
+    }
+
+    /**
+     * @covers Plop_Logger::__construct
+     * @expectedException           Plop_Exception
+     * @expectedExceptionMessage    $class and $method must both be NULL when $file is not NULL
+     */
+    public function testConstructorWithInvalidArguments()
+    {
+        $logger = new Plop_Logger(
+            __FILE__,
+            __CLASS__,
+            __METHOD__
+        );
     }
 
     /**
@@ -66,16 +81,40 @@ extends Plop_TestCase
     public function testConstructorWithSpecificArguments()
     {
         $logger = new Plop_Logger(
+            // Also tests trailing DIRECTORY_SEPARATOR removal.
             __FILE__ . DIRECTORY_SEPARATOR,
+            NULL,
+            NULL
+        );
+
+        $this->assertSame(__FILE__, $logger->getFile());
+        $this->assertSame(NULL, $logger->getClass());
+        $this->assertSame(NULL, $logger->getMethod());
+        $this->assertSame(Plop::NOTSET, $this->_logger->getLevel());
+        $this->assertSame(0, count($this->_logger->getHandlers()));
+        $this->assertSame(0, count($this->_logger->getFilters()));
+    }
+
+    /**
+     * @covers Plop_Logger::__construct
+     * @covers Plop_Logger::getFile
+     * @covers Plop_Logger::getClass
+     * @covers Plop_Logger::getMethod
+     */
+    public function testConstructorWithSpecificArguments2()
+    {
+        $logger = new Plop_Logger(
+            NULL,
             __CLASS__,
             __METHOD__
         );
 
-        $this->assertSame(__FILE__, $logger->getFile());
+        $this->assertSame(NULL, $logger->getFile());
         $this->assertSame(__CLASS__, $logger->getClass());
         $this->assertSame(__METHOD__, $logger->getMethod());
         $this->assertSame(Plop::NOTSET, $this->_logger->getLevel());
         $this->assertSame(0, count($this->_logger->getHandlers()));
+        $this->assertSame(0, count($this->_logger->getFilters()));
     }
 
     /**

@@ -95,6 +95,26 @@ extends Plop_TestCase
     }
 
     /**
+     * @covers Plop::offsetSet
+     * @expectedException           Plop_Exception
+     * @expectedExceptionMessage    $class and $method must both be NULL when $file is not NULL
+     */
+    public function testOffsetSetter4()
+    {
+        $plop       = new Plop_Stub(FALSE);
+        $logger = $this->getMock('Plop_LoggerInterface');
+        $logger
+            ->expects($this->any())
+            ->method('getFile')
+            ->will($this->returnValue(dirname(__FILE__)));
+        $logger
+            ->expects($this->any())
+            ->method('getClass')
+            ->will($this->returnValue(__CLASS__));
+        $plop[] = $logger;
+    }
+
+    /**
      * @covers                      Plop::offsetGet
      * @expectedException           Plop_Exception
      * @expectedExceptionMessage    Invalid identifier
@@ -143,10 +163,6 @@ extends Plop_TestCase
         $classLogger = $this->getMock('Plop_LoggerInterface');
         $classLogger
             ->expects($this->any())
-            ->method('getFile')
-            ->will($this->returnValue(__FILE__));
-        $classLogger
-            ->expects($this->any())
             ->method('getClass')
             ->will($this->returnValue(__CLASS__));
         $plop[] = $classLogger;
@@ -155,10 +171,6 @@ extends Plop_TestCase
 
         // Add a logger for this method (and test its retrieval).
         $methodLogger = $this->getMock('Plop_LoggerInterface');
-        $methodLogger
-            ->expects($this->any())
-            ->method('getFile')
-            ->will($this->returnValue(__FILE__));
         $methodLogger
             ->expects($this->any())
             ->method('getClass')
@@ -221,7 +233,7 @@ extends Plop_TestCase
     public function testCountMethod()
     {
         $this->_logger
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('getFile')
             ->will($this->returnValue(__FILE__));
 
@@ -350,15 +362,15 @@ extends Plop_TestCase
     public function testIndirectLogging()
     {
         $this->_logger
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('getFile')
             ->will($this->returnValue(dirname(dirname(__FILE__))));
         $this->_logger
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('getClass')
             ->will($this->returnValue(NULL));
         $this->_logger
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('getMethod')
             ->will($this->returnValue(NULL));
 

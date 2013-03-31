@@ -90,9 +90,22 @@ extends     Plop_LoggerAbstract
         if ($filters === NULL) {
             $filters = new Plop_FiltersCollection();
         }
-        while (substr($file, -strlen(DIRECTORY_SEPARATOR)) ==
-            DIRECTORY_SEPARATOR) {
-            $file = (string) substr($file, 0, -strlen(DIRECTORY_SEPARATOR));
+        if ($file !== NULL) {
+            while (substr($file, -strlen(DIRECTORY_SEPARATOR)) ==
+                DIRECTORY_SEPARATOR) {
+                $file = (string) substr($file, 0, -strlen(DIRECTORY_SEPARATOR));
+            }
+        }
+        /* Either :
+         * - $file == NULL, $class == NULL, $method == NULL (root logger),
+         * - $file == NULL, $class != NULL, $method == NULL (class logger),
+         * - $file == NULL, $class == NULL, $method != NULL (function logger),
+         * - $file == NULL, $class != NULL, $method != NULL (method logger),
+         * - $file != NULL, $class == $method == NULL (file/directory logger).
+         */
+        if ($file !== NULL and ($class !== NULL or $method !== NULL)) {
+            throw new Plop_Exception('$class and $method must both be NULL ' .
+                                     'when $file is not NULL');
         }
         $this->_file            = $file;
         $this->_class           = $class;

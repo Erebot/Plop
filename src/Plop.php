@@ -429,6 +429,21 @@ implements  ArrayAccess,
             }
         }
 
+        /* Either :
+         * - $file == NULL, $class == NULL, $method == NULL (root logger),
+         * - $file == NULL, $class != NULL, $method == NULL (class logger),
+         * - $file == NULL, $class == NULL, $method != NULL (function logger),
+         * - $file == NULL, $class != NULL, $method != NULL (method logger),
+         * - $file != NULL, $class == $method == NULL (file/directory logger).
+         */
+        $file   = $logger->getFile();
+        $class  = $logger->getClass();
+        $method = $logger->getMethod();
+        if ($file !== NULL and ($class !== NULL or $method !== NULL)) {
+            throw new Plop_Exception('$class and $method must both be NULL ' .
+                                     'when $file is not NULL');
+        }
+
         $this->_loggers[$id] = $logger;
     }
 
@@ -465,18 +480,14 @@ implements  ArrayAccess,
             $file = (string) substr($file, 0, -strlen(DIRECTORY_SEPARATOR));
         }
 
-        // File + class + method match.
-        if (isset($this->_loggers["$method:$class:$file"])) {
-            return $this->_loggers["$method:$class:$file"];
+        // Class and method / function match.
+        if (isset($this->_loggers["$method:$class:"])) {
+            return $this->_loggers["$method:$class:"];
         }
 
-        // File + class match.
-        // Note: for functions, this is actually a file match,
-        //       which is redundant with the loop afterwards,
-        //       but that's okay 'cause the performance hit
-        //       ain't that big.
-        if (isset($this->_loggers[":$class:$file"])) {
-            return $this->_loggers[":$class:$file"];
+        // Class match.
+        if ($class != "" && isset($this->_loggers[":$class:"])) {
+            return $this->_loggers[":$class:"];
         }
 
         // File match.
