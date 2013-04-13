@@ -10,3 +10,7 @@ Plop aims at providing an efficient logging API while being
 more feature-complete than PEAR's Log package and
 more user-friendly than Apache's log4php.
 
+This product includes software developed by the University of
+California, Berkeley and its contributors.
+More precisely, it includes a PHP port of FreeBSD's fnmatch.c.
+
