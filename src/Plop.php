@@ -601,12 +601,16 @@ implements  ArrayAccess,
             $bt = debug_backtrace(FALSE);
         }
 
-        $dir    = dirname(__FILE__) . DIRECTORY_SEPARATOR;
-        $len    = strlen($dir);
         $max    = count($bt);
+        $pfix1  = dirname(__FILE__) . DIRECTORY_SEPARATOR .
+                    'Plop' . DIRECTORY_SEPARATOR;
+        $len1   = strlen($pfix1);
+        $pfix2  = __FILE__;
+        $len2   = strlen($pfix2);
         for ($i = 0; $i < $max; $i++) {
             if (isset($bt[$i]['file']) &&
-                strncmp($dir, $bt[$i]['file'], $len)) {
+                strncmp($pfix1, $bt[$i]['file'], $len1) &&
+                strncmp($pfix2, $bt[$i]['file'], $len2)) {
                 break;
             }
 
