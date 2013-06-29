@@ -1,4 +1,4 @@
-@INCLUDE = buildenv/Doxyfile
+@INCLUDE = vendor/erebot/buildenv/Doxyfile
 PROJECT_NAME           = Plop
 PROJECT_NUMBER         = $(PLOP_VERSION)
 IGNORE_PREFIX          = $ \

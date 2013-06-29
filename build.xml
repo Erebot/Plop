@@ -12,5 +12,5 @@
         <include name="**/*.php"/>
     </fileset>
 
-    <import file="buildenv/build.xml"/>
+    <import file="vendor/erebot/buildenv/build.xml"/>
 </project>

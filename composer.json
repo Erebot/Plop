@@ -24,6 +24,9 @@
         "ext-Sockets": "*",
         "ext-SPL": "*"
     },
+    "require-dev": {
+        "erebot/buildenv": "dev-master"
+    },
     "autoload": {
         "psr-0": {
             "Plop": "src/"

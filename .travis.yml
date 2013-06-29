@@ -1,14 +1,22 @@
 language: php
 
 php:
-    - 5.2
     - 5.3.3
     - 5.3
     - 5.4
+    - 5.5
+
+branches:
+    only: master
 
 notifications:
     email: false
     irc: "irc.iiens.net#Erebot"
+
+before_script:
+    - wget http://getcomposer.org/composer.phar
+    - if [[ "$TRAVIS_PHP_VERSION" = "5.3.3" ]]; then php composer.phar install --dev --prefer-source; fi
+    - if [[ "$TRAVIS_PHP_VERSION" != "5.3.3" ]]; then php composer.phar install --dev; fi
 
 script: phpunit
 
