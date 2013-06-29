@@ -18,6 +18,12 @@
         "irc": "irc://irc.iiens.net/Erebot",
         "source": "https://github.com/Erebot/Plop"
     },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "http://packages.erebot.net"
+        }
+    ],
     "require": {
         "php": ">=5.2.1",
         "ext-pcre": "*",
