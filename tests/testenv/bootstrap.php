@@ -29,37 +29,30 @@ if (!defined('TESTENV_DIR')) {
         define('TESTENV_DIR', dirname(__FILE__));
 }
 
-if ('@php_dir@' == '@'.'php_dir'.'@') {
-    $base = dirname(dirname(TESTENV_DIR . DIRECTORY_SEPARATOR)) .
-            DIRECTORY_SEPARATOR;
-    require(dirname(__FILE__).DIRECTORY_SEPARATOR.'Autoload.php');
+$base = dirname(dirname(TESTENV_DIR . DIRECTORY_SEPARATOR)) .
+        DIRECTORY_SEPARATOR;
+require(dirname(__FILE__).DIRECTORY_SEPARATOR.'Autoload.php');
 
-    // Add the component's sources to the Autoloader.
-    Erebot_Autoload::initialize($base . "src");
+// Add the component's sources to the Autoloader.
+Erebot_Autoload::initialize($base . "src");
 
-    // Add vendor sources too.
-    $base .= "vendor";
-    if (is_dir($base)) {
-        foreach (scandir($base) as $path) {
-            if (trim($path, '.') == '')
-                continue;
-            $path = $base . DIRECTORY_SEPARATOR .
-                    $path . DIRECTORY_SEPARATOR;
-            if (is_dir($path . 'src'))
-                Erebot_Autoload::initialize($path . 'src');
-            if (is_dir($path . 'lib'))  // for sfService.
-                Erebot_Autoload::initialize($path . 'lib');
-        }
+// Add vendor sources too.
+$base .= "vendor";
+if (is_dir($base)) {
+    foreach (scandir($base) as $path) {
+        if (trim($path, '.') == '')
+            continue;
+        $path = $base . DIRECTORY_SEPARATOR .
+                $path . DIRECTORY_SEPARATOR;
+        if (is_dir($path . 'src'))
+            Erebot_Autoload::initialize($path . 'src');
+        if (is_dir($path . 'lib'))  // for sfService.
+            Erebot_Autoload::initialize($path . 'lib');
     }
-    // Register include_path with the Autoloader.
-    foreach (explode(PATH_SEPARATOR, get_include_path()) as $path)
-        Erebot_Autoload::initialize($path);
 }
-// Otherwise, we're probably in Pyrus/PEAR.
-else {
-    require('Erebot/Autoload.php');
-    Erebot_Autoload::initialize('@php_dir@');
-}
+// Register include_path with the Autoloader.
+foreach (explode(PATH_SEPARATOR, get_include_path()) as $path)
+    Erebot_Autoload::initialize($path);
 
 require(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'TestCase.php');
 
