@@ -14,15 +14,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Erebot/Erebot_Buildenv.git",
-                "reference": "03c621d56756a2412065ba6094034f5ca22f31c8"
+                "reference": "30d64452e42e1acf42d262a921c07ddceff379f2"
             },
             "dist": {
                 "type": "tar",
-                "url": "https://packages.erebot.net:943/composer/erebot-buildenv-03c621d56756a2412065ba6094034f5ca22f31c8-zip-46b166.tar",
+                "url": "https://packages.erebot.net:943/composer/erebot-buildenv-30d64452e42e1acf42d262a921c07ddceff379f2-zip-3eaeaa.tar",
                 "reference": "dev-master",
-                "shasum": "0b97c2b2ef495c5be8b53ee7d508e8ccdbdde46c"
+                "shasum": "515e96a88e613fcf26a3d0acd999455cc4f30b70"
             },
             "require": {
+                "ext-xsl": "*",
                 "phing/phing": ">=2.4.3",
                 "php": ">=5.2.2"
             },
@@ -61,7 +62,7 @@
                 "irc": "irc://irc.iiens.net/Erebot",
                 "source": "https://github.com/Erebot/Erebot_Buildenv"
             },
-            "time": "2013-06-24 21:53:45"
+            "time": "2013-07-16 10:27:59"
         },
         {
             "name": "phing/phing",
