@@ -2,6 +2,7 @@
 <project name="Plop" description="" default="all">
     <property name="email"              value="clicky@erebot.net"/>
     <property name="qa.coverage.force"  value="false"/>
+    <property name="subfile.phpunit"    value="tests/phpunit.xml"/>
 
     <fileset dir="." id="phar.files">
         <include name="data/**"/>
