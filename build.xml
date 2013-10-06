@@ -1,8 +1,11 @@
 <?xml version="1.0"?>
 <project name="Plop" description="" default="all">
-    <property name="version"            value="0.1.2"/>
     <property name="email"              value="clicky@erebot.net"/>
     <property name="qa.coverage.force"  value="false"/>
+
+    <fileset dir="." id="phar.files">
+        <include name="data/**"/>
+    </fileset>
 
     <fileset dir="src/" id="sources">
         <include name="**/*.php"/>
@@ -11,6 +14,8 @@
     <fileset dir="tests/src" id="tests">
         <include name="**/*.php"/>
     </fileset>
+
+    <target name="i18n" description=""/>
 
     <import file="vendor/erebot/buildenv/build.xml"/>
 </project>

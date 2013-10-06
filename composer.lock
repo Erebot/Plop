@@ -14,15 +14,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Erebot/Erebot_Buildenv.git",
-                "reference": "30d64452e42e1acf42d262a921c07ddceff379f2"
+                "reference": "b511e88891a11c70f8f6ebeff800b6881559df98"
             },
             "dist": {
                 "type": "tar",
-                "url": "https://packages.erebot.net:943/composer/erebot-buildenv-30d64452e42e1acf42d262a921c07ddceff379f2-zip-3eaeaa.tar",
+                "url": "https://packages.erebot.net:943/composer/erebot-buildenv-b511e88891a11c70f8f6ebeff800b6881559df98-zip-33a30c.tar",
                 "reference": "dev-master",
-                "shasum": "515e96a88e613fcf26a3d0acd999455cc4f30b70"
+                "shasum": "bc7365cbe2109bfca64051f5c4d2d77785b13074"
             },
             "require": {
+                "ext-phar": "*",
                 "ext-xsl": "*",
                 "phing/phing": ">=2.4.3",
                 "php": ">=5.2.2"
@@ -62,20 +63,20 @@
                 "irc": "irc://irc.iiens.net/Erebot",
                 "source": "https://github.com/Erebot/Erebot_Buildenv"
             },
-            "time": "2013-07-16 10:27:59"
+            "time": "2013-08-17 17:15:26"
         },
         {
             "name": "phing/phing",
-            "version": "2.5.0",
+            "version": "2.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phingofficial/phing.git",
-                "reference": "2.5.0"
+                "reference": "3f7d71bf561bafea39087250f777b349438cc32e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phingofficial/phing/zipball/2.5.0",
-                "reference": "2.5.0",
+                "url": "https://api.github.com/repos/phingofficial/phing/zipball/3f7d71bf561bafea39087250f777b349438cc32e",
+                "reference": "3f7d71bf561bafea39087250f777b349438cc32e",
                 "shasum": ""
             },
             "require": {
@@ -114,7 +115,7 @@
                 "task",
                 "tool"
             ],
-            "time": "2013-02-16 14:23:57"
+            "time": "2013-08-26 21:13:03"
         }
     ],
     "aliases": [
