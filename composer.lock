@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "d812be14d77f5097b1acfb1515fa99ed",
+    "hash": "aa26088906578cd6953d80cba8cc283e",
     "packages": [
 
     ],
@@ -17,10 +17,10 @@
                 "reference": "b511e88891a11c70f8f6ebeff800b6881559df98"
             },
             "dist": {
-                "type": "tar",
-                "url": "https://packages.erebot.net:943/composer/erebot-buildenv-b511e88891a11c70f8f6ebeff800b6881559df98-zip-33a30c.tar",
-                "reference": "dev-master",
-                "shasum": "bc7365cbe2109bfca64051f5c4d2d77785b13074"
+                "type": "zip",
+                "url": "https://api.github.com/repos/Erebot/Erebot_Buildenv/zipball/b511e88891a11c70f8f6ebeff800b6881559df98",
+                "reference": "b511e88891a11c70f8f6ebeff800b6881559df98",
+                "shasum": ""
             },
             "require": {
                 "ext-phar": "*",
@@ -41,6 +41,7 @@
                     "dev-master": "1.0.x-dev"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "GPL-3.0+"
             ],
@@ -56,13 +57,6 @@
             "keywords": [
                 "Erebot"
             ],
-            "support": {
-                "email": "erebot@erebot.net",
-                "issues": "https://github.com/Erebot/Erebot_Buildenv/issues",
-                "wiki": "http://erebot.github.com/Erebot/",
-                "irc": "irc://irc.iiens.net/Erebot",
-                "source": "https://github.com/Erebot/Erebot_Buildenv"
-            },
             "time": "2013-08-17 17:15:26"
         },
         {
