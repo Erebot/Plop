@@ -1,11 +1,11 @@
 <?php
 
-abstract class  Plop_HandlerAbstract_Stub
-extends         Plop_HandlerAbstract
+namespace Plop\Stub;
+
+abstract class HandlerAbstract extends \Plop\HandlerAbstract
 {
-    public function formatStub(Plop_RecordInterface $record)
+    public function formatStub(\Plop\RecordInterface $record)
     {
-        return parent::_format($record);
+        return parent::format($record);
     }
 }
-

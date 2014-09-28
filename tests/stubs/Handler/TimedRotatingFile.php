@@ -1,66 +1,66 @@
 <?php
 
-class   Plop_Handler_TimedRotatingFile_Stub
-extends Plop_Handler_TimedRotatingFile
+namespace Plop\Stub\Handler;
+
+class TimedRotatingFile extends \Plop\Handler\TimedRotatingFile
 {
     public function computeRolloverStub($currentTime)
     {
-        return parent::_computeRollover($currentTime);
+        return parent::computeRollover($currentTime);
     }
 
-    public function shouldRolloverStub(Plop_RecordInterface $record)
+    public function shouldRolloverStub(\Plop\RecordInterface $record)
     {
-        return parent::_shouldRollover($record);
+        return parent::shouldRollover($record);
     }
 
     public function getFilesToDeleteStub()
     {
-        return parent::_getFilesToDelete();
+        return parent::getFilesToDelete();
     }
 
     public function doRolloverStub()
     {
-        return parent::_doRollover();
+        return parent::doRollover();
     }
 
     public function getWhenStub()
     {
-        return $this->_when;
+        return $this->when;
     }
 
     public function getBackupCountStub()
     {
-        return $this->_backupCount;
+        return $this->backupCount;
     }
 
     public function getUTCStub()
     {
-        return $this->_utc;
+        return $this->utc;
     }
 
     public function getIntervalStub()
     {
-        return $this->_interval;
+        return $this->interval;
     }
 
     public function getSuffixStub()
     {
-        return $this->_suffix;
+        return $this->suffix;
     }
 
     public function getExtMatchStub()
     {
-        return $this->_extMatch;
+        return $this->extMatch;
     }
 
     public function getDayOfWeekStub()
     {
-        return $this->_dayOfWeek;
+        return $this->dayOfWeek;
     }
 
     public function getRolloverAtStub()
     {
-        return $this->_rolloverAt;
+        return $this->rolloverAt;
     }
 }
-

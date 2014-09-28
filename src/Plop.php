@@ -18,12 +18,36 @@
     along with Plop.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+namespace Plop;
+
+/// No log level defined.
+const NOTSET    =  0;
+
+/// DEBUG log level.
+const DEBUG     = 10;
+
+/// INFO log level.
+const INFO      = 20;
+
+/// WARNING log level.
+const WARNING   = 30;
+
+/// Alias for the WARNING log level.
+const WARN      = \Plop\WARNING;
+
+/// ERROR log level.
+const ERROR     = 40;
+
+/// CRITICAL error log level.
+const CRITICAL  = 50;
+
+
 /**
  *  \brief
  *      Main class for Plop.
  *
  *  For the most basic use cases, the Plop class acts
- *  as an instance of Plop_LoggerInterface, which means
+ *  as an instance of Plop::LoggerInterface, which means
  *  you only need code such as the following to start
  *  logging messages:
  *  \code
@@ -37,7 +61,7 @@
  *  piece of code:
  *  \code
  *      $logging = Plop::getInstance();
- *      $logger = $logging->getLogger(__FILE__, __CLASS__, __FUNCTION__);
+ *      $logger = $logging->getLogger(__NAMESPACE__, __CLASS__, __FUNCTION__);
  *      $logger->info('The cat is both dead and alive!');
  *  \endcode
  *
@@ -48,13 +72,13 @@
  *  The following piece of code shows how to configure bits of Plop
  *  using PHP code:
  *  \code
- *      $logging = Plop::getInstance();
+ *      $logging = \\Plop\\Plop::getInstance();
  *
  *      // Grab the root logger.
  *      $logger = $logging->getLogger();
  *
  *      // Log only messages with a level of INFO or more.
- *      $logger->setLevel(Plop::INFO);
+ *      $logger->setLevel(\\Plop::INFO);
  *
  *      // Change the format used to display logs on the console.
  *      // Also, display dates as UNIX timestamps instead of using
@@ -67,78 +91,56 @@
  *      // Send logs to the syslog (using the default format),
  *      // in addition to the console, if the level is WARNING
  *      // or above.
- *      $handler = new Plop_Handler_SysLog(
- *          Plop_Handler_SysLog::DEFAULT_ADDRESS,
+ *      $handler = new \\Plop\\Handler\\SysLog(
+ *          \\Plop\\Handler\\SysLog::DEFAULT_ADDRESS,
  *          LOG_DAEMON
  *      );
  *      $handlers = $logger->getHandlers();
- *      $handlers[] = $handler->setLevel(Plop::WARNING);
+ *      $handlers[] = $handler->setLevel(\\Plop::WARNING);
  *  \endcode
  */
-class       Plop
-extends     Plop_IndirectLoggerAbstract
-implements  ArrayAccess,
-            Countable
+class Plop extends \Plop\IndirectLoggerAbstract implements \ArrayAccess, \Countable
 {
     /// Default format used by the root logger.
     const BASIC_FORMAT  = '[%(levelname)s] %(message)s';
 
-    /// No log level defined.
-    const NOTSET    =  0;
-    /// DEBUG log level.
-    const DEBUG     = 10;
-    /// INFO log level.
-    const INFO      = 20;
-    /// WARNING log level.
-    const WARNING   = 30;
-    /// Alias for the WARNING log level.
-    const WARN      = 30;
-    /// ERROR log level.
-    const ERROR     = 40;
-    /// CRITICAL error log level.
-    const CRITICAL  = 50;
-
     /// Shared instance of the logging service.
-    static protected $_instance = NULL;
+    static protected $instance = null;
 
     /// Associative array of loggers, indexed by their ID.
-    protected $_loggers;
+    protected $loggers;
     /// Mapping between level names and their value.
-    protected $_levelNames;
+    protected $levelNames;
     /// Date and time when the logging service was initialized.
-    protected $_created;
-    /// An object responsible for removing common prefixes from files.
-    protected $_prefixStripper;
+    protected $created;
 
     /**
      * Create a new instance of the logging service.
      */
     protected function __construct()
     {
-        $this->_loggers = array();
-        $rootLogger     = new Plop_Logger(NULL, NULL, NULL);
-        $basicHandler   = new Plop_Handler_Stream(fopen('php://stderr', 'w'));
-        $this[]         = $rootLogger;
-        $handlers       = $rootLogger->getHandlers();
-        $handlers[]     = $basicHandler->setFormatter(
-                            new Plop_Formatter(self::BASIC_FORMAT)
-                        );
-        $this->_levelNames = array(
-            self::NOTSET    => 'NOTSET',
-            self::DEBUG     => 'DEBUG',
-            self::INFO      => 'INFO',
-            self::WARNING   => 'WARNING',
-            self::ERROR     => 'ERROR',
-            self::CRITICAL  => 'CRITICAL',
+        $this->loggers      = array();
+        $rootLogger         = new \Plop\Logger(null, null);
+        $basicHandler       = new \Plop\Handler\Stream(fopen('php://stderr', 'w'));
+        $this[]             = $rootLogger;
+        $handlers           = $rootLogger->getHandlers();
+        $formatter          = new \Plop\Formatter(self::BASIC_FORMAT);
+        $handlers[]         = $basicHandler->setFormatter($formatter);
+        $this->created      = microtime(true);
+        $this->levelNames   = array(
+            \Plop\NOTSET    => 'NOTSET',
+            \Plop\DEBUG     => 'DEBUG',
+            \Plop\INFO      => 'INFO',
+            \Plop\WARNING   => 'WARNING',
+            \Plop\ERROR     => 'ERROR',
+            \Plop\CRITICAL  => 'CRITICAL',
         );
-        $this->_created         = microtime(TRUE);
-        $this->_prefixStripper  = new Plop_PrefixesCollection();
     }
 
     /// This class is not clone-safe.
     public function __clone()
     {
-        throw new Plop_Exception('Cloning this class is forbidden');
+        throw new \Plop\Exception('Cloning this class is forbidden');
     }
 
     /**
@@ -147,13 +149,13 @@ implements  ArrayAccess,
      * \retval Plop
      *      Instance of the logging service.
      */
-    static public function & getInstance()
+    public static function & getInstance()
     {
-        if (self::$_instance === NULL) {
+        if (static::$instance === null) {
             $c = __CLASS__;
-            self::$_instance = new $c();
+            static::$instance = new $c();
         }
-        return self::$_instance;
+        return static::$instance;
     }
 
     /**
@@ -166,7 +168,7 @@ implements  ArrayAccess,
      */
     public function getCreationDate()
     {
-        return $this->_created;
+        return $this->created;
     }
 
     /**
@@ -184,12 +186,12 @@ implements  ArrayAccess,
     public function addLevelName($levelName, $levelValue)
     {
         if (!is_int($levelValue)) {
-            throw new Plop_Exception('Invalid level value');
+            throw new \Plop\Exception('Invalid level value');
         }
         if (!is_string($levelName)) {
-            throw new Plop_Exception('Invalid level name');
+            throw new \Plop\Exception('Invalid level name');
         }
-        $this->_levelNames[$levelValue] = $levelName;
+        $this->levelNames[$levelValue] = $levelName;
         return $this;
     }
 
@@ -210,12 +212,12 @@ implements  ArrayAccess,
     public function getLevelName($level)
     {
         if (!is_int($level)) {
-            throw new Plop_Exception('Invalid level value');
+            throw new \Plop\Exception('Invalid level value');
         }
-        if (!isset($this->_levelNames[$level])) {
+        if (!isset($this->levelNames[$level])) {
             return "Level $level";
         }
-        return $this->_levelNames[$level];
+        return $this->levelNames[$level];
     }
 
     /**
@@ -238,36 +240,25 @@ implements  ArrayAccess,
     public function getLevelValue($levelName)
     {
         if (!is_string($levelName)) {
-            throw new Plop_Exception('Invalid level name');
+            throw new \Plop\Exception('Invalid level name');
         }
-        $key = array_search($levelName, $this->_levelNames, TRUE);
-        return (int) $key; // FALSE is silently converted to 0.
-    }
-
-    public function getPrefixes()
-    {
-        return $this->_prefixStripper;
-    }
-
-    public function setPrefixes(Plop_PrefixesCollectionInterface $prefixes)
-    {
-        $this->_prefixStripper = $prefixes;
-        return $this;
+        $key = array_search($levelName, $this->levelNames, true);
+        return (int) $key; // false is silently converted to 0.
     }
 
     /**
      * Return the logger that is most appropriate
      * given a bit of context.
      *
-     * \param string $file
-     *      (optional) Name of the file for which
-     *      a logger must be returned.
+     * \param string $namespace
+     *      (optional) Namespace for which a logger
+     *      must be returned.
      *      Most of the time, you will pass the value
-     *      of \a \_\_FILE\_\_ to this parameter.
+     *      of \a \_\_NAMESPACE\_\_ to this parameter.
      *
      * \param string $class
-     *      (optional) Class inside the given file
-     *      for which a logger must be returned.
+     *      (optional) Class for which a logger must be
+     *      returned.
      *      Most of the time, you will pass the value
      *      of \a \_\_CLASS\_\_ to this parameter.
      *
@@ -277,25 +268,25 @@ implements  ArrayAccess,
      *      Most of the time, you will pass the value
      *      of \a \_\_FUNCTION\_\_ to this parameter,
      *      even for methods, where this will have
-     *      the same value as \a \_\_METHOD\_\_.
+     *      the same value as \a \_\_FUNCTION\_\_.
      *
-     * \retval Plop_LoggerInterface
+     * \retval Plop::LoggerInterface
      *      Logger that is the most appropriate given
      *      the context.
      *
      * \note
-     *      For functions, pass \a NULL as the value
+     *      For functions, pass \a null as the value
      *      for the \a $class parameter.
      *
      * \warning
      *      When the default value is kept for every
      *      parameter, this method will return the root
      *      logger. It will not try to get the values
-     *      of \a \_\_FILE\_\_, \a \_\_CLASS\_\_ and
-     *      \a \_\_FUNCTION\_\_ automatically.
+     *      of \a \_\_NAMESPACE\_\_, \a \_\_CLASS\_\_
+     *      and \a \_\_FUNCTION\_\_ automatically.
      *      If you need more magic than that, keep in mind
      *      that the Plop class also implements the
-     *      Plop_LoggerInterface interface to provide
+     *      Plop::LoggerInterface interface to provide
      *      shortcuts.
      *      Therefore,
      *      \code
@@ -304,13 +295,21 @@ implements  ArrayAccess,
      *      is equivalent to
      *      \code
      *          $logging
-     *              ->getLogger(\_\_FILE\_\_, \_\_CLASS\_\_, \_\_FUNCTION\_\_)
+     *              ->getLogger(\_\_NAMESPACE\_\_, \_\_CLASS\_\_, \_\_FUNCTION\_\_)
      *              ->info('The quick brown fox jumps over the lazy dog');
      *      \endcode
      */
-    public function getLogger($file = '', $class = '', $method = '')
+    public function getLogger($namespace = '', $class = '', $method = '')
     {
-        return $this["$method:$class:$file"];
+        // Remove any potential namespace from the class and method names.
+        $class = substr($class, strrpos('\\' . $class, '\\'));
+        $method = substr($method, strrpos('\\' . $method, '\\'));
+
+        // If __METHOD__ was used instead of __FUNCTION__, it also contains
+        // the class name as a prefix. We get rid of that too.
+        $method = substr((string) $method, strrpos(':' . $method, ':'));
+
+        return $this["$method:$class:$namespace"];
     }
 
     /**
@@ -325,7 +324,7 @@ implements  ArrayAccess,
      * (such as Dependency Injection Containers) but do not
      * support object subscripting (ie. array notation).
      *
-     * \param Plop_LoggerInterface $logger
+     * \param Plop::LoggerInterface $logger
      *      New logger to register.
      *
      * \retval Plop
@@ -345,12 +344,12 @@ implements  ArrayAccess,
      *      time with this method. Just pass each logger
      *      to register as an argument to this method.
      */
-    public function addLogger(Plop_LoggerInterface $logger /*, ... */)
+    public function addLogger(\Plop\LoggerInterface $logger /*, ... */)
     {
         $loggers = func_get_args();
         foreach ($loggers as $logger) {
-            if (!($logger instanceof Plop_LoggerInterface)) {
-                throw new Plop_Exception('Not a logger');
+            if (!($logger instanceof \Plop\LoggerInterface)) {
+                throw new \Plop\Exception('Not a logger');
             }
         }
 
@@ -363,18 +362,18 @@ implements  ArrayAccess,
     /**
      * Return a logger's identifier.
      *
-     * \param Plop_LoggerInterface $logger
+     * \param Plop::LoggerInterface $logger
      *      A logger whose identifier we're interested in.
      *
      * \retval string
      *      The logger's identifier.
      */
-    static protected function _getLoggerId(Plop_LoggerInterface $logger)
+    protected static function getLoggerId(\Plop\LoggerInterface $logger)
     {
-        $method = $logger->getMethod();
-        $class  = $logger->getClass();
-        $file   = $logger->getFile();
-        return "$method:$class:$file";
+        $func   = $logger->getMethod();
+        $cls    = $logger->getClass();
+        $ns     = $logger->getNamespace();
+        return "$func:$cls:$ns";
     }
 
     /**
@@ -386,7 +385,7 @@ implements  ArrayAccess,
      */
     public function count()
     {
-        return count($this->_loggers);
+        return count($this->loggers);
     }
 
     /**
@@ -397,7 +396,7 @@ implements  ArrayAccess,
      *      must match the identifier of the logger
      *      given in \a $logger.
      *
-     * \param Plop_LoggerInterface $logger
+     * \param Plop::LoggerInterface $logger
      *      New logger to register.
      *
      * \deprecated
@@ -418,43 +417,29 @@ implements  ArrayAccess,
      */
     public function offsetSet($offset, $logger)
     {
-        if (!($logger instanceof Plop_LoggerInterface)) {
-            throw new Plop_Exception('Invalid logger');
+        if (!($logger instanceof \Plop\LoggerInterface)) {
+            throw new \Plop\Exception('Invalid logger');
         }
 
-        $id = self::_getLoggerId($logger);
+        $id = static::getLoggerId($logger);
         if (is_string($offset)) {
             if ($offset != $id) {
-                throw new Plop_Exception('Identifier mismatch');
+                throw new \Plop\Exception('Identifier mismatch');
             }
         }
 
-        /* Either :
-         * - $file == NULL, $class == NULL, $method == NULL (root logger),
-         * - $file == NULL, $class != NULL, $method == NULL (class logger),
-         * - $file == NULL, $class == NULL, $method != NULL (function logger),
-         * - $file == NULL, $class != NULL, $method != NULL (method logger),
-         * - $file != NULL, $class == $method == NULL (file/directory logger).
-         */
-        $file   = $logger->getFile();
-        $class  = $logger->getClass();
-        $method = $logger->getMethod();
-        if ($file !== NULL and ($class !== NULL or $method !== NULL)) {
-            throw new Plop_Exception('$class and $method must both be NULL ' .
-                                     'when $file is not NULL');
-        }
-
-        $this->_loggers[$id] = $logger;
+        $this->loggers[$id] = $logger;
     }
 
     /**
      * Return the registered logger with the given identifier,
-     * or the root logger if no other logger was found.
+     * one of its parents, or the root logger if no other logger
+     * can be found.
      *
      * \param string $offset
      *      Identifier of the logger to return.
      *
-     * \retval Plop_LoggerInterface
+     * \retval Plop::LoggerInterface
      *      The registered logger with that identifier if one
      *      was found, or the root logger.
      *
@@ -465,61 +450,60 @@ implements  ArrayAccess,
     public function offsetGet($offset)
     {
         if (!is_string($offset)) {
-            throw new Plop_Exception('Invalid identifier');
+            throw new \Plop\Exception('Invalid identifier');
         }
 
         $parts = explode(':', $offset, 3);
         if (count($parts) != 3) {
-            throw new Plop_Exception('Invalid identifier');
+            throw new \Plop\Exception('Invalid identifier');
         }
-        list($method, $class, $file) = $parts;
-        $file = $this->_prefixStripper->stripLongestPrefix($file);
+        list($method, $class, $ns) = $parts;
 
-        while (substr($file, -strlen(DIRECTORY_SEPARATOR)) ==
-            DIRECTORY_SEPARATOR) {
-            $file = (string) substr($file, 0, -strlen(DIRECTORY_SEPARATOR));
-        }
-
-        // Class and method / function match.
-        if (isset($this->_loggers["$method:$class:"])) {
-            return $this->_loggers["$method:$class:"];
+        $len = -strlen('\\');
+        while (substr($ns, $len) == '\\') {
+            $ns = (string) substr($ns, 0, $len);
         }
 
-        // Class match.
-        if ($class != "" && isset($this->_loggers[":$class:"])) {
-            return $this->_loggers[":$class:"];
+        // Namespace, class and method/function match.
+        if (isset($this->loggers["$method:$class:$ns"])) {
+            return $this->loggers["$method:$class:$ns"];
         }
 
-        // File match.
-        $parts = explode(DIRECTORY_SEPARATOR, $file);
+        // Namespace and class match.
+        if ($class != "" && isset($this->loggers[":$class:$ns"])) {
+            return $this->loggers[":$class:$ns"];
+        }
+
+        // Namespace match.
+        $parts = explode('\\', $ns);
         while (count($parts)) {
-            $offset = implode(DIRECTORY_SEPARATOR, $parts);
+            $offset = implode('\\', $parts);
             if ($offset == '') {
                 break;
             }
 
-            if (isset($this->_loggers["::$offset"])) {
-                return $this->_loggers["::$offset"];
+            if (isset($this->loggers["::$offset"])) {
+                return $this->loggers["::$offset"];
             }
             array_pop($parts);
         }
 
         // Root logger.
-        return $this->_loggers['::'];
+        return $this->loggers['::'];
     }
 
     /**
      * Return a flag indicating whether a logger with
      * the given identifier was registered with Plop.
      *
-     * \param string|Plop_LoggerInterface $offset
+     * \param string|Plop::LoggerInterface $offset
      *      A logger identifier. You may also pass a logger,
      *      in which case, that logger's identifier will be
      *      used for the test.
      *
      * \retval bool
      *      A flag indicating whether a logger was registered
-     *      with that identifier (\a TRUE) or not (\a FALSE).
+     *      with that identifier (\a true) or not (\a false).
      *
      * \warning
      *      When a logger is passed to this method, it will
@@ -529,19 +513,19 @@ implements  ArrayAccess,
      */
     public function offsetExists($offset)
     {
-        if ($offset instanceof Plop_LoggerInterface) {
-            $offset = self::_getLoggerId($offset);
+        if ($offset instanceof \Plop\LoggerInterface) {
+            $offset = static::getLoggerId($offset);
         }
         if (!is_string($offset)) {
-            throw new Plop_Exception('Invalid identifier');
+            throw new \Plop\Exception('Invalid identifier');
         }
-        return isset($this->_loggers[$offset]);
+        return isset($this->loggers[$offset]);
     }
 
     /**
      * Unregister a logger.
      *
-     * \param string|Plop_LoggerInterface $offset
+     * \param string|Plop::LoggerInterface $offset
      *      Identifier of the logger to unregister.
      *      You may also pass a logger, in which case,
      *      that logger's identifier will be used.
@@ -554,20 +538,20 @@ implements  ArrayAccess,
      */
     public function offsetUnset($offset)
     {
-        if ($offset instanceof Plop_LoggerInterface) {
-            $offset = self::_getLoggerId($offset);
+        if ($offset instanceof \Plop\LoggerInterface) {
+            $offset = static::getLoggerId($offset);
         }
         if ($offset == "::") {
-            throw new Plop_Exception('The root logger cannot be unset');
+            throw new \Plop\Exception('The root logger cannot be unset');
         }
-        unset($this->_loggers[$offset]);
+        unset($this->loggers[$offset]);
     }
 
-    /// \copydoc Plop_IndirectLoggerAbstract::_getIndirectLogger().
-    protected function _getIndirectLogger()
+    /// \copydoc Plop::IndirectLoggerAbstract::getIndirectLogger().
+    protected function getIndirectLogger()
     {
-        $caller = self::findCaller();
-        return $this["{$caller['func']}:{$caller['class']}:{$caller['fn']}"];
+        $caller = static::findCaller();
+        return $this["{$caller['func']}:{$caller['cls']}:{$caller['ns']}"];
     }
 
     /**
@@ -576,64 +560,84 @@ implements  ArrayAccess,
      * \retval array
      *      An associative array with information about the caller.
      *      This array always contains the following keys:
-     *      -   "fn" -- the name of the file where the call was made.
-     *      -   "lno" -- the line number in that file where the call
+     *      -   "ns" -- the name of the caller's namespace.
+     *      -   "dir" -- the path to the caller's file.
+     *      -   "file" -- the name of the caller's file.
+     *      -   "line" -- the line number in that file where the call
      *          was made.
      *      -   "func" -- the name of the function/method where the
      *          call happened.
-     *      -   "class" -- the name of the class where the call was
+     *      -   "cls" -- the name of the class where the call was
      *          made.
      *
-     *      Each of those values may be NULL (or 0 in the case of
-     *      "lno") if the information could not be extracted from
+     *      Each of those values may be null (or 0 in the case of
+     *      "line") if the information could not be extracted from
      *      the call stack.
      *
      * \note
      *      Here, "caller" means the first context in the call stack
      *      that does not refer to one of Plop's methods/files.
      */
-    static public function findCaller()
+    public static function findCaller()
     {
         if (version_compare(PHP_VERSION, '5.3.6', '>=')) {
             $bt = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
-        }
-        else {
-            $bt = debug_backtrace(FALSE);
+        } else {
+            $bt = debug_backtrace(false);
         }
 
         $max    = count($bt);
-        $pfix1  = dirname(__FILE__) . DIRECTORY_SEPARATOR .
-                    'Plop' . DIRECTORY_SEPARATOR;
-        $len1   = strlen($pfix1);
-        $pfix2  = __FILE__;
-        $len2   = strlen($pfix2);
+        $ns     = __NAMESPACE__ . '\\';
+        $len    = strlen($ns);
+        $ns2    = $ns . 'Tests' . '\\';
         for ($i = 0; $i < $max; $i++) {
-            if (isset($bt[$i]['file']) &&
-                strncmp($pfix1, $bt[$i]['file'], $len1) &&
-                strncmp($pfix2, $bt[$i]['file'], $len2)) {
-                break;
+            if (isset($bt[$i]['function']) &&
+                !strncmp($ns, $bt[$i]['function'], $len) &&
+                strncmp($ns2, $bt[$i]['function'], $len + 6)) {
+                // Skip frames until we get out of Plop's code.
+                continue;
             }
 
-            // Skip frames until we get out of Plop's code.
+            if (isset($bt[$i]['class']) &&
+                !strncmp($ns, $bt[$i]['class'], $len) &&
+                strncmp($ns2, $bt[$i]['class'], $len + 6)) {
+                // Skip frames until we get out of Plop's code.
+                continue;
+            }
+
+            break;
         }
 
         if ($i == $max) {
             return array(
-                'fn'    => NULL,
-                'lno'   => 0,
-                'func'  => NULL,
-                'class' => NULL,
+                'ns'    => null,
+                'file'  => null,
+                'line'  => 0,
+                'func'  => null,
+                'cls'   => null,
             );
         }
 
+        $ns     = '';
+        $func   = isset($bt[$i]['function']) ? $bt[$i]['function'] : null;
+        $cls    = isset($bt[$i]['class']) ? $bt[$i]['class'] : null;
+        $file   = isset($bt[$i - 1]['file']) ? $bt[$i - 1]['file'] : null;
+        $line   = isset($bt[$i - 1]['line']) ? $bt[$i - 1]['line'] : 0;
+
+        if (($pos = strrpos($func, '\\')) !== false) {
+            $ns     = substr($func, 0, $pos);
+            $func   = substr($func, $pos + 1);
+        } elseif (($pos = strrpos($cls, '\\')) !== false) {
+            $ns     = substr($cls, 0, $pos);
+            $cls    = substr($cls, $pos + 1);
+        }
+
         return array(
-            'fn'    => $bt[$i]['file'],
-            'lno'   => $bt[$i]['line'],
-            'func'  => (!isset($bt[$i + 1]['function'])
-                        ? NULL : $bt[$i + 1]['function']),
-            'class' => (!isset($bt[$i + 1]['class'])
-                        ? NULL : $bt[$i + 1]['class']),
+            'ns'    => $ns,
+            'file'  => $file,
+            'line'  => $line,
+            'func'  => $func,
+            'cls'   => $cls,
         );
     }
 }
-

@@ -1,44 +1,43 @@
 <?php
 
-class   Plop_Handler_Socket_Stub
-extends Plop_Handler_Socket
+namespace Plop\Stub\Handler;
+
+class Socket extends \Plop\Handler\Socket
 {
     public function createSocketStub()
     {
-        return parent::_createSocket();
+        return parent::createSocket();
     }
 
     public function sendStub($s)
     {
-        return parent::_send($s);
+        return parent::send($s);
     }
 
-    public function makePickleStub(Plop_RecordInterface $record)
+    public function makePickleStub(\Plop\RecordInterface $record)
     {
-        return parent::_makePickle($record);
+        return parent::makePickle($record);
     }
 
-    public function emitStub(Plop_RecordInterface $record)
+    public function emitStub(\Plop\RecordInterface $record)
     {
-        return parent::_emit($record);
+        return parent::emit($record);
     }
 
     public function writeStub($s)
     {
-        return parent::_write($s);
+        return parent::write($s);
     }
 
     public function handleErrorStub(
-        Plop_RecordInterface    $record,
-        Exception               $exception
-    )
-    {
+        \Plop\RecordInterface $record,
+        \Exception $exception
+    ) {
         return parent::handleError($record, $exception);
     }
 
     public function getRetryTimeStub()
     {
-        return $this->_retryTime;
+        return $this->retryTime;
     }
 }
-

@@ -1,4 +1,6 @@
 {
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "name": "erebot/plop",
     "description": "A simple logging library for PHP",
     "keywords": ["log", "logging"],
@@ -19,17 +21,23 @@
         "source": "https://github.com/Erebot/Plop"
     },
     "require": {
-        "php": ">=5.2.1",
+        "php": ">=5.3.1",
         "ext-pcre": "*",
         "ext-Sockets": "*",
         "ext-SPL": "*"
     },
     "require-dev": {
-        "erebot/buildenv": "dev-master"
+        "erebot/buildenv": "dev-master",
+        "sebastian/phpcpd": "*",
+        "phpmd/phpmd": "*",
+        "pdepend/pdepend": "*",
+        "phpunit/phpunit": "*",
+        "phpunit/php-code-coverage": "*",
+        "squizlabs/php_codesniffer": "*"
     },
     "autoload": {
-        "psr-0": {
-            "Plop": "src/"
+        "psr-4": {
+            "Plop\\": "src/"
         }
     },
     "extra": {

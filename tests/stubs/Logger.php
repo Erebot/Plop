@@ -1,21 +1,21 @@
 <?php
 
-class   Plop_Logger_Stub
-extends Plop_Logger
+namespace Plop\Stub;
+
+class Logger extends \Plop\Logger
 {
-    public function callHandlersStub(Plop_RecordInterface $record)
+    public function callHandlersStub(\Plop\RecordInterface $record)
     {
-        return parent::_callHandlers($record);
+        return parent::callHandlers($record);
     }
 
     public function emitWarningStub()
     {
-        return parent::_emitWarning();
+        return parent::emitWarning();
     }
 
-    public function handleStub(Plop_RecordInterface $record)
+    public function handleStub(\Plop\RecordInterface $record)
     {
-        return parent::_handle($record);
+        return parent::handle($record);
     }
 }
-

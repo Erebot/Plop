@@ -21,7 +21,7 @@
 class Plop_Testenv_Stderr
 {
     public $context;
-    protected $_callback;
+    protected $callback;
 
     public function stream_open($path, $mode, $options, &$opened_path)
     {
@@ -29,39 +29,39 @@ class Plop_Testenv_Stderr
         if (!isset($params['mock']['callback']) ||
             !is_callable($params['mock']['callback']) ||
             $mode != 'at') {
-            return FALSE;
+            return false;
         }
 
         $opened_path        =   $path;
-        $this->_callback    =&  $params['mock']['callback'];
-        return TRUE;
+        $this->callback     =&  $params['mock']['callback'];
+        return true;
     }
 
     public function stream_close()
     {
         $params = stream_context_get_options($this->context);
-        $params['stderr']['buffer'] =& $this->_buffer;
-        return TRUE;
+        $params['stderr']['buffer'] =& $this->buffer;
+        return true;
     }
 
     public function stream_flush()
     {
-        return TRUE;
+        return true;
     }
 
     public function stream_eof()
     {
-        return FALSE;
+        return false;
     }
 
     public function stream_tell()
     {
-        return strlen($this->_buffer);
+        return strlen($this->buffer);
     }
 
     public function stream_write($data)
     {
-        call_user_func($this->_callback, $data);
+        call_user_func($this->callback, $data);
         return strlen($data);
     }
 }
