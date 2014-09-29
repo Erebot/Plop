@@ -1,26 +1,26 @@
 <?php
 
-class   Plop_Handler_File_Stub
-extends Plop_Handler_File
+namespace Plop\Stub\Handler;
+
+class File extends \Plop\Handler\File
 {
     public function openStub()
     {
-        return parent::_open();
+        return parent::open();
     }
 
     public function closeStub()
     {
-        return parent::_close();
+        return parent::close();
     }
 
-    public function emitStub(Plop_RecordInterface $record)
+    public function emitStub(\Plop\RecordInterface $record)
     {
-        return parent::_emit($record);
+        return parent::emit($record);
     }
 
     public function getStreamStub()
     {
-        return $this->_stream;
+        return $this->stream;
     }
 }
-

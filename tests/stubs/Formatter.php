@@ -1,19 +1,18 @@
 <?php
 
-class   Plop_Formatter_Stub
-extends Plop_Formatter
+namespace Plop\Stub;
+
+class Formatter extends \Plop\Formatter
 {
     public function formatTimeStub(
-        Plop_RecordInterface    $record,
-                                $dateFormat = self::DEFAULT_DATE_FORMAT
-    )
-    {
-        return parent::_formatTime($record, $dateFormat);
+        \Plop\RecordInterface $record,
+        $dateFormat = self::DEFAULT_DATE_FORMAT
+    ) {
+        return parent::formatTime($record, $dateFormat);
     }
 
-    public function formatExceptionStub(Exception $exception)
+    public function formatExceptionStub(\Exception $exception)
     {
-        return parent::_formatException($exception);
+        return parent::formatException($exception);
     }
 }
-

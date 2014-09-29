@@ -10,12 +10,11 @@ In case you compiled PHP yourself, you may need to recompile it to include
 additional extensions (see the list of required PHP dependencies in the section
 entitled `Getting started`_ for more information).
 
-As of this writing, Plop is known to work on PHP versions ranging from
-PHP 5.2.1 up to PHP 5.4.8. Also, Plop should run correctly on both
-Windows (XP or later) and Linux (most distros).
-The code is tested using an automated process on Windows XP (32 bits),
-Debian Stable (64 bits) and CentOS 6 (64 bits), as reflected by our
-`Continuous Integration server`_.
+Plop is known to work with most PHP versions.
+Plop should run correctly on both Windows (XP or later) and Linux (most distros).
+The code is tested using an automated process on Windows Vista (64 bits),
+Windows 7 (64 bits), Windows 8.1 (64 bits), Debian Stable (64 bits)
+and CentOS 6 (64 bits), as reflected by our `Continuous Integration server`_.
 
 ..  contents:: :local:
 
@@ -111,6 +110,6 @@ You may also consult the output of ``phpinfo()`` for the same purpose.
     :trim:
 
 ..  _`Continuous Integration server`:
-    https://buildbot.erebot.net/components/
+    https://ci.erebot.net/components/
 
 .. vim: ts=4 et

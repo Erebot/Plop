@@ -1,11 +1,11 @@
 <?php
 
-abstract class  Plop_Handler_RotatingAbstract_Stub
-extends         Plop_Handler_RotatingAbstract
+namespace Plop\Stub\Handler;
+
+abstract class RotatingAbstract extends \Plop\Handler\RotatingAbstract
 {
-    public function emitStub(Plop_RecordInterface $record)
+    public function emitStub(\Plop\RecordInterface $record)
     {
-        return parent::_emit($record);
+        return parent::emit($record);
     }
 }
-

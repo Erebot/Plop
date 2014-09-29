@@ -1,46 +1,46 @@
 <?php
 
-class   Plop_Handler_SysLog_Stub
-extends Plop_Handler_SysLog
+namespace Plop\Stub\Handler;
+
+class SysLog extends \Plop\Handler\SysLog
 {
     public function makeSocketStub()
     {
-        return parent::_makeSocket();
+        return parent::makeSocket();
     }
 
     public function encodePriorityStub($facility, $priority)
     {
-        return parent::_encodePriority($facility, $priority);
+        return parent::encodePriority($facility, $priority);
     }
 
     public function closeStub()
     {
-        return parent::_close();
+        return parent::close();
     }
 
     public function mapPriorityStub($levelName)
     {
-        return parent::_mapPriority($levelName);
+        return parent::mapPriority($levelName);
     }
 
-    public function emitStub(Plop_RecordInterface $record)
+    public function emitStub(\Plop\RecordInterface $record)
     {
-        return parent::_emit($record);
+        return parent::emit($record);
     }
 
     public function getSocketStub()
     {
-        return $this->_socket;
+        return $this->socket;
     }
 
     public function getAddressStub()
     {
-        return $this->_address;
+        return $this->address;
     }
 
     public function getFacilityStub()
     {
-        return $this->_facility;
+        return $this->facility;
     }
 }
-

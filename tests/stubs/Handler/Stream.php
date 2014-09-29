@@ -1,11 +1,11 @@
 <?php
 
-class   Plop_Handler_Stream_Stub
-extends Plop_Handler_Stream
+namespace Plop\Stub\Handler;
+
+class Stream extends \Plop\Handler\Stream
 {
-    public function emitStub(Plop_RecordInterface $record)
+    public function emitStub(\Plop\RecordInterface $record)
     {
-        return parent::_emit($record);
+        return parent::emit($record);
     }
 }
-

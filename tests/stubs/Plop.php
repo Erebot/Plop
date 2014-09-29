@@ -1,30 +1,30 @@
 <?php
 
-class   Plop_Stub
-extends Plop
+namespace Plop\Stub;
+
+class Plop extends \Plop\Plop
 {
     public function __construct($empty)
     {
         parent::__construct();
-        $this->_created = 12345678.9;
+        $this->created = 12345678.9;
         if ($empty) {
-            $this->_loggers = array();
+            $this->loggers = array();
         }
     }
 
-    static public function resetInstanceStub()
+    public static function resetInstanceStub()
     {
-        self::$_instance = NULL;
+        self::$instance = null;
     }
 
-    static public function getLoggerIdStub(Plop_LoggerInterface $logger)
+    public static function getLoggerIdStub(\Plop\LoggerInterface $logger)
     {
-        return self::_getLoggerId($logger);
+        return self::getLoggerId($logger);
     }
 
     public function getIndirectLoggerStub()
     {
-        return $this->_getIndirectLogger();
+        return $this->getIndirectLogger();
     }
 }
-

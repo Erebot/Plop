@@ -8,54 +8,11 @@ There are several ways to achieve that. Each method is described below.
 
 ..  note::
 
-    For users of PHP >= 5.3.0, we recommend using the `PHAR installation`_
-    method or the `composer installation`_ method, depending on whether
-    your project already uses `Composer`_ or not.
-
-..  note::
-
-    For users of PHP < 5.3.0, we recommend that you install Plop
-    using its `PEAR channel`_. The `PEAR installation`_ method will result
-    in a system-wide installation which can be upgraded very easily later.
-    `Installation from sources`_ is reserved for advanced installations
-    (mainly for Plop's developers).
+    We recommend using the `PHAR installation`_ method
+    or the `composer installation`_ method, depending on
+    whether your project already uses `Composer`_ or not.
 
 ..  _`PEAR installation`:
-
-Installation from Plop's PEAR channel
--------------------------------------
-
-This installation method is very simple and works on all PHP versions still
-in use. Hence, it's the recommended way for beginners.
-Just use whatever tool your distribution provides to manage PEAR packages:
-
-* Either `pear`_ (traditionnal tool)
-* or `pyrus`_ (new experimental tool meant to replace pear someday)
-
-You can install (**as a privileged user**) either the latest stable release
-using a command such as:
-
-..  sourcecode:: console
-
-    root@home:~# pear channel-discover pear.erebot.net
-    root@home:~# pear install erebot/Plop
-
-... or you can install the latest unstable version instead, using:
-
-..  sourcecode:: bash
-
-    root@home:~# pear channel-discover pear.erebot.net
-    root@home:~# pear install erebot/Plop-alpha
-
-Please note that the ``channel-discover`` command needs to be run only once
-(pear and pyrus will refuse to discover a PEAR channel more than once anyway).
-To use Pyrus to manage PEAR packages instead of the regular pear tool,
-just replace :command:`pear` with :command:`pyrus` in the commands above.
-
-That's all! Plop is now installed and ready to use.
-You may now proceed to the :ref:`next step <Using Plop>`, which makes
-actual use of Plop's logging capabilities.
-
 
 ..  _`PHAR installation`:
 
@@ -89,9 +46,8 @@ Installing Plop as a PHAR archive only involves a few steps:
 
     ..  sourcecode:: bash
 
-        $ wget --no-check-certificate                               \
-            https://pear.erebot.net/get/Plop-latest.phar            \
-            https://pear.erebot.net/get/Plop-latest.phar.pubkey
+        $ wget https://packages.erebot.net/get/Plop-latest.phar     \
+            https://packages.erebot.net/get/Plop-latest.phar.pubkey
 
 ..  warning::
 

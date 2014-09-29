@@ -20,8 +20,8 @@
 
 class Plop_Testenv_Socket
 {
-    public      $context;
-    protected   $_mock;
+    public $context;
+    protected $mock;
 
     final public function stream_open($path, $mode, $options, &$opened_path)
     {
@@ -29,16 +29,16 @@ class Plop_Testenv_Socket
         if (!isset($params['mock']['object']) ||
             !is_object($params['mock']['object']) ||
             $mode != 'a+t') {
-            return FALSE;
+            return false;
         }
 
         $opened_path    =   $path;
-        $this->_mock    =&  $params['mock']['object'];
-        return TRUE;
+        $this->mock     =&  $params['mock']['object'];
+        return true;
     }
 
     public function stream_close()
     {
-        return call_user_func(array($this->_mock, 'stream_close'));
+        return call_user_func(array($this->mock, 'stream_close'));
     }
 }

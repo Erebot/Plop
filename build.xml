@@ -12,8 +12,8 @@
         <include name="**/*.php"/>
     </fileset>
 
-    <fileset dir="tests/src" id="tests">
-        <include name="**/*.php"/>
+    <fileset dir="tests/" id="tests">
+        <include name="unit/**/*.php"/>
     </fileset>
 
     <target name="i18n" description=""/>

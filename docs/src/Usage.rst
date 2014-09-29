@@ -29,15 +29,14 @@ The way to load Plop's classes depends on the installation method selected:
 
         require_once('path/to/vendor/autoload.php');
 
--   For the PEAR installation method or for an installation from sources,
+-   For an installation from sources,
 
     ..  sourcecode:: inline-php
 
         require_once('Plop/Autoloader.php');
         Plop_Autoloader::register();
 
-    Also, make sure the full path to your PEAR installation's ``php_dir``
-    (or to Plop's :file:`src/` directory in case you installed it from sources)
+    Also, make sure the full path to Plop's :file:`src/` directory
     is part of your PHP installation's ``include_path``.
 
     On Linux, you may use the following command to display your PHP
@@ -68,7 +67,7 @@ Loggers
 
 A logger intercepts log messages for a given method, class, file or directory.
 This is decided at construction time based on the arguments passed to
-:api:`Plop_Logger::__construct`.
+:api:`Plop::Logger::__construct`.
 
 Internally, Plop builds up a hierarchy of loggers like so::
 
@@ -100,8 +99,8 @@ Several aspects of a logger can be configured, such as:
 
 -   The record factory. This factory is used to create records of logging
     messages, intended to keep track of the message's contextual information.
-    This factory must implement the :api:`Plop_RecordFactoryInterface`
-    interface and is usually an instance of :api:`Plop_RecordFactory`.
+    This factory must implement the :api:`Plop::RecordFactoryInterface`
+    interface and is usually an instance of :api:`Plop::RecordFactory`.
 
 -   :ref:`Filters`.
 
@@ -112,7 +111,7 @@ using the following code snippet:
 
 ..  sourcecode:: inline-php
 
-    $logging = Plop::getInstance();
+    $logging = \Plop\Plop::getInstance();
     $logging[] = $newlyCreatedLogger;
 
 This will add the logger to the list of loggers already known to Plop.
@@ -121,18 +120,18 @@ If a logger had already been registered in Plop with the same "identity"
 
 ..  seealso::
 
-    :api:`Plop_LoggerInterface`
+    :api:`Plop::LoggerInterface`
         Detailed API documentation on the interface implemented by loggers.
 
-    :api:`Plop_LoggerAbstract`
+    :api:`Plop::LoggerAbstract`
         An abstract class that can be useful when implementing your own logger.
 
-    :api:`Plop_IndirectLoggerAbstract`
+    :api:`Plop::IndirectLoggerAbstract`
         An abstract class that can be useful when implementing an indirect
         logger. An indirect logger is a logger which relies on another logger
         to work. Plop's main class (:api:`Plop`) is an example of such a logger.
 
-    :api:`Plop_Logger`
+    :api:`Plop::Logger`
         The most common type of logger.
 
 ..  _`filters`:
@@ -142,8 +141,8 @@ Filters
 
 Filters are associated with either :ref:`loggers <Loggers>` or
 :ref:`handlers <handlers>` through an object implementing
-:api:`Plop_FiltersCollectionInterface` (usually an instance of
-:api:`Plop_FiltersCollection`) and are used to restrict what messages will be
+:api:`Plop::FiltersCollectionInterface` (usually an instance of
+:api:`Plop::FiltersCollection`) and are used to restrict what messages will be
 handled.
 They are applied once the message has been turned into a log record
 and work by defining various criteria such a record must respect.
@@ -155,7 +154,7 @@ to do their work.
 ..  note::
     The "level" associated with a logger acts like a lightweight filter.
     In fact, the same effect could be obtained by defining a collection
-    containing an instance of :api:`Plop_Filter_Level` with the level
+    containing an instance of :api:`Plop::Filter::Level` with the level
     desired.
 
 ..  warning::
@@ -176,11 +175,11 @@ have to pass the new filter before they can be handled.
 
 ..  seealso::
 
-    :api:`Plop_FiltersCollectionInterface`
+    :api:`Plop::FiltersCollectionInterface`
         Detailed API documentation for the interface representing a collection
         of filters.
 
-    :api:`Plop_FilterInterface`
+    :api:`Plop::FilterInterface`
         Detailed API documentation for the interface implemented by all filters.
         This page also references all the filters that can be used in a
         collection.
@@ -191,8 +190,8 @@ Handlers
 ~~~~~~~~
 
 Handlers are associated with :ref:`loggers <Loggers>` through an object
-implementing :api:`Plop_HandlersCollectionInterface` (usually an instance of
-:api:`Plop_HandlersCollection`) and are used to define the treatment applied
+implementing :api:`Plop::HandlersCollectionInterface` (usually an instance of
+:api:`Plop::HandlersCollection`) and are used to define the treatment applied
 to log records.
 
 Various types of handlers exist that can be used to log message to different
@@ -218,14 +217,14 @@ will be called when a log record must be handled.
 
 ..  seealso::
 
-    :api:`Plop_HandlersCollectionInterface`
+    :api:`Plop::HandlersCollectionInterface`
         Detailed API documentation for the interface representing a collection
         of handlers.
 
-    :api:`Plop_HandlerAbstract`
+    :api:`Plop::HandlerAbstract`
         An abstract class that can be useful when implementing a new handler.
 
-    :api:`Plop_HandlerInterface`
+    :api:`Plop::HandlerInterface`
         Detailed API documentation for the interface implemented by all
         handlers. This page also references all the handlers that can be
         used in a collection.
@@ -243,28 +242,28 @@ There are a few things about a formatter that you can configure:
 
 -   The main format. This string serves as a pattern for the final message.
 
-    When using an instance of :api:`Plop_Formatter` as the formatter,
-    it may contain `Python-like string formats`__ using the syntax for
-    dictionaries.
+    When using an instance of :api:`Plop::Formatter` with default settings
+    as the formatter, it may contain `Python-like string formats`__
+    using the syntax for dictionaries.
 
     That is, it may contain something like the following::
 
         [%(asctime)s] %(levelname)s - %(message)s
 
     The default format in that case is defined in
-    :api:`Plop_Formatter::DEFAULT_FORMAT`.
+    :api:`Plop::Formatter::DEFAULT_FORMAT`.
 
     Several pre-defined formats exist that depend on the particular
     implementation used to represent records.
-    For example, :api:`Plop_Record` closely follows the formats defined
+    For example, :api:`Plop::Record` closely follows the formats defined
     by `Python's logging module`__ whenever they are applicable.
 
 -   The format for dates and times.
 
-    When using an instance of :api:`Plop_Formatter` as the formatter,
+    When using an instance of :api:`Plop::Formatter` as the formatter,
     it uses the formatting options from PHP's `date()`__ function.
     Also, the default format for dates and times is then defined in
-    :api:`Plop_Formatter::DEFAULT_DATE_FORMAT`.
+    :api:`Plop::Formatter::DEFAULT_DATE_FORMAT`.
 
 
 -   The current timezone as a `DateTimeZone`__ object.
@@ -281,14 +280,14 @@ Please note that this **will** replace any formatter previously in place.
 
 ..  seealso::
 
-    :api:`Plop_FormatterInterface`
+    :api:`Plop::FormatterInterface`
         Detailed API documentation for the interface implemented by all
         formatters.
 
-    :api:`Plop_Formatter`
+    :api:`Plop::Formatter`
         The most common implementation of formatters.
 
-    :api:`Plop_Record`
+    :api:`Plop::Record`
         The most common implementation for log records.
 
     http://php.net/class.datetime.php#datetime.constants.types
@@ -313,7 +312,7 @@ Logging messages with Plop usually only involves the following sequence:
     // First, grab an instance of Plop.
     // Plop uses a singleton pattern, so the same instance will be returned
     // every time you use this method, no matter where you're calling it from.
-    $logging = Plop::getInstance();
+    $logging = \Plop\Plop::getInstance();
 
     // Now, send a log.
     // Various log levels are available by default:
@@ -326,7 +325,7 @@ apply :abbr:`I18N (Internationalization)` methods on the messages. E.g.
 
 ..  sourcecode:: inline-php
 
-    $logging = Plop::getInstance();
+    $logging = \Plop\Plop::getInstance();
     $logging->error(
         _('Sorry %(nick)s, now is not the time for that!'),
         array(

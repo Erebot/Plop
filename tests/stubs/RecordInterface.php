@@ -1,26 +1,20 @@
 <?php
 
-interface Plop_RecordInterface_Helper
-{
-    public function formatPercent($msg, array $args = array());
-}
+namespace Plop\Stub;
 
-abstract class  Plop_RecordInterface_Stub
-implements      Plop_RecordInterface
+abstract class RecordInterface implements \Plop\RecordInterface
 {
-    static protected $_formatPercentHelper = NULL;
+    protected static $formatPercentHelper = null;
 
-    static public function formatPercent($msg, array $args = array())
+    public static function formatPercent($msg, array $args = array())
     {
-        $helper = self::$_formatPercentHelper;
+        $helper = self::$formatPercentHelper;
         return $helper->formatPercent($msg, $args);
     }
 
     final public function setFormatPercentHelper(
-        Plop_RecordInterface_Helper $helper
-    )
-    {
-        self::$_formatPercentHelper = $helper;
+        \Plop\Stub\RecordInterface\Helper $helper
+    ) {
+        self::$formatPercentHelper = $helper;
     }
 }
-

@@ -18,8 +18,8 @@
     along with Plop.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'Stderr.php');
-require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'Socket.php');
+require_once(__DIR__ . DIRECTORY_SEPARATOR . 'Stderr.php');
+require_once(__DIR__ . DIRECTORY_SEPARATOR . 'Socket.php');
 
 class   Plop_TestCase
 extends PHPUnit_Framework_TestCase
@@ -94,7 +94,7 @@ extends PHPUnit_Framework_TestCase
         }
     }
 
-    protected function _setExpectations($obj, $method, $inputs, $outputs)
+    protected function setExpectations($obj, $method, $inputs, $outputs, $regex = false)
     {
         $class = get_class($obj);
         $this->assertSame(count($inputs), count($outputs));
@@ -105,6 +105,7 @@ extends PHPUnit_Framework_TestCase
             'index'     => 0,
             'inputs'    => $inputs,
             'outputs'   => $outputs,
+            'regex'     => $regex,
         );
     }
 
@@ -132,14 +133,26 @@ extends PHPUnit_Framework_TestCase
             count($this->_expectations[$class][$method]['inputs'][$index]),
             count($args)
         );
-        foreach ($this->_expectations[$class][$method]['inputs'][$index]
-                 as $i => $arg) {
-            $this->assertSame(
-                $arg,
-                $args[$i],
-                "Comparing '{$args[$i]}' against expected '$arg' " .
-                "($class::$method #$index)"
-            );
+        if ($this->_expectations[$class][$method]['regex']) {
+            foreach ($this->_expectations[$class][$method]['inputs'][$index]
+                     as $i => $arg) {
+                $this->assertRegExp(
+                    $arg,
+                    $args[$i],
+                    "Comparing '{$args[$i]}' against expected '$arg' " .
+                    "($class::$method #$index)"
+                );
+            }
+        } else {
+            foreach ($this->_expectations[$class][$method]['inputs'][$index]
+                     as $i => $arg) {
+                $this->assertSame(
+                    $arg,
+                    $args[$i],
+                    "Comparing '{$args[$i]}' against expected '$arg' " .
+                    "($class::$method #$index)"
+                );
+            }
         }
         return $this->_expectations[$class][$method]['outputs'][$index];
     }

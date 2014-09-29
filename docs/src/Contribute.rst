@@ -9,7 +9,6 @@ to the project:
 
 *   by `reporting new issues`_ (or asking for new features)
 *   by forking the code and sending `pull requests`_
-*   by running the tests suite (manually or by providing a `test machine`_)
 
 Whichever one it is, you may also `join our IRC channel`_ to discuss issues,
 new ideas / feature requests and follow Plop's development.
@@ -36,25 +35,6 @@ to decide whether it can be accepted as-is, needs more changes before having
 a chance to be accepted or is utterly rejected.
 
 
-..  _`test machine`:
-
-..  toctree::
-    :hidden:
-    :maxdepth: 0
-
-    Buildslaves
-
-Test machines
--------------
-
-So, you have some spare CPU cycles to contribute? We're glad to hear that!
-
-The Plop project uses `Buildbot`_ for continuous integration.
-The process of setting up a test machine (more oftenly called a "buildslave"
-in Buildbot's terminology) is a bit tedious and deserves
-`a page of its own <Buildslaves.html>`_.
-
-
 ..  _`reporting new issues`:
     https://github.com/Erebot/Plop/issues/new
 ..  _`sending pull requests`:
@@ -64,8 +44,6 @@ in Buildbot's terminology) is a bit tedious and deserves
 ..  _`coding standard`:
     Coding_Standard.html
 ..  _`Fork the code`:
-    https://github.com/Erebot/Plop/fork_select
-..  _`Buildbot`:
-    http://buildbot.net/
+    https://github.com/Erebot/Plop/fork
 
 .. vim: ts=4 et
