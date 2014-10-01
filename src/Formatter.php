@@ -264,12 +264,6 @@ class Formatter implements \Plop\FormatterInterface
      */
     protected function formatException(\Exception $exception)
     {
-        // Don't display exceptions unless display_errors
-        // is set to "On" (which ini_get() returns as "1").
-        if (!((int) ini_get("display_errors"))) {
-            return false;
-        }
-
         if (!$this->pythonLike) {
             $s = (string) $exception;
             if (substr($s, -1) == "\n") {

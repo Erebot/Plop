@@ -177,17 +177,6 @@ class Formatter extends \Plop_TestCase
      */
     public function testFormatException()
     {
-        ini_set('display_errors', 0);
-        $exc = new \Exception('');
-        $this->assertFalse($this->formatter->formatExceptionStub($exc));
-    }
-
-    /**
-     * @covers \Plop\Formatter::formatException
-     */
-    public function testFormatException2()
-    {
-        ini_set('display_errors', 1);
         $exc    = new \Plop\Exception('Foo');
         $line   = __LINE__ - 1;
         $file   = __FILE__;
@@ -202,9 +191,8 @@ class Formatter extends \Plop_TestCase
     /**
      * @covers \Plop\Formatter::formatException
      */
-    public function testFormatException3()
+    public function testFormatException2()
     {
-        ini_set('display_errors', 1);
         $this->formatter->setPythonLike(true);
         $exc    = new \Plop\Exception('Foo');
         $line   = __LINE__ - 1;
