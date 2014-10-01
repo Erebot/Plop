@@ -246,7 +246,6 @@ class Formatter extends \Plop_TestCase
         $this->record
             ->expects($this->once())
             ->method('getMessage')
-            ->with($interpolator)
             ->will($this->returnValue('Foo'));
 
         $this->record

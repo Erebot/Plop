@@ -53,22 +53,26 @@ class LoggerAbstract extends \Plop_TestCase
         return array(
             array('debug',      \Plop\DEBUG),
             array('info',       \Plop\INFO),
+            array('notice',     \Plop\NOTICE),
             array('warning',    \Plop\WARNING),
             array('warn',       \Plop\WARN),
             array('error',      \Plop\ERROR),
             array('critical',   \Plop\CRITICAL),
-            array('fatal',      \Plop\CRITICAL),
+            array('alert',      \Plop\ALERT),
+            array('emergency',  \Plop\EMERGENCY),
         );
     }
 
     /**
      * @covers \Plop\LoggerAbstract::debug
      * @covers \Plop\LoggerAbstract::info
+     * @covers \Plop\LoggerAbstract::notice
      * @covers \Plop\LoggerAbstract::warning
      * @covers \Plop\LoggerAbstract::warn
      * @covers \Plop\LoggerAbstract::error
      * @covers \Plop\LoggerAbstract::critical
-     * @covers \Plop\LoggerAbstract::fatal
+     * @covers \Plop\LoggerAbstract::alert
+     * @covers \Plop\LoggerAbstract::emergency
      * @dataProvider providerLevels
      */
     public function testMessageOnly($method, $level)
@@ -86,11 +90,13 @@ class LoggerAbstract extends \Plop_TestCase
     /**
      * @covers \Plop\LoggerAbstract::debug
      * @covers \Plop\LoggerAbstract::info
+     * @covers \Plop\LoggerAbstract::notice
      * @covers \Plop\LoggerAbstract::warning
      * @covers \Plop\LoggerAbstract::warn
      * @covers \Plop\LoggerAbstract::error
      * @covers \Plop\LoggerAbstract::critical
-     * @covers \Plop\LoggerAbstract::fatal
+     * @covers \Plop\LoggerAbstract::alert
+     * @covers \Plop\LoggerAbstract::emergency
      * @dataProvider providerLevels
      */
     public function testOtherArguments($method, $level)

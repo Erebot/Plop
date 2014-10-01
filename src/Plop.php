@@ -23,23 +23,53 @@ namespace Plop;
 /// No log level defined.
 const NOTSET    =  0;
 
-/// DEBUG log level.
+/// Detailed debug information.
 const DEBUG     = 10;
 
-/// INFO log level.
+/**
+ * Interesting events.
+ *
+ * Example: User logs in, SQL logs.
+ */
 const INFO      = 20;
 
-/// WARNING log level.
-const WARNING   = 30;
+/// Normal but significant events.
+const NOTICE    = 30;
 
-/// Alias for the WARNING log level.
+/**
+ * Exceptional occurrences that are not errors.
+ *
+ * Example: Use of deprecated APIs, poor use of an API, undesirable things
+ * that are not necessarily wrong.
+ */
+const WARNING   = 40;
+
+/// Alias for Plop::WARNING.
 const WARN      = \Plop\WARNING;
 
-/// ERROR log level.
-const ERROR     = 40;
+/**
+ * Runtime errors that do not require immediate action but should typically
+ * be logged and monitored.
+ */
+const ERROR     = 50;
 
-/// CRITICAL error log level.
-const CRITICAL  = 50;
+/**
+ * Critical conditions.
+ *
+ * Example: Application component unavailable, unexpected exception.
+ */
+const CRITICAL  = 60;
+
+/**
+ * Action must be taken immediately.
+ *
+ * Example: Entire website down, database unavailable, etc. This should
+ * trigger the SMS alerts and wake you up.
+ */
+const ALERT     = 70;
+
+/// System is unusable.
+const EMERGENCY = 80;
 
 
 /**

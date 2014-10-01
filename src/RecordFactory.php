@@ -27,6 +27,15 @@ namespace Plop;
  */
 class RecordFactory implements \Plop\RecordFactoryInterface
 {
+    protected $interpolator;
+
+    public function __construct(\Plop\InterpolatorInterface $interpolator = null) {
+        if ($interpolator === null) {
+            $interpolator = new \Plop\Interpolator\Percent();
+        }
+        $this->interpolator = $interpolator;
+    }
+
     /// \copydoc Plop::RecordFactoryInterface::createRecord().
     public function createRecord(
         $loggerNamespace,
@@ -48,6 +57,7 @@ class RecordFactory implements \Plop\RecordFactoryInterface
             $lineno,
             $msg,
             $args,
+            $this->interpolator,
             $exception
         );
         return $record;

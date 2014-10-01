@@ -235,6 +235,39 @@ interface LoggerInterface
     );
 
     /**
+     * Log a message with the Plop::NOTICE log level.
+     *
+     * \param string $msg
+     *      The message to log (possibly with values from
+     *      the \a $args parameter embedded -- read the rest
+     *      of this entry for more information).
+     *
+     * \param array $args
+     *      (optional) Associative array of values that may
+     *      be replaced dynamically in the log message,
+     *      using a formatting sequence based on this model:
+     *      \verbatim %(name)<spec> \endverbatim
+     *      where \a name is the key of the variable, taken from
+     *      the \a $args parameter, and \a \<spec\> is a valid
+     *      <a href="http://php.net/sprintf">sprintf()</a> format
+     *      specification, such as \verbatim %(foo)04d \endverbatim
+     *      By default, an empty array is used.
+     *
+     * \param Exception|null $exception
+     *      (optional) An exception that should also be logged.
+     *      The exception's stack trace will be included in the
+     *      final message.
+     *
+     * \retval Plop::LoggerInterface
+     *      The logger instance (ie. \a $this).
+     */
+    public function notice(
+        $msg,
+        array $args = array(),
+        \Exception $exception = null
+    );
+
+    /**
      * Log a message with the Plop::WARNING log level.
      *
      * \param string $msg
@@ -336,8 +369,6 @@ interface LoggerInterface
     /**
      * Log a message with the Plop::CRITICAL log level.
      *
-     * This is an alias for Plop::LoggerInterface::fatal().
-     *
      * \param string $msg
      *      The message to log (possibly with values from
      *      the \a $args parameter embedded -- read the rest
@@ -369,9 +400,7 @@ interface LoggerInterface
     );
 
     /**
-     * Log a message with the Plop::CRITICAL log level.
-     *
-     * This is an alias for Plop::LoggerInterface::critical().
+     * Log a message with the Plop::ALERT log level.
      *
      * \param string $msg
      *      The message to log (possibly with values from
@@ -397,7 +426,40 @@ interface LoggerInterface
      * \retval Plop::LoggerInterface
      *      The logger instance (ie. \a $this).
      */
-    public function fatal(
+    public function alert(
+        $msg,
+        array $args = array(),
+        \Exception $exception = null
+    );
+
+    /**
+     * Log a message with the Plop::EMERGENCY log level.
+     *
+     * \param string $msg
+     *      The message to log (possibly with values from
+     *      the \a $args parameter embedded -- read the rest
+     *      of this entry for more information).
+     *
+     * \param array $args
+     *      (optional) Associative array of values that may
+     *      be replaced dynamically in the log message,
+     *      using a formatting sequence based on this model:
+     *      \verbatim %(name)<spec> \endverbatim
+     *      where \a name is the key of the variable, taken from
+     *      the \a $args parameter, and \a \<spec\> is a valid
+     *      <a href="http://php.net/sprintf">sprintf()</a> format
+     *      specification, such as \verbatim %(foo)04d \endverbatim
+     *      By default, an empty array is used.
+     *
+     * \param Exception|null $exception
+     *      (optional) An exception that should also be logged.
+     *      The exception's stack trace will be included in the
+     *      final message.
+     *
+     * \retval Plop::LoggerInterface
+     *      The logger instance (ie. \a $this).
+     */
+    public function emergency(
         $msg,
         array $args = array(),
         \Exception $exception = null
@@ -453,10 +515,12 @@ interface LoggerInterface
      *      using the following shortcut methods:
      *      -   Plop::LoggerInterface::debug()
      *      -   Plop::LoggerInterface::info()
+     *      -   Plop::LoggerInterface::notice()
      *      -   Plop::LoggerInterface::warning()
      *      -   Plop::LoggerInterface::error()
      *      -   Plop::LoggerInterface::critical()
-     *      -   Plop::LoggerInterface::fatal()
+     *      -   Plop::LoggerInterface::alert()
+     *      -   Plop::LoggerInterface::emergency()
      *
      * \param string $msg
      *      The message to log (possibly with values from

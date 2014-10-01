@@ -76,9 +76,12 @@ class SysLog extends \Plop\HandlerAbstract
     protected static $priorityMap = array(
         'DEBUG'     => 'debug',
         'INFO'      => 'info',
+        'NOTICE'    => 'notice',
         'WARNING'   => 'warning',
         'ERROR'     => 'error',
         'CRITICAL'  => 'critical',
+        'ALERT'     => 'alert',
+        'EMERGENCY' => 'emergency',
     );
 
     /// Address of the syslog where the logs will be sent.

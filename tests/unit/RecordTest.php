@@ -25,8 +25,15 @@ class Record extends \Plop_TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->line    = __LINE__;
-        $this->record  = new \Plop\Record(
+        $this->line         = __LINE__;
+
+        $this->interpolator = $this->getMock('\\Plop\\InterpolatorInterface');
+        $this->interpolator
+            ->expects($this->any())
+            ->method('interpolate')
+            ->will($this->returnArgument(0));
+
+        $this->record       = new \Plop\Record(
             'loggerNamespace',
             'loggerClass',
             'loggerMethod',
@@ -34,7 +41,8 @@ class Record extends \Plop_TestCase
             __FILE__,
             $this->line,
             '@ %(foo)s @',
-            array('foo' => 'bar')
+            array('foo' => 'bar'),
+            $this->interpolator
         );
     }
 
@@ -90,6 +98,7 @@ class Record extends \Plop_TestCase
             $line,
             'qux',
             array('bar' => 'baz'),
+            $this->interpolator,
             $exc
         );
 
@@ -126,9 +135,10 @@ class Record extends \Plop_TestCase
      */
     public function testMessageGetter()
     {
+        $this->record->setInterpolator(new \Plop\Interpolator\Percent());
         $this->assertSame(
             '@ bar @',
-            $this->record->getMessage(new \Plop\Interpolator\Percent())
+            $this->record->getMessage()
         );
     }
 
@@ -163,7 +173,7 @@ class Record extends \Plop_TestCase
             __LINE__,
             'qux',
             array('bar' => 'baz'),
-            null
+            new \Plop\Interpolator\Percent()
         );
 
         // Overwrite values that depend on time/platform.
@@ -178,15 +188,16 @@ class Record extends \Plop_TestCase
         $record['hostname']         = 'conan';
 
         $data =<<<DATA
-C:11:"Plop\Record":628:{a:23:{s:15:"loggerNamespace";s:10:"Plop\Tests";s:11:
-"loggerClass";s:6:"Record";s:12:"loggerMethod";s:17:"testSerialization";s:3:
-"msg";s:3:"qux";s:4:"args";a:1:{s:3:"bar";s:3:"baz";}s:9:"levelname";s:5:"ER
-ROR";s:7:"levelno";i:40;s:8:"pathname";s:9:"/dev/null";s:8:"filename";s:9:"/
-dev/null";s:6:"module";s:14:"Unknown module";s:8:"exc_info";N;s:8:"exc_text"
-;N;s:6:"lineno";i:163;s:8:"funcName";s:17:"testSerialization";s:5:"msecs";i:
-1337;s:7:"created";i:42;s:11:"createdDate";N;s:15:"relativeCreated";i:23;s:8
-:"threadId";N;s:15:"threadCreatorId";N;s:7:"process";i:108;s:11:"processName
-";s:7:"phpunit";s:8:"hostname";s:5:"conan";}}
+C:11:"Plop\Record":679:{a:2:{i:0;a:23:{s:15:"loggerNamespace";
+s:10:"Plop\Tests";s:11:"loggerClass";s:6:"Record";s:12:"loggerMethod";
+s:17:"testSerialization";s:3:"msg";s:3:"qux";s:4:"args";
+a:1:{s:3:"bar";s:3:"baz";}s:9:"levelname";s:5:"ERROR";s:7:"levelno";i:50;
+s:8:"pathname";s:9:"/dev/null";s:8:"filename";s:9:"/dev/null";s:6:"module";
+s:14:"Unknown module";s:8:"exc_info";N;s:8:"exc_text";N;s:6:"lineno";i:173;
+s:8:"funcName";s:17:"testSerialization";s:5:"msecs";i:1337;s:7:"created";
+i:42;s:11:"createdDate";N;s:15:"relativeCreated";i:23;s:8:"threadId";N;
+s:15:"threadCreatorId";N;s:7:"process";i:108;s:11:"processName";s:7:"phpunit";
+s:8:"hostname";s:5:"conan";}i:1;O:25:"Plop\Interpolator\Percent":0:{}}}
 DATA;
 
         $data = str_replace(array("\r", "\n"), '', $data);

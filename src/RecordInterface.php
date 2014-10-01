@@ -30,18 +30,18 @@ namespace Plop;
  */
 interface RecordInterface extends \ArrayAccess, \Serializable
 {
+    public function getInterpolator();
+    public function setInterpolator(\Plop\InterpolatorInterface $interpolator);
+
     /**
      * Return the message stored in this log record,
      * after all interpolated variables have been
      * replaced in it.
      *
-     * \param Plop::InterpolatorInterface $interpolator
-     *      Interpolator to use during message creation.
-     *
      * \retval string
      *      The message stored in the log record.
      */
-    public function getMessage(\Plop\InterpolatorInterface $interpolator);
+    public function getMessage();
 
     /**
      * The properties of this log record,

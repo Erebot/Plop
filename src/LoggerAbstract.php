@@ -45,6 +45,15 @@ abstract class LoggerAbstract implements \Plop\LoggerInterface
         return $this->log(\Plop\INFO, $msg, $args, $exception);
     }
 
+    /// \copydoc Plop::LoggerInterface::notice().
+    public function notice(
+        $msg,
+        array $args = array(),
+        \Exception $exception = null
+    ) {
+        return $this->log(\Plop\NOTICE, $msg, $args, $exception);
+    }
+
     /// \copydoc Plop::LoggerInterface::warning().
     public function warning(
         $msg,
@@ -81,13 +90,22 @@ abstract class LoggerAbstract implements \Plop\LoggerInterface
         return $this->log(\Plop\CRITICAL, $msg, $args, $exception);
     }
 
-    /// \copydoc Plop::LoggerInterface::fatal().
-    public function fatal(
+    /// \copydoc Plop::LoggerInterface::alert().
+    public function alert(
         $msg,
         array $args = array(),
         \Exception $exception = null
     ) {
-        return $this->log(\Plop\CRITICAL, $msg, $args, $exception);
+        return $this->log(\Plop\ALERT, $msg, $args, $exception);
+    }
+
+    /// \copydoc Plop::LoggerInterface::emergency().
+    public function emergency(
+        $msg,
+        array $args = array(),
+        \Exception $exception = null
+    ) {
+        return $this->log(\Plop\EMERGENCY, $msg, $args, $exception);
     }
 
     /// \copydoc Plop::LoggerInterface::exception().

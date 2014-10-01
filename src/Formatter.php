@@ -203,7 +203,7 @@ class Formatter implements \Plop\FormatterInterface
     public function format(\Plop\RecordInterface $record)
     {
         /// @FIXME: use a different interpolator for the record's message?
-        $record['message'] = $record->getMessage($this->interpolator);
+        $record['message'] = $record->getMessage();
         $format = (string) $this->format;
         $dateFormat = (string) $this->dateFormat;
         if (strpos($format, '%(asctime)') !== false) {

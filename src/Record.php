@@ -61,6 +61,9 @@ class Record implements \Plop\RecordInterface
      * \param array $args
      *      Additional arguments for the log message.
      *
+     * \param Plop::InterpolatorInterface $interpolator
+     *      Interpolator to use during record formatting.
+     *
      * \param null|Exception $exception
      *      An exception whose backtrace will be merged
      *      into the log message.
@@ -74,6 +77,7 @@ class Record implements \Plop\RecordInterface
         $lineno,
         $msg,
         array $args,
+        \Plop\InterpolatorInterface $interpolator,
         \Exception $exception = null
     ) {
         static $pid = null;
@@ -81,6 +85,7 @@ class Record implements \Plop\RecordInterface
             $pid = getmypid();
         }
 
+        $this->interpolator = $interpolator;
         $logging    = \Plop\Plop::getInstance();
         $ct         = explode(' ', microtime(false));
         $msecs      = (int) substr($ct[0] . '000000', 2);
@@ -130,10 +135,23 @@ class Record implements \Plop\RecordInterface
         $this->dict['hostname']         = php_uname('n');
     }
 
-    /// \copydoc Plop::RecordInterface::getMessage().
-    public function getMessage(\Plop\InterpolatorInterface $interpolator)
+    /// \copydoc Plop::RecordInterface::getInterpolator().
+    public function getInterpolator()
     {
-        return $interpolator->interpolate(
+        return $this->interpolator;
+    }
+
+    /// \copydoc Plop::RecordInterface::setInterpolator().
+    public function setInterpolator(\Plop\InterpolatorInterface $interpolator)
+    {
+        $this->interpolator = $interpolator;
+        return $this;
+    }
+
+    /// \copydoc Plop::RecordInterface::getMessage().
+    public function getMessage()
+    {
+        return $this->interpolator->interpolate(
             $this->dict['msg'],
             $this->dict['args']
         );
@@ -241,7 +259,7 @@ class Record implements \Plop\RecordInterface
      */
     public function serialize()
     {
-        return serialize($this->dict);
+        return serialize(array($this->dict, $this->interpolator));
     }
 
     /**
@@ -256,6 +274,8 @@ class Record implements \Plop\RecordInterface
      */
     public function unserialize($data)
     {
-        $this->dict = unserialize($data);
+        $data = unserialize($data);
+        $this->dict = $data[0];
+        $this->setInterpolator($data[1]);
     }
 }
