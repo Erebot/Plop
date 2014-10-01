@@ -33,7 +33,11 @@
         "pdepend/pdepend": "*",
         "phpunit/phpunit": "*",
         "phpunit/php-code-coverage": "*",
-        "squizlabs/php_codesniffer": "*"
+        "squizlabs/php_codesniffer": "*",
+        "psr/log": "*"
+    },
+    "suggest": {
+        "psr/log": "Provides the PSR-3 logging framework"
     },
     "autoload": {
         "psr-4": {
