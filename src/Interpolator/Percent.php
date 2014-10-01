@@ -4,39 +4,6 @@ namespace Plop\Interpolator;
 
 class Percent implements \Plop\InterpolatorInterface
 {
-    /**
-     * Return a percent-prefixed variable.
-     *
-     * \param string $a
-     *      Variable to work on.
-     *
-     * \retval string
-     *      Percent-prefixed version of the variable name.
-     *
-     * @codeCoverageIgnore
-     */
-    private static function pctPrefix($a)
-    {
-        return '%('.$a.')';
-    }
-
-    /**
-     * Return an incremented and percent-prefixed variable.
-     *
-     * \param int $a
-     *      Variable to work on.
-     *
-     * \retval string
-     *      Incremented and percent-prefixed version
-     *      of the variable.
-     *
-     * @codeCoverageIgnore
-     */
-    private static function increment($a)
-    {
-        return '%'.($a + 1).'$';
-    }
-
     /// \copydoc Plop::InterpolatorInterface::interpolate().
     public function interpolate($msg, array $args = array())
     {
@@ -56,8 +23,8 @@ class Percent implements \Plop\InterpolatorInterface
         // Mapping = array(name => index)
         $keys       = array_keys($args);
         $mapping    = array_flip($keys);
-        $keys       = array_map(array('static', 'pctPrefix'), $keys);
-        $values     = array_map(array('static', 'increment'), $mapping);
+        $keys       = array_map(function ($key) { return "%($key)"; }, $keys);
+        $values     = array_map(function ($val) { return '%'.($val + 1).'$'; }, $mapping);
         $mapping    = array_combine($keys, $values);
         $msg        = strtr($msg, $mapping);
         return vsprintf($msg, array_values($args));

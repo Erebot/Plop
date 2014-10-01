@@ -43,8 +43,6 @@ class Percent extends \Plop_TestCase
     /**
      * @dataProvider    testdata
      * @covers          \Plop\Interpolator\Percent::interpolate
-     * @covers          \Plop\Interpolator\Percent::pctPrefix
-     * @covers          \Plop\Interpolator\Percent::increment
      */
     public function testInterpolation($expected, $pattern, $args)
     {
