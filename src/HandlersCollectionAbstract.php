@@ -24,7 +24,7 @@ namespace Plop;
  * \brief
  *      Interface for a collection of handlers.
  */
-abstract class HandlersCollectionAbstract extends \Plop\CollectionAbstract
+abstract class HandlersCollectionAbstract extends \Plop\Collection
 {
     const TYPE_HINT = '\\Plop\\HandlerInterface';
 

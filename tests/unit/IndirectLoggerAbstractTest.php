@@ -103,4 +103,58 @@ class IndirectLoggerAbstract extends \Plop_TestCase
             );
         }
     }
+
+    /**
+     * @covers \Plop\IndirectLoggerAbstract::getFilters
+     */
+    public function testGetFilters()
+    {
+        $collection = new \Plop\FiltersCollection();
+        $this->sublogger
+            ->expects($this->once())
+            ->method('getFilters')
+            ->will($this->returnValue($collection));
+        $this->assertSame($collection, $this->indirect->getFilters());
+    }
+
+    /**
+     * @covers \Plop\IndirectLoggerAbstract::setFilters
+     */
+    public function testSetFilters()
+    {
+        $collection = new \Plop\FiltersCollection();
+        $this->sublogger
+            ->expects($this->once())
+            ->method('setFilters')
+            ->will($this->returnValue($this->sublogger));
+        // setFilters() returns $this.
+        $this->assertSame($this->indirect, $this->indirect->setFilters($collection));
+    }
+
+    /**
+     * @covers \Plop\IndirectLoggerAbstract::getHandlers
+     */
+    public function testGetHandlers()
+    {
+        $collection = new \Plop\HandlersCollection();
+        $this->sublogger
+            ->expects($this->once())
+            ->method('getHandlers')
+            ->will($this->returnValue($collection));
+        $this->assertSame($collection, $this->indirect->getHandlers());
+    }
+
+    /**
+     * @covers \Plop\IndirectLoggerAbstract::setHandlers
+     */
+    public function testSetHandlers()
+    {
+        $collection = new \Plop\HandlersCollection();
+        $this->sublogger
+            ->expects($this->once())
+            ->method('setHandlers')
+            ->will($this->returnValue($this->sublogger));
+        // setHandlers() returns $this.
+        $this->assertSame($this->indirect, $this->indirect->setHandlers($collection));
+    }
 }

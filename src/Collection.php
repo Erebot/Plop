@@ -24,7 +24,7 @@ namespace Plop;
  *  \brief
  *      A class that can be used to handle collections of objects.
  */
-abstract class CollectionAbstract implements \ArrayAccess, \Countable, \IteratorAggregate
+class Collection implements \ArrayAccess, \Countable, \IteratorAggregate
 {
     const TYPE_HINT = null;
 
@@ -54,23 +54,21 @@ abstract class CollectionAbstract implements \ArrayAccess, \Countable, \Iterator
     {
         $hint = static::TYPE_HINT;
         if ($hint !== null && (!is_object($value) || !($value instanceof $hint))) {
-            throw new \Plop\Exception('An instance of ' . static::TYPE_HINT . 'was expected');
+            throw new \Plop\Exception('An instance of ' . static::TYPE_HINT . ' was expected');
         }
-        $key = array_search($value, $this->items, true);
-        if ($key === false) {
-            if ($offset === null) {
-                $this->items[] = $value;
-            } else {
-                $this->items[$offset] = $value;
-            }
+
+        if ($offset === null) {
+            $this->items[] = $value;
+        } else {
+            $this->items[$offset] = $value;
         }
     }
 
     /// \copydoc ArrayAccess::offsetExists().
     public function offsetExists($offset)
     {
-        $res = isset($this->items[$offset]) ||
-               (array_search($value, $this->items, true) !== false);
+        $res = @isset($this->items[$offset]) ||
+               (array_search($offset, $this->items, true) !== false);
         return $res;
     }
 

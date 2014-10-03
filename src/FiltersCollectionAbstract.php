@@ -24,7 +24,7 @@ namespace Plop;
  * \brief
  *      Abstract class for a collection of filters.
  */
-abstract class FiltersCollectionAbstract extends \Plop\CollectionAbstract
+abstract class FiltersCollectionAbstract extends \Plop\Collection
 {
     const TYPE_HINT = '\\Plop\\FilterInterface';
 

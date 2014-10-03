@@ -150,7 +150,8 @@ class Record extends \Plop_TestCase
     {
         $interpolator = new \Plop\Interpolator\Percent();
         $this->assertNotSame($interpolator, $this->record->getInterpolator());
-        $this->record->setInterpolator($interpolator);
+        // setInterpolator() returns $this.
+        $this->assertSame($this->record, $this->record->setInterpolator($interpolator));
         $this->assertSame($interpolator, $this->record->getInterpolator());
     }
 
@@ -219,7 +220,7 @@ C:11:"Plop\\Record":743:{a:2:{i:0;a:26:{s:4:"args";a:1:{s:3:"bar";s:3:"baz";}
 s:5:"class";s:5:"class";s:7:"created";i:42;s:11:"createdDate";N;
 s:8:"exc_info";N;s:8:"exc_text";N;s:8:"filename";s:9:"/dev/null";
 s:8:"funcName";s:6:"method";s:8:"hostname";s:5:"conan";s:9:"levelname";
-s:5:"ERROR";s:7:"levelno";i:50;s:6:"lineno";i:200;s:11:"loggerClass";
+s:5:"ERROR";s:7:"levelno";i:50;s:6:"lineno";i:201;s:11:"loggerClass";
 s:6:"Record";s:12:"loggerMethod";s:17:"testSerialization";
 s:15:"loggerNamespace";s:10:"Plop\Tests";s:6:"method";s:6:"method";
 s:6:"module";s:9:"namespace";s:5:"msecs";i:1337;s:3:"msg";s:3:"qux";

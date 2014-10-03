@@ -244,4 +244,30 @@ class Logger extends \Plop_TestCase
         $logger->setRecordFactory($this->factory);
         $this->assertSame($logger, $logger->log(\Plop\DEBUG, 'foo'));
     }
+
+    /**
+     * @covers \Plop\Logger::getFilters
+     * @covers \Plop\Logger::setFilters
+     */
+    public function testFiltersAccessors()
+    {
+        $collection = new \Plop\FiltersCollection();
+        $this->assertNotSame($collection, $this->logger->getFilters());
+        // setFilters() returns $this.
+        $this->assertSame($this->logger, $this->logger->setFilters($collection));
+        $this->assertSame($collection, $this->logger->getFilters());
+    }
+
+    /**
+     * @covers \Plop\Logger::getHandlers
+     * @covers \Plop\Logger::setHandlers
+     */
+    public function testHandlersAccessors()
+    {
+        $collection = new \Plop\HandlersCollection();
+        $this->assertNotSame($collection, $this->logger->getHandlers());
+        // setHandlers() returns $this.
+        $this->assertSame($this->logger, $this->logger->setHandlers($collection));
+        $this->assertSame($collection, $this->logger->getHandlers());
+    }
 }
