@@ -161,9 +161,12 @@ class Plop extends \Plop\IndirectLoggerAbstract implements \ArrayAccess, \Counta
             \Plop\NOTSET    => 'NOTSET',
             \Plop\DEBUG     => 'DEBUG',
             \Plop\INFO      => 'INFO',
+            \Plop\NOTICE    => 'NOTICE',
             \Plop\WARNING   => 'WARNING',
             \Plop\ERROR     => 'ERROR',
             \Plop\CRITICAL  => 'CRITICAL',
+            \Plop\ALERT     => 'ALERT',
+            \Plop\EMERGENCY => 'EMERGENCY',
         );
     }
 
