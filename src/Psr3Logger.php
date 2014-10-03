@@ -27,7 +27,25 @@ namespace Plop;
  */
 class Psr3Logger extends \Psr\Log\AbstractLogger
 {
-    protected $factory = null;
+    static $factory = null;
+    static $instance = null;
+
+    public function __construct()
+    {
+        if (static::$factory === null) {
+            static::$factory = new \Plop\RecordFactory(
+                new \Plop\Interpolator\Psr3()
+            );
+        }
+    }
+
+    public static function getInstance()
+    {
+        if (static::$instance === null) {
+            static::$instance = new static();
+        }
+        return static::$instance;
+    }
 
     public function log($level, $message, array $context = array())
     {
@@ -44,16 +62,11 @@ class Psr3Logger extends \Psr\Log\AbstractLogger
          *      - register_tick_function()
          *      - debug_backtrace()
          */
-
-        if ($this->factory === null) {
-            $this->factory = new \Plop\RecordFactory(new \Plop\Interpolator\Psr3());
-        }
-
         $logging = \Plop\Plop::getInstance();
         $factory = $logging->getRecordFactory();
         try {
             // Switch to a factory that uses PSR3-interpolation.
-            $logging->setRecordFactory($this->factory);
+            $logging->setRecordFactory(static::$factory);
             $logging->$level($message, $context);
         } catch (Exception $e) {}
 
