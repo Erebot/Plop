@@ -43,7 +43,16 @@ class Record implements \Plop\RecordInterface
      *      Class associated with the logger that captured the log.
      *
      * \param string $loggerMethod
-     *      Method associated with the logger that captured the log.
+     *      Method or function associated with the logger that captured the log.
+     *
+     * \param string $namespace
+     *      Namespace where the log was emitted.
+     *
+     * \param string $class
+     *      Class where the log was emitted.
+     *
+     * \param string $method
+     *      Method or function where the log was emitted.
      *
      * \param int $level
      *      The level of the log.
@@ -72,6 +81,9 @@ class Record implements \Plop\RecordInterface
         $loggerNamespace,
         $loggerClass,
         $loggerMethod,
+        $namespace,
+        $class,
+        $method,
         $level,
         $pathname,
         $lineno,
@@ -89,7 +101,6 @@ class Record implements \Plop\RecordInterface
         $logging    = \Plop\Plop::getInstance();
         $ct         = explode(' ', microtime(false));
         $msecs      = (int) substr($ct[0] . '000000', 2);
-        /// @FIXME: There must be a better way to do this!
         $date       = new \DateTime('@' . $ct[1], new \DateTimeZone('UTC'));
         $date       = new \DateTime(
             sprintf(
@@ -109,30 +120,32 @@ class Record implements \Plop\RecordInterface
         // Represent the date using the local timezone (if configured).
         $date->setTimeZone(new \DateTimeZone(@date_default_timezone_get()));
 
-        $this->dict['loggerNamespace']  = $loggerNamespace;
-        $this->dict['loggerClass']      = $loggerClass;
-        $this->dict['loggerMethod']     = $loggerMethod;
-        $this->dict['msg']              = $msg;
         $this->dict['args']             = $args;
-        $this->dict['levelname']        = $logging->getLevelName($level);
-        $this->dict['levelno']          = $level;
-        $this->dict['pathname']         = $pathname;
-        $this->dict['filename']         = $pathname;
-        $this->dict['module']           = 'Unknown module';
-        $this->dict['exc_info']         = $exception;
-        $this->dict['exc_text']         = null;
-        $this->dict['lineno']           = $lineno;
-        /// @FIXME: funcName should be != from $loggerMethod!
-        $this->dict['funcName']         = $loggerMethod;
-        $this->dict['msecs']            = $msecs;
+        $this->dict['class']            = $class;
         $this->dict['created']          = $created;
         $this->dict['createdDate']      = $date;
+        $this->dict['exc_info']         = $exception;
+        $this->dict['exc_text']         = null;
+        $this->dict['filename']         = $pathname;
+        $this->dict['funcName']         = $method;
+        $this->dict['hostname']         = php_uname('n');
+        $this->dict['levelname']        = $logging->getLevelName($level);
+        $this->dict['levelno']          = $level;
+        $this->dict['lineno']           = $lineno;
+        $this->dict['loggerClass']      = $loggerClass;
+        $this->dict['loggerMethod']     = $loggerMethod;
+        $this->dict['loggerNamespace']  = $loggerNamespace;
+        $this->dict['method']           = $method;
+        $this->dict['module']           = $namespace;
+        $this->dict['msecs']            = $msecs;
+        $this->dict['msg']              = $msg;
+        $this->dict['namespace']        = $namespace;
+        $this->dict['pathname']         = $pathname;
+        $this->dict['process']          = $pid;
+        $this->dict['processName']      = $processName;
         $this->dict['relativeCreated']  = $diff;
         $this->dict['threadId']         = null;
         $this->dict['threadCreatorId']  = null;
-        $this->dict['process']          = $pid;
-        $this->dict['processName']      = $processName;
-        $this->dict['hostname']         = php_uname('n');
     }
 
     /// \copydoc Plop::RecordInterface::getInterpolator().
@@ -165,6 +178,7 @@ class Record implements \Plop\RecordInterface
      *      The name of the property to return.
      *      The default properties include:
      *      -   args
+     *      -   class
      *      -   created
      *      -   createdDate
      *      -   exc_info
@@ -178,9 +192,11 @@ class Record implements \Plop\RecordInterface
      *      -   loggerClass
      *      -   loggerFile
      *      -   loggerMethod
+     *      -   method
      *      -   module
      *      -   msecs
      *      -   msg
+     *      -   namespace
      *      -   pathname
      *      -   process
      *      -   processName

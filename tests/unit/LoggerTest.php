@@ -155,7 +155,7 @@ class Logger extends \Plop_TestCase
      */
     public function testHandleMethod()
     {
-        $filters     = $this->getMock('\\Plop\\FiltersCollectionInterface');
+        $filters     = $this->getMock('\\Plop\\FiltersCollectionAbstract');
         $logger = $this->getMock(
             '\\Plop\\Stub\\Logger',
             array('callHandlers'),
@@ -180,7 +180,7 @@ class Logger extends \Plop_TestCase
      */
     public function testHandleMethod2()
     {
-        $filters     = $this->getMock('\\Plop\\FiltersCollectionInterface');
+        $filters     = $this->getMock('\\Plop\\FiltersCollectionAbstract');
         $logger = $this->getMock(
             '\\Plop\\Stub\\Logger',
             array('callHandlers'),

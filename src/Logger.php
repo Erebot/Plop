@@ -68,11 +68,11 @@ class Logger extends \Plop\LoggerAbstract
      *      (meaning this logger is not related to any
      *      specific method or function).
      *
-     * \param Plop::HandlersCollectionInterface $handlers
+     * \param Plop::HandlersCollectionAbstract $handlers
      *      (optional) A collection of handlers to associate
      *      with this logger. Defaults to an empty list.
      *
-     * \param Plop::FiltersCollectionInterface $filters
+     * \param Plop::FiltersCollectionAbstract $filters
      *      (optional) A collection of filters to associate
      *      with this logger. Defaults to an empty list.
      */
@@ -80,8 +80,8 @@ class Logger extends \Plop\LoggerAbstract
         $ns = null,
         $cls = null,
         $method = null,
-        \Plop\HandlersCollectionInterface $handlers = null,
-        \Plop\FiltersCollectionInterface $filters = null
+        \Plop\HandlersCollectionAbstract $handlers = null,
+        \Plop\FiltersCollectionAbstract $filters = null
     ) {
         if ($handlers === null) {
             $handlers = new \Plop\HandlersCollection();
@@ -155,7 +155,7 @@ class Logger extends \Plop\LoggerAbstract
     }
 
     /// \copydoc Plop::LoggerInterface::setFilters().
-    public function setFilters(\Plop\FiltersCollectionInterface $filters)
+    public function setFilters(\Plop\FiltersCollectionAbstract $filters)
     {
         $this->filters = $filters;
         return $this;
@@ -168,7 +168,7 @@ class Logger extends \Plop\LoggerAbstract
     }
 
     /// \copydoc Plop::LoggerInterface::setHandlers().
-    public function setHandlers(\Plop\HandlersCollectionInterface $handlers)
+    public function setHandlers(\Plop\HandlersCollectionAbstract $handlers)
     {
         $this->handlers = $handlers;
         return $this;
@@ -187,6 +187,9 @@ class Logger extends \Plop\LoggerAbstract
                 $this->ns,
                 $this->cls,
                 $this->method,
+                $caller['ns'],
+                $caller['cls'],
+                $caller['func'],
                 $level,
                 $caller['file'] ? $caller['file'] : '???',
                 $caller['line'],

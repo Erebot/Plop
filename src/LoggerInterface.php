@@ -128,7 +128,7 @@ interface LoggerInterface
      * Get the collection of filters currently
      * associated with this logger.
      *
-     * \retval Plop::FiltersCollectionInterface
+     * \retval Plop::FiltersCollectionAbstract
      *      Collection of filters associated with this logger.
      */
     public function getFilters();
@@ -144,13 +144,13 @@ interface LoggerInterface
      * \retval Plop::LoggerInterface
      *      The logger instance (ie. \a $this).
      */
-    public function setFilters(\Plop\FiltersCollectionInterface $filters);
+    public function setFilters(\Plop\FiltersCollectionAbstract $filters);
 
     /**
      * Get the collection of handlers currently
      * associated with this logger.
      *
-     * \retval Plop::HandlersCollectionInterface
+     * \retval Plop::HandlersCollectionAbstract
      *      Collection of handlers associated with this logger.
      */
     public function getHandlers();
@@ -159,14 +159,14 @@ interface LoggerInterface
      * Set the collection of handlers associated
      * with this logger.
      *
-     * \param Plop::HandlersCollectionInterface $handlers
+     * \param Plop::HandlersCollectionAbstract $handlers
      *      New collection of handlers to associate
      *      with this logger.
      *
      * \retval Plop::LoggerInterface
      *      The logger instance (ie. \a $this).
      */
-    public function setHandlers(\Plop\HandlersCollectionInterface $handlers);
+    public function setHandlers(\Plop\HandlersCollectionAbstract $handlers);
 
     /**
      * Log a message with the Plop::DEBUG log level.

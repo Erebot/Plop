@@ -38,7 +38,16 @@ interface RecordFactoryInterface
      *      Class associated with the logger that captured the log.
      *
      * \param string $loggerMethod
-     *      Method associated with the logger that captured the log.
+     *      Method of function associated with the logger that captured the log.
+     *
+     * \param string $namespace
+     *      Namespace where the log was emitted.
+     *
+     * \param string $class
+     *      Class where the log was emitted.
+     *
+     * \param string $method
+     *      Method or function where the log was emitted.
      *
      * \param int $level
      *      Level of the log record.
@@ -70,6 +79,9 @@ interface RecordFactoryInterface
         $loggerNamespace,
         $loggerClass,
         $loggerMethod,
+        $namespace,
+        $class,
+        $method,
         $level,
         $filename,
         $lineno,

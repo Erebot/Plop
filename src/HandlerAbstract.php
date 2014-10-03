@@ -43,13 +43,13 @@ abstract class HandlerAbstract implements \Plop\HandlerInterface
      *      to render records. By default, a new instance
      *      of Plop::Formatter is created.
      *
-     * \param Plop::FiltersCollectionInterface $filters
+     * \param Plop::FiltersCollectionAbstract $filters
      *      (optional) A collection of filters to associate
      *      with this handler. Defaults to an empty list.
      */
     public function __construct(
         \Plop\FormatterInterface $formatter = null,
-        \Plop\FiltersCollectionInterface $filters = null
+        \Plop\FiltersCollectionAbstract $filters = null
     ) {
         if ($formatter === null) {
             $formatter = new \Plop\Formatter();
@@ -81,7 +81,7 @@ abstract class HandlerAbstract implements \Plop\HandlerInterface
     }
 
     /// \copydoc Plop::HandlerInterface::setFilters().
-    public function setFilters(\Plop\FiltersCollectionInterface $filters)
+    public function setFilters(\Plop\FiltersCollectionAbstract $filters)
     {
         $this->filters = $filters;
         return $this;

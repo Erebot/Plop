@@ -50,7 +50,7 @@ interface HandlerInterface
      * Get the collection of filters currently
      * associated with this handler.
      *
-     * \retval Plop::FiltersCollectionInterface
+     * \retval Plop::FiltersCollectionAbstract
      *      Collection of filters associated with this handler.
      */
     public function getFilters();
@@ -59,14 +59,14 @@ interface HandlerInterface
      * Set the collection of filters associated
      * with this handler.
      *
-     * \param Plop::FiltersCollectionInterface $filters
+     * \param Plop::FiltersCollectionAbstract $filters
      *      New collection of filters to associate
      *      with this handler.
      *
      * \retval Plop::HandlerInterface
      *      The handler instance (ie. \a $this).
      */
-    public function setFilters(\Plop\FiltersCollectionInterface $filters);
+    public function setFilters(\Plop\FiltersCollectionAbstract $filters);
 
     /**
      * Handle a log record.

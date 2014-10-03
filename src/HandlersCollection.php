@@ -24,71 +24,12 @@ namespace Plop;
  *  \brief
  *      A class that can be used to handle records.
  */
-class HandlersCollection implements \Plop\HandlersCollectionInterface
+class HandlersCollection extends \Plop\HandlersCollectionAbstract
 {
-    /// List of handlers.
-    protected $handlers;
-
-    /// Construct a new collection of handlers.
-    public function __construct()
-    {
-        $this->handlers = array();
-    }
-
-    /// \copydoc Countable::count().
-    public function count()
-    {
-        return count($this->handlers);
-    }
-
-    /// \copydoc IteratorAggregate::getIterator().
-    public function getIterator()
-    {
-        return new \ArrayIterator($this->handlers);
-    }
-
-    /// \copydoc ArrayAccess::offsetGet().
-    public function offsetGet($offset)
-    {
-        return $this->handlers[$offset];
-    }
-
-    /// \copydoc ArrayAccess::offsetSet().
-    public function offsetSet($offset, $value)
-    {
-        $key = array_search($value, $this->handlers, true);
-        if ($key === false) {
-            if ($offset === null) {
-                $this->handlers[] = $value;
-            } else {
-                $this->handlers[$offset] = $value;
-            }
-        }
-    }
-
-    /// \copydoc ArrayAccess::offsetExists().
-    public function offsetExists($offset)
-    {
-        $res = isset($this->handlers[$offset]) ||
-               (array_search($value, $this->handlers, true) !== false);
-        return $res;
-    }
-
-    /// \copydoc ArrayAccess::offsetUnset().
-    public function offsetUnset($offset)
-    {
-        if (!is_int($offset)) {
-            $offset = array_search($offset, $this->handlers, true);
-        }
-        if (isset($this->handlers[$offset])) {
-            unset($this->handlers[$offset]);
-        }
-    }
-
-    /// \copydoc Plop::HandlersCollectionInterface::handle().
+    /// \copydoc Plop::HandlersCollectionAbstract::handle().
     public function handle(\Plop\RecordInterface $record)
     {
-        foreach ($this->handlers as $handler) {
+        foreach ($this->items as $handler) {
             $handler->handle($record);
         }
         return $this;

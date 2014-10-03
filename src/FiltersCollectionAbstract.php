@@ -22,9 +22,9 @@ namespace Plop;
 
 /**
  * \brief
- *      Interface for a collection of filters.
+ *      Abstract class for a collection of filters.
  */
-interface FiltersCollectionInterface extends \Plop\CollectionInterface
+abstract class FiltersCollectionAbstract extends \Plop\CollectionAbstract
 {
     /**
      * Apply the filters and return a flag indicating
@@ -38,5 +38,5 @@ interface FiltersCollectionInterface extends \Plop\CollectionInterface
      *      Whether the record should be handled normally
      *      (\a true) or filtered out (\a false).
      */
-    public function filter(\Plop\RecordInterface $record);
+    abstract public function filter(\Plop\RecordInterface $record);
 }

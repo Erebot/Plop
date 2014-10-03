@@ -24,7 +24,7 @@ namespace Plop;
  * \brief
  *      Interface for a collection of handlers.
  */
-interface HandlersCollectionInterface extends \Plop\CollectionInterface
+abstract class HandlersCollectionAbstract extends \Plop\CollectionAbstract
 {
     /**
      * Handle a single log record.
@@ -32,8 +32,8 @@ interface HandlersCollectionInterface extends \Plop\CollectionInterface
      * \param Plop::RecordInterface $record
      *      The record to handle.
      *
-     * \retval Plop::HandlersCollectionInterface
+     * \retval Plop::HandlersCollectionAbstract
      *      The current collection (ie. \a $this).
      */
-    public function handle(\Plop\RecordInterface $record);
+    abstract public function handle(\Plop\RecordInterface $record);
 }

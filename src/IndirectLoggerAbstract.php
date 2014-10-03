@@ -104,7 +104,7 @@ abstract class IndirectLoggerAbstract extends LoggerAbstract
     }
 
     /// \copydoc Plop::LoggerInterface::setHandlers().
-    public function setHandlers(\Plop\HandlersCollectionInterface $handlers)
+    public function setHandlers(\Plop\HandlersCollectionAbstract $handlers)
     {
         $logger = $this->getIndirectLogger();
         $logger->setHandlers($handlers);
@@ -118,7 +118,7 @@ abstract class IndirectLoggerAbstract extends LoggerAbstract
     }
 
     /// \copydoc Plop::HandlerInterface::setFilters().
-    public function setFilters(\Plop\FiltersCollectionInterface $filters)
+    public function setFilters(\Plop\FiltersCollectionAbstract $filters)
     {
         $logger = $this->getIndirectLogger();
         $logger->setFilters($filters);

@@ -37,6 +37,9 @@ class Record extends \Plop_TestCase
             'loggerNamespace',
             'loggerClass',
             'loggerMethod',
+            'namespace',
+            'class',
+            'method',
             \Plop\DEBUG,
             __FILE__,
             $this->line,
@@ -56,13 +59,16 @@ class Record extends \Plop_TestCase
             'loggerNamespace'   => 'loggerNamespace',
             'loggerClass'       => 'loggerClass',
             'loggerMethod'      => 'loggerMethod',
+            'namespace'         => 'namespace',
+            'class'             => 'class',
+            'method'            => 'method',
             'msg'               => '@ %(foo)s @',
             'args'              => array('foo' => 'bar'),
             'levelname'         => 'DEBUG',
             'levelno'           => \Plop\DEBUG,
             'pathname'          => __FILE__,
             'filename'          => __FILE__,
-            'module'            => 'Unknown module',
+            'module'            => 'namespace',
             'exc_info'          => null,
             'exc_text'          => null,
             'lineno'            => $this->line,
@@ -93,6 +99,9 @@ class Record extends \Plop_TestCase
             'foo',
             'foo2',
             'foo3',
+            'namespace',
+            'class',
+            'method',
             \Plop\ERROR,
             __FILE__,
             $line,
@@ -106,13 +115,16 @@ class Record extends \Plop_TestCase
             'loggerNamespace'   => 'foo',
             'loggerClass'       => 'foo2',
             'loggerMethod'      => 'foo3',
+            'namespace'         => 'namespace',
+            'class'             => 'class',
+            'method'            => 'method',
             'msg'               => 'qux',
             'args'              => array('bar' => 'baz'),
             'levelname'         => 'ERROR',
             'levelno'           => \Plop\ERROR,
             'pathname'          => __FILE__,
             'filename'          => __FILE__,
-            'module'            => 'Unknown module',
+            'module'            => 'namespace',
             'exc_info'          => $exc,
             'exc_text'          => null,
             'lineno'            => $line,
@@ -128,6 +140,18 @@ class Record extends \Plop_TestCase
             $this->assertSame($val, $values[$key], "Differing values for key $key");
         }
         $_SERVER['argv'][0] = $script;
+    }
+
+    /**
+     * @covers \Plop\Record::getInterpolator
+     * @covers \Plop\Record::setInterpolator
+     */
+    public function testInterpolatorAccessors()
+    {
+        $interpolator = new \Plop\Interpolator\Percent();
+        $this->assertNotSame($interpolator, $this->record->getInterpolator());
+        $this->record->setInterpolator($interpolator);
+        $this->assertSame($interpolator, $this->record->getInterpolator());
     }
 
     /**
@@ -167,7 +191,10 @@ class Record extends \Plop_TestCase
         $record = new \Plop\Record(
             __NAMESPACE__,
             substr(__CLASS__, strrpos('\\' . __CLASS__, '\\')),
-            __FUNCTION__,
+            substr(__FUNCTION__, strrpos('\\' . __FUNCTION__, '\\')),
+            'namespace',
+            'class',
+            'method',
             \Plop\ERROR,
             __FILE__,
             __LINE__,
@@ -188,16 +215,18 @@ class Record extends \Plop_TestCase
         $record['hostname']         = 'conan';
 
         $data =<<<DATA
-C:11:"Plop\Record":679:{a:2:{i:0;a:23:{s:15:"loggerNamespace";
-s:10:"Plop\Tests";s:11:"loggerClass";s:6:"Record";s:12:"loggerMethod";
-s:17:"testSerialization";s:3:"msg";s:3:"qux";s:4:"args";
-a:1:{s:3:"bar";s:3:"baz";}s:9:"levelname";s:5:"ERROR";s:7:"levelno";i:50;
-s:8:"pathname";s:9:"/dev/null";s:8:"filename";s:9:"/dev/null";s:6:"module";
-s:14:"Unknown module";s:8:"exc_info";N;s:8:"exc_text";N;s:6:"lineno";i:173;
-s:8:"funcName";s:17:"testSerialization";s:5:"msecs";i:1337;s:7:"created";
-i:42;s:11:"createdDate";N;s:15:"relativeCreated";i:23;s:8:"threadId";N;
-s:15:"threadCreatorId";N;s:7:"process";i:108;s:11:"processName";s:7:"phpunit";
-s:8:"hostname";s:5:"conan";}i:1;O:25:"Plop\Interpolator\Percent":0:{}}}
+C:11:"Plop\\Record":743:{a:2:{i:0;a:26:{s:4:"args";a:1:{s:3:"bar";s:3:"baz";}
+s:5:"class";s:5:"class";s:7:"created";i:42;s:11:"createdDate";N;
+s:8:"exc_info";N;s:8:"exc_text";N;s:8:"filename";s:9:"/dev/null";
+s:8:"funcName";s:6:"method";s:8:"hostname";s:5:"conan";s:9:"levelname";
+s:5:"ERROR";s:7:"levelno";i:50;s:6:"lineno";i:200;s:11:"loggerClass";
+s:6:"Record";s:12:"loggerMethod";s:17:"testSerialization";
+s:15:"loggerNamespace";s:10:"Plop\Tests";s:6:"method";s:6:"method";
+s:6:"module";s:9:"namespace";s:5:"msecs";i:1337;s:3:"msg";s:3:"qux";
+s:9:"namespace";s:9:"namespace";s:8:"pathname";s:9:"/dev/null";
+s:7:"process";i:108;s:11:"processName";s:7:"phpunit";
+s:15:"relativeCreated";i:23;s:8:"threadId";N;s:15:"threadCreatorId";N;}i:1;
+O:25:"Plop\\Interpolator\\Percent":0:{}}}
 DATA;
 
         $data = str_replace(array("\r", "\n"), '', $data);

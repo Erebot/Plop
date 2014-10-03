@@ -24,71 +24,12 @@ namespace Plop;
  *  \brief
  *      A class that can be used to filter records.
  */
-class FiltersCollection implements \Plop\FiltersCollectionInterface
+class FiltersCollection extends \Plop\FiltersCollectionAbstract
 {
-    /// List of filters.
-    protected $filters;
-
-    /// Construct a new collection of filters.
-    public function __construct()
-    {
-        $this->filters = array();
-    }
-
-    /// \copydoc Countable::count().
-    public function count()
-    {
-        return count($this->filters);
-    }
-
-    /// \copydoc IteratorAggregate::getIterator().
-    public function getIterator()
-    {
-        return new ArrayIterator($this->filters);
-    }
-
-    /// \copydoc ArrayAccess::offsetGet().
-    public function offsetGet($offset)
-    {
-        return $this->filters[$offset];
-    }
-
-    /// \copydoc ArrayAccess::offsetSet().
-    public function offsetSet($offset, $value)
-    {
-        $key = array_search($value, $this->filters, true);
-        if ($key === false) {
-            if ($offset === null) {
-                $this->filters[] = $value;
-            } else {
-                $this->filters[$offset] = $value;
-            }
-        }
-    }
-
-    /// \copydoc ArrayAccess::offsetExists().
-    public function offsetExists($offset)
-    {
-        $res = isset($this->filters[$offset]) ||
-               (array_search($value, $this->filters, true) !== false);
-        return $res;
-    }
-
-    /// \copydoc ArrayAccess::offsetUnset().
-    public function offsetUnset($offset)
-    {
-        if (!is_int($offset)) {
-            $offset = array_search($offset, $this->filters, true);
-        }
-        if (isset($this->filters[$offset])) {
-            unset($this->filters[$offset]);
-        }
-    }
-
-    /// \copydoc Plop::FiltersCollectionInterface::filter().
+    /// \copydoc Plop::FiltersCollectionAbstract::filter().
     public function filter(\Plop\RecordInterface $record)
     {
-        foreach ($this->filters as $filter) {
+        foreach ($this->items as $filter) {
             if (!$filter->filter($record)) {
                 return false;
             }

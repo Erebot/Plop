@@ -30,7 +30,23 @@ namespace Plop;
  */
 interface RecordInterface extends \ArrayAccess, \Serializable
 {
+    /**
+     * Return this record's message interpolator.
+     *
+     * \retval Plop::InterpolatorInterface
+     *      Message interpolator.
+     */
     public function getInterpolator();
+
+    /**
+     * Set the message interpolator for this record.
+     *
+     * \param Plop::InterpolatorInterface $interpolator
+     *      Message interpolator to use.
+     *
+     * \retval Plop::RecordInterface
+     *      The record (ie. \a $this).
+     */
     public function setInterpolator(\Plop\InterpolatorInterface $interpolator);
 
     /**
