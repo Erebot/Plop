@@ -26,6 +26,8 @@ namespace Plop;
  */
 abstract class CollectionAbstract implements \ArrayAccess, \Countable, \IteratorAggregate
 {
+    const TYPE_HINT = null;
+
     /// List of items in the collection.
     protected $items = array();
 
@@ -50,6 +52,10 @@ abstract class CollectionAbstract implements \ArrayAccess, \Countable, \Iterator
     /// \copydoc ArrayAccess::offsetSet().
     public function offsetSet($offset, $value)
     {
+        $hint = static::TYPE_HINT;
+        if ($hint !== null && (!is_object($value) || !($value instanceof $hint))) {
+            throw new \Plop\Exception('An instance of ' . static::TYPE_HINT . 'was expected');
+        }
         $key = array_search($value, $this->items, true);
         if ($key === false) {
             if ($offset === null) {

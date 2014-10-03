@@ -26,6 +26,8 @@ namespace Plop;
  */
 abstract class HandlersCollectionAbstract extends \Plop\CollectionAbstract
 {
+    const TYPE_HINT = '\\Plop\\HandlerInterface';
+
     /**
      * Handle a single log record.
      *

@@ -26,6 +26,8 @@ namespace Plop;
  */
 abstract class FiltersCollectionAbstract extends \Plop\CollectionAbstract
 {
+    const TYPE_HINT = '\\Plop\\FilterInterface';
+
     /**
      * Apply the filters and return a flag indicating
      * whether the given record should be handled or
