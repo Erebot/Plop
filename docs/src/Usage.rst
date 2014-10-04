@@ -38,6 +38,8 @@ The way to load Plop's classes depends on the installation method selected:
         require_once('src/Autoloader.php');
         \Plop\Autoloader::register();
 
+If you're not interested in fine-tuning Plop, you may skip the rest
+of this page until you reach the part about `Logging some messages`_.
 
 Configuring Plop
 ----------------
@@ -304,12 +306,14 @@ Logging messages with Plop usually only involves the following sequence:
 
     // Now, send a log.
     // Various log levels are available by default:
-    // debug, info, warning, error & critical.
+    // debug, info, notice, warning, error, critical, alert & emergency.
+    // There's a method named after each log level's name.
     $logging->debug('Hello world');
 
 Log messages may contain variables, which will be replaced with their actual
-value when the logging method is called. This comes handy when you need to
-apply :abbr:`I18N (Internationalization)` methods on the messages. E.g.
+value when the logging method is called. This is useful in a lot of situations.
+For example, you can use it to apply :abbr:`i18n (Internationalization)`
+methods to the messages:
 
 ..  sourcecode:: inline-php
 
