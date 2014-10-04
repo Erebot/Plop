@@ -18,12 +18,9 @@
     along with Plop.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-if (version_compare(phpversion(), '5.3.1', '<')) {
-    if (substr(phpversion(), 0, 5) != '5.3.1') {
-        // this small hack is because of running RCs of 5.3.1
-        echo basename(__FILE__) . " requires PHP 5.3.1 or newer." . PHP_EOL;
-        exit(1);
-    }
+if (version_compare(phpversion(), '5.3.3', '<')) {
+    echo basename(__FILE__) . " requires PHP 5.3.3 or newer." . PHP_EOL;
+    exit(1);
 }
 foreach (array('phar', 'spl', 'pcre', 'simplexml') as $ext) {
     if (!extension_loaded($ext)) {

@@ -22,7 +22,7 @@ and CentOS 6 (64 bits), as reflected by our `Continuous Integration server`_.
 Getting started
 ---------------
 
-To use Plop in your project, you only need a version of PHP compiled with the
+To use Plop in your project, you need PHP 5.3.3 or later, compiled with the
 following extensions:
 
 -   pcre
@@ -50,7 +50,12 @@ enabled for your installation:
 
     ..  sourcecode:: console
 
-        me@home:~$ php -m
+        me@home:~$ php -v # Check PHP version
+        PHP 5.4.33 (cli) (built: Sep 25 2014 23:41:02) (DEBUG)
+        Copyright (c) 1997-2014 The PHP Group
+        Zend Engine v2.4.0, Copyright (c) 1998-2014 Zend Technologies
+
+        me@home:~$ php -m # Check available extensions
         [PHP Modules]
         bcmath
         bz2
@@ -99,9 +104,6 @@ enabled for your installation:
         xsl
         zip
         zlib
-
-        [Zend Modules]
-        Xdebug
 
 You may also consult the output of ``phpinfo()`` for the same purpose.
 

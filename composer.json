@@ -21,7 +21,7 @@
         "source": "https://github.com/Erebot/Plop"
     },
     "require": {
-        "php": ">=5.3.1",
+        "php": ">=5.3.3",
         "ext-pcre": "*",
         "ext-Sockets": "*",
         "ext-SPL": "*"
