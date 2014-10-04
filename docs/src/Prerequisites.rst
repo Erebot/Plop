@@ -41,12 +41,12 @@ extensions are required:
 -   SimpleXML
 
 
-Checking whether these requirements are fulfilled
--------------------------------------------------
+Validating your PHP installation
+--------------------------------
 
-You can check whether your version of PHP contains all the necessary extensions
-by running the following command, which will list all the extensions currently
-enabled for your installation:
+You can check whether your PHP installation satisfies all the prerequisites
+listed above by running the following commands, which will display information
+about the PHP version and list all currently enabled extensions:
 
     ..  sourcecode:: console
 
