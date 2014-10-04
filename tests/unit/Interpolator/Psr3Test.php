@@ -2,7 +2,7 @@
 /*
     This file is part of Plop, a simple logging library for PHP.
 
-    Copyright © 2010-2012 François Poirotte
+    Copyright © 2014 François Poirotte
 
     Plop is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
