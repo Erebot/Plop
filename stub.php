@@ -21,7 +21,7 @@
 if (version_compare(phpversion(), '5.3.1', '<')) {
     if (substr(phpversion(), 0, 5) != '5.3.1') {
         // this small hack is because of running RCs of 5.3.1
-        echo "@PACKAGE_NAME@ requires PHP 5.3.1 or newer." . PHP_EOL;
+        echo basename(__FILE__) . " requires PHP 5.3.1 or newer." . PHP_EOL;
         exit(1);
     }
 }
@@ -34,22 +34,15 @@ foreach (array('phar', 'spl', 'pcre', 'simplexml') as $ext) {
 try {
     Phar::mapPhar();
 } catch (Exception $e) {
-    echo "Cannot process @PACKAGE_NAME@ phar:" . PHP_EOL;
-    echo $e->getMessage() . PHP_EOL;
+    echo "Cannot process " . basename(__FILE__, '.phar') . ":" . PHP_EOL;
+    echo "\t" . $e->getMessage() . PHP_EOL;
     exit(1);
 }
 
 require_once('phar://' . __FILE__ .
-    DIRECTORY_SEPARATOR . '@PACKAGE_NAME@-@PACKAGE_VERSION@' .
-    DIRECTORY_SEPARATOR . 'php' .
-    DIRECTORY_SEPARATOR . 'Plop' .
+    DIRECTORY_SEPARATOR . 'src' .
     DIRECTORY_SEPARATOR . 'Autoloader.php'
 );
-Plop_Autoloader::register();
-
-$phar = new Phar(__FILE__);
-$sig = $phar->getSignature();
-define('Plop_SIG', $sig['hash']);
-define('Plop_SIGTYPE', $sig['hash_type']);
+\Plop\Autoloader::register();
 
 __HALT_COMPILER();

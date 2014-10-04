@@ -49,8 +49,7 @@ class Autoloader
     public static function register()
     {
         if (self::$instance === null) {
-            $cls = __CLASS__;
-            self::$instance = new $cls();
+            self::$instance = new static();
             spl_autoload_register(array(self::$instance, 'load'));
         }
     }
