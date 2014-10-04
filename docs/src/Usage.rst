@@ -7,6 +7,8 @@ Using Plop usually involves 3 steps, detailed below.
 
 ..  contents:: :local:
 
+TL;DR: simply read the section on `Loading Plop's classes`_ then skip
+all the way down to the section on `Logging some messages`_.
 
 Loading Plop's classes
 ----------------------
@@ -33,25 +35,8 @@ The way to load Plop's classes depends on the installation method selected:
 
     ..  sourcecode:: inline-php
 
-        require_once('Plop/Autoloader.php');
-        Plop_Autoloader::register();
-
-    Also, make sure the full path to Plop's :file:`src/` directory
-    is part of your PHP installation's ``include_path``.
-
-    On Linux, you may use the following command to display your PHP
-    installation's ``include_path``:
-
-    ..  sourcecode:: console
-
-        me@home:~$ php -r 'echo ini_get("include_path") . PHP_EOL;'
-
-    On Windows, you may use this command instead (assuming :file:`php.exe`
-    is located somewhere on your :envvar:`PATH`) to do the same:
-
-    ..  sourcecode:: bat
-
-        C:\WINDOWS> php -r "echo ini_get('include_path') . PHP_EOL;"
+        require_once('src/Autoloader.php');
+        \Plop\Autoloader::register();
 
 
 Configuring Plop
@@ -72,23 +57,21 @@ This is decided at construction time based on the arguments passed to
 Internally, Plop builds up a hierarchy of loggers like so::
 
     root-level logger
-        directory-level logger
-            file-level logger
-                class-level logger
-                    method/function-level logger
+        namespace-level logger
+            class-level logger
+                method/function-level logger
 
 Log messages "bubble up". That is, Plop first looks for a method or
 function-level logger to handle the message. If none can be found, it looks
 for a class-level logger (in case the message was emitted from a method).
-Then it looks for a file-level logger, then a logger for the directory
-containing the file, then a logger for that directory's parent, etc. until
-it reaches the root-level logger, which always exists.
+Then it looks for a namespace-level logger, then a logger for the parent's
+namespace, etc. until it reaches the root-level logger, which always exists.
 
 Whichever logger is found first will be the one to handle the message.
 
 ..  note::
-    The root-level logger (root logger) comes pre-configured with a handler
-    that logs messages to ``STDERR`` using basic formatting.
+    The root-level logger) comes pre-configured with a handler
+    that logs messages to ``STDERR`` using some very basic formatting.
 
 Several aspects of a logger can be configured, such as:
 
@@ -116,7 +99,8 @@ using the following code snippet:
 
 This will add the logger to the list of loggers already known to Plop.
 If a logger had already been registered in Plop with the same "identity"
-(file/directory, class and method names), it will be replaced with the new one.
+(ie. the same namespace, class and method names), it will automatically
+be replaced with the new one.
 
 ..  seealso::
 
@@ -134,6 +118,10 @@ If a logger had already been registered in Plop with the same "identity"
     :api:`Plop::Logger`
         The most common type of logger.
 
+    :api:`Plop::Psr3Logger`
+        A logger that supports the `PSR-3 <http://www.php-fig.org/psr/psr-3/>`_
+        ``\Psr\Log\LoggerInterface`` interface.
+
 ..  _`filters`:
 
 Filters
@@ -142,8 +130,8 @@ Filters
 Filters are associated with either :ref:`loggers <Loggers>` or
 :ref:`handlers <handlers>` through an object implementing
 :api:`Plop::FiltersCollectionInterface` (usually an instance of
-:api:`Plop::FiltersCollection`) and are used to restrict what messages will be
-handled.
+:api:`Plop::FiltersCollection`) and are used to restrict which messages
+will be handled.
 They are applied once the message has been turned into a log record
 and work by defining various criteria such a record must respect.
 
