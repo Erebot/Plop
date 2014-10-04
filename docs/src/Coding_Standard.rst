@@ -1,7 +1,7 @@
 Coding standard
 ===============
 
-The Plop project uses the `PSR-2`_ as its coding standard.
+The Plop project uses the `PSR-2`_ coding standard.
 
 Check your code
 ---------------
