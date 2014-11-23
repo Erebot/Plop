@@ -12,14 +12,13 @@ There are several ways to achieve that. Each method is described below.
     or the `composer installation`_ method, depending on
     whether your project already uses `Composer`_ or not.
 
-..  _`PEAR installation`:
 
 ..  _`PHAR installation`:
 
 Installation using a PHAR archive
 ---------------------------------
 
-A PHAR archive is simply a one of bundling all the necessary files in one big
+A PHAR archive is simply a way of bundling all the necessary files in one big
 file.
 
 Installing Plop as a PHAR archive only involves a few steps:
