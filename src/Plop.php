@@ -82,7 +82,7 @@ const EMERGENCY = 80;
  *  logging messages:
  *  \code
  *      // Grab an instance of the logging service.
- *      $logging = Plop::getInstance();
+ *      $logging = \\Plop\\Plop::getInstance();
  *      // Log a message with the INFO level.
  *      $logging->info('The cat is both dead and alive!');
  *  \endcode
@@ -90,7 +90,7 @@ const EMERGENCY = 80;
  *  This is equivalent to the following less concise
  *  piece of code:
  *  \code
- *      $logging = Plop::getInstance();
+ *      $logging = \\Plop\\Plop::getInstance();
  *      $logger = $logging->getLogger(__NAMESPACE__, __CLASS__, __FUNCTION__);
  *      $logger->info('The cat is both dead and alive!');
  *  \endcode
