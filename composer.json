@@ -27,7 +27,7 @@
         "ext-SPL": "*"
     },
     "require-dev": {
-        "erebot/buildenv": "dev-master",
+        "erebot/buildenv": "~1.2.0",
         "sebastian/phpcpd": "*",
         "phpmd/phpmd": "*",
         "pdepend/pdepend": "*",
