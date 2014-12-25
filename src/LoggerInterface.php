@@ -40,9 +40,10 @@ interface LoggerInterface
      * Set the minimum level a log record must have
      * to be handled by this class.
      *
-     * \param int $level
+     * \param int|string $level
      *      The new minimum level at which log records
-     *      will be accepted.
+     *      will be accepted, either as an integer
+     *      or as a level name.
      *
      * \retval Plop::LoggerInterface
      *      The logger instance (ie. \a $this).
