@@ -128,26 +128,16 @@ class Logger extends \Plop_TestCase
         $this->assertFalse($this->logger->isEnabledFor(\Plop\WARNING));
         $this->assertFalse($this->logger->isEnabledFor(\Plop\INFO));
         $this->assertFalse($this->logger->isEnabledFor(\Plop\DEBUG));
-    }
 
-    /**
-     * @covers \Plop\Logger::setLevel
-     * @expectedException           \Plop\Exception
-     * @expectedExceptionMessage    Invalid value
-     */
-    public function testLevelAccessors2()
-    {
-        $this->logger->setLevel('foo');
-    }
+        // Same thing, using strings instead of (constant) integers.
+        $this->logger->setLevel('ERROR');
+        $this->assertSame(\Plop\ERROR, $this->logger->getLevel());
 
-    /**
-     * @covers \Plop\Logger::isEnabledFor
-     * @expectedException           \Plop\Exception
-     * @expectedExceptionMessage    Invalid value
-     */
-    public function testLevelAccessors3()
-    {
-        $this->logger->isEnabledFor('foo');
+        $this->assertTrue($this->logger->isEnabledFor('ERROR'));
+        $this->assertFalse($this->logger->isEnabledFor('WARN'));
+        $this->assertFalse($this->logger->isEnabledFor('WARNING'));
+        $this->assertFalse($this->logger->isEnabledFor('INFO'));
+        $this->assertFalse($this->logger->isEnabledFor('DEBUG'));
     }
 
     /**

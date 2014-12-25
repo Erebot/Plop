@@ -54,7 +54,7 @@ interface LoggerInterface
      * Return a flag indicating whether a log with
      * the given level would be handled by this instance.
      *
-     * \param int $level
+     * \param int|string $level
      *      Level to test.
      *
      * \retval bool

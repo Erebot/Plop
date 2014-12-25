@@ -286,7 +286,8 @@ class Logger extends \Plop\LoggerAbstract
     public function isEnabledFor($level)
     {
         if (!is_int($level)) {
-            throw new \Plop\Exception('Invalid value');
+            $plop = \Plop\Plop::getInstance();
+            $level = $plop->getLevelValue($level);
         }
         return ($level >= $this->level);
     }
