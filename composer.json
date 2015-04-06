@@ -1,11 +1,9 @@
 {
-    "minimum-stability": "dev",
-    "prefer-stable": true,
     "name": "erebot/plop",
     "description": "A simple logging library for PHP",
-    "keywords": ["log", "logging"],
+    "keywords": ["log", "logging", "psr-3", "psr3"],
     "homepage": "https://github.com/Erebot/Plop",
-    "license": "GPL-3.0+",
+    "license": "MIT",
     "authors": [
         {
             "name": "François Poirotte",
@@ -24,7 +22,8 @@
         "php": ">=5.3.3",
         "ext-pcre": "*",
         "ext-Sockets": "*",
-        "ext-SPL": "*"
+        "ext-SPL": "*",
+        "psr/log": "^1.0"
     },
     "require-dev": {
         "erebot/buildenv": "~1.2.0",
@@ -33,11 +32,10 @@
         "pdepend/pdepend": "*",
         "phpunit/phpunit": "*",
         "phpunit/php-code-coverage": "*",
-        "squizlabs/php_codesniffer": "*",
-        "psr/log": "*"
+        "squizlabs/php_codesniffer": "*"
     },
-    "suggest": {
-        "psr/log": "Provides the PSR-3 logging framework"
+    "provide": {
+        "psr/log-implementation": "1.0.0"
     },
     "autoload": {
         "psr-4": {
