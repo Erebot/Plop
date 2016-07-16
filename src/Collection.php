@@ -54,7 +54,7 @@ class Collection implements \ArrayAccess, \Countable, \IteratorAggregate
     {
         $hint = static::TYPE_HINT;
         if ($hint !== null && (!is_object($value) || !($value instanceof $hint))) {
-            throw new \Plop\Exception('An instance of ' . static::TYPE_HINT . ' was expected');
+            throw new \Plop\Exception('An instance of ' . $hint . ' was expected');
         }
 
         if ($offset === null) {
