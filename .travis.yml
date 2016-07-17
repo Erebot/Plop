@@ -1,27 +1,33 @@
 language: php
 
+sudo: false
+
+cache:
+    directories:
+    - vendor/
+
 php:
-    - 5.3.3
     - 5.3
     - 5.4
     - 5.5
     - 5.6
+    - 7.0
+    - nightly
     - hhvm
-    - hhvm-nightly
 
 notifications:
     email: false
     irc: "irc.iiens.net#Erebot"
 
 before_script:
-    - if [ "$TRAVIS_PHP_VERSION" = "5.3.3" ]; then prefer_source="--prefer-source"; else prefer_source=""; fi
+    - rm composer.lock
     - composer self-update -n
-    - composer install --dev -n $prefer_source
+    - composer install --dev -n
 
 script:
-    - phpunit --coverage-clover clover.xml --test-suffix=.php --bootstrap tests/testenv/bootstrap.php tests/unit/
+    - vendor/bin/phpunit
 
-after_script:
-    - composer require --dev $prefer_source "satooshi/php-coveralls dev-master"
-    - php vendor/bin/coveralls -n -v
+after_success:
+    - composer require --dev satooshi/php-coveralls
+    - travis_retry vendor/bin/coveralls -n -v
 
