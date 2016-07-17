@@ -22,7 +22,7 @@ notifications:
 before_script:
     - rm composer.lock
     - composer self-update -n
-    - composer install --dev -n
+    - composer install -n
 
 script:
     - vendor/bin/phpunit
