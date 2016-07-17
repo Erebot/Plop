@@ -12,9 +12,7 @@
         }
     ],
     "support": {
-        "email": "erebot@erebot.net",
         "issues": "https://github.com/Erebot/Plop/issues",
-        "wiki": "http://erebot.github.com/Plop/",
         "irc": "irc://irc.iiens.net/Erebot",
         "source": "https://github.com/Erebot/Plop"
     },
