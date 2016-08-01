@@ -96,14 +96,14 @@ class Logger extends \Plop\LoggerAbstract
         }
 
         // Strip potential namespace from class name.
-        $cls = substr($cls, strrpos('\\' . $cls, '\\'));
-        if ($cls === false) {
+        $cls = (string) substr($cls, strrpos('\\' . $cls, '\\'));
+        if ($cls === '') {
             $cls = null;
         }
 
         // Strip potential namespace from method/function name.
-        $method = substr($method, strrpos('\\' . $method, '\\'));
-        if ($method === false) {
+        $method = (string) substr($method, strrpos('\\' . $method, '\\'));
+        if ($method === '') {
             $method = null;
         }
 
