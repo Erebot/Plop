@@ -25,7 +25,7 @@ before_script:
     - composer install -n
 
 script:
-    - vendor/bin/phpunit
+    - vendor/bin/phpunit --coverage-clover clover.xml
 
 after_success:
     - composer require --dev satooshi/php-coveralls
