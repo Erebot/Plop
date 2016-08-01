@@ -27,7 +27,7 @@ class Record extends \Plop_TestCase
         parent::setUp();
         $this->line         = __LINE__;
 
-        $this->interpolator = $this->getMock('\\Plop\\InterpolatorInterface');
+        $this->interpolator = $this->getMockBuilder('\\Plop\\InterpolatorInterface')->getMock();
         $this->interpolator
             ->expects($this->any())
             ->method('interpolate')

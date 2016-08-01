@@ -25,8 +25,8 @@ class Test extends \Plop_TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->record       = $this->getMock('\\Plop\\Stub\\RecordInterface');
-        $this->formatter    = $this->getMock('\\Plop\\FormatterInterface');
+        $this->record       = $this->getMockBuilder('\\Plop\\Stub\\RecordInterface')->getMock();
+        $this->formatter    = $this->getMockBuilder('\\Plop\\FormatterInterface')->getMock();
     }
 
     /**
@@ -34,11 +34,10 @@ class Test extends \Plop_TestCase
      */
     public function testDefaultArguments()
     {
-        $handler = $this->getMock(
-            '\\Plop\\Stub\\HandlerAbstract',
-            array('emit'),
-            array()
-        );
+        $handler = $this->getMockBuilder('\\Plop\\Stub\\HandlerAbstract')
+            ->setMethods(array('emit'))
+            ->setConstructorArgs(array())
+            ->getMock();
         $formatter = $handler->getFormatter();
         $this->assertSame('Plop\\Formatter', get_class($formatter));
     }
@@ -48,11 +47,10 @@ class Test extends \Plop_TestCase
      */
     public function testDefaultArgumentsOverride()
     {
-        $handler = $this->getMock(
-            '\\Plop\\Stub\\HandlerAbstract',
-            array('emit'),
-            array($this->formatter)
-        );
+        $handler = $this->getMockBuilder('\\Plop\\Stub\\HandlerAbstract')
+            ->setMethods(array('emit'))
+            ->setConstructorArgs(array($this->formatter))
+            ->getMock();
         $this->assertSame($this->formatter, $handler->getFormatter());
     }
 
@@ -61,10 +59,9 @@ class Test extends \Plop_TestCase
      */
     public function testHandleMethod()
     {
-        $handler = $this->getMock(
-            '\\Plop\\Stub\\HandlerAbstract',
-            array('format', 'emit')
-        );
+        $handler = $this->getMockBuilder('\\Plop\\Stub\\HandlerAbstract')
+            ->setMethods(array('emit', 'format'))
+            ->getMock();
         $handler
             ->expects($this->once())
             ->method('format')

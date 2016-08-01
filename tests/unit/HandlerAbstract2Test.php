@@ -25,12 +25,11 @@ class Test2 extends \Plop_TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->record       = $this->getMock('\\Plop\\Stub\\RecordInterface');
-        $this->formatter    = $this->getMock('\\Plop\\FormatterInterface');
-        $this->handler      = $this->getMock(
-            '\\Plop\\Stub\\HandlerAbstract',
-            array('emit')
-        );
+        $this->record       = $this->getMockBuilder('\\Plop\\Stub\\RecordInterface')->getMock();
+        $this->formatter    = $this->getMockBuilder('\\Plop\\FormatterInterface')->getMock();
+        $this->handler      = $this->getMockBuilder('\\Plop\\Stub\\HandlerAbstract')
+            ->setMethods(array('emit'))
+            ->getMock();
     }
 
     /**
@@ -72,18 +71,17 @@ class Test2 extends \Plop_TestCase
     {
         $line       = __LINE__ + 1;
         $exc        = new \Plop\Exception('test');
-        $handler    = $this->getMock(
-            '\\Plop\\Stub\\HandlerAbstract',
-            array('getStderr', 'emit')
-        );
+        $handler    = $this->getMockBuilder('\\Plop\\Stub\\HandlerAbstract')
+            ->setMethods(array('getStderr', 'emit'))
+            ->getMock();
         $handler
             ->expects($this->once())
             ->method('getStderr')
             ->will($this->returnValue($this->stderrStream));
 
         $this->expectStderrRegex(
-            "#exception 'Plop\\\\Exception' with message" .
-            " 'test' in [^\\r\\n]+:$line(\\r\\n?|\\n).*#m"
+            "#(exception ')?Plop\\\\Exception[:'] (with message ')?test'? " .
+            "in [^\\r\\n]+:$line(\\r\\n?|\\n).*#m"
         );
         $this->assertSame(
             $handler,

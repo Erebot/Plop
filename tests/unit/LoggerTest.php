@@ -26,9 +26,9 @@ class Logger extends \Plop_TestCase
     {
         parent::setUp();
         $this->logger      = new \Plop\Logger();
-        $this->factory     = $this->getMock('\\Plop\\RecordFactoryInterface');
-        $this->record      = $this->getMock('\\Plop\\Stub\\RecordInterface');
-        $this->handler     = $this->getMock('\\Plop\\HandlerInterface');
+        $this->factory     = $this->getMockBuilder('\\Plop\\RecordFactoryInterface')->getMock();
+        $this->record      = $this->getMockBuilder('\\Plop\\Stub\\RecordInterface')->getMock();
+        $this->handler     = $this->getMockBuilder('\\Plop\\HandlerInterface')->getMock();
     }
 
     /**
@@ -145,12 +145,11 @@ class Logger extends \Plop_TestCase
      */
     public function testHandleMethod()
     {
-        $filters     = $this->getMock('\\Plop\\FiltersCollectionAbstract');
-        $logger = $this->getMock(
-            '\\Plop\\Stub\\Logger',
-            array('callHandlers'),
-            array(null, null, null, null, $filters)
-        );
+        $filters     = $this->getMockBuilder('\\Plop\\FiltersCollectionAbstract')->getMock();
+        $logger = $this->getMockBuilder('\\Plop\\Stub\\Logger')
+            ->setMethods(array('callHandlers'))
+            ->setConstructorArgs(array(null, null, null, null, $filters))
+            ->getMock();
 
         $filters
             ->expects($this->once())
@@ -170,12 +169,11 @@ class Logger extends \Plop_TestCase
      */
     public function testHandleMethod2()
     {
-        $filters     = $this->getMock('\\Plop\\FiltersCollectionAbstract');
-        $logger = $this->getMock(
-            '\\Plop\\Stub\\Logger',
-            array('callHandlers'),
-            array(null, null, null, null, $filters)
-        );
+        $filters     = $this->getMockBuilder('\\Plop\\FiltersCollectionAbstract')->getMock();
+        $logger = $this->getMockBuilder('\\Plop\\Stub\\Logger')
+            ->setMethods(array('callHandlers'))
+            ->setConstructorArgs(array(null, null, null, null, $filters))
+            ->getMock();
 
         $filters
             ->expects($this->once())
@@ -194,10 +192,9 @@ class Logger extends \Plop_TestCase
      */
     public function testLogMethod()
     {
-        $logger = $this->getMock(
-            '\\Plop\\Stub\\Logger',
-            array('handle')
-        );
+        $logger = $this->getMockBuilder('\\Plop\\Stub\\Logger')
+            ->setMethods(array('handle'))
+            ->getMock();
 
         $this->factory
             ->expects($this->once())
@@ -218,10 +215,9 @@ class Logger extends \Plop_TestCase
      */
     public function testLogMethod2()
     {
-        $logger = $this->getMock(
-            '\\Plop\\Stub\\Logger',
-            array('handle')
-        );
+        $logger = $this->getMockBuilder('\\Plop\\Stub\\Logger')
+            ->setMethods(array('handle'))
+            ->getMock();
 
         $this->factory
             ->expects($this->never())

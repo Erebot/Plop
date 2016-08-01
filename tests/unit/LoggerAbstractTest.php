@@ -25,27 +25,25 @@ class LoggerAbstract extends \Plop_TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->logger = $this->getMock(
-            '\\Plop\\LoggerAbstract',
-            array(
-                'log',
-                'getLevel',
-                'setLevel',
-                'isEnabledFor',
-                'getNamespace',
-                'getClass',
-                'getMethod',
-                'getRecordFactory',
-                'setRecordFactory',
-                'getFilters',
-                'setFilters',
-                'getHandlers',
-                'setHandlers',
-            ),
-            array(),
-            '',
-            false
-        );
+        $this->logger = $this->getMockBuilder('\\Plop\\LoggerAbstract')
+            ->setMethods(
+                array(
+                    'log',
+                    'getLevel',
+                    'setLevel',
+                    'isEnabledFor',
+                    'getNamespace',
+                    'getClass',
+                    'getMethod',
+                    'getRecordFactory',
+                    'setRecordFactory',
+                    'getFilters',
+                    'setFilters',
+                    'getHandlers',
+                    'setHandlers',
+                )
+            )
+            ->getMock();
     }
 
     public function providerLevels()

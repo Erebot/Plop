@@ -25,7 +25,7 @@ class Formatter extends \Plop_TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->record       = $this->getMock('\\Plop\\Stub\\RecordInterface');
+        $this->record       = $this->getMockBuilder('\\Plop\\Stub\\RecordInterface')->getMock();
         $this->formatter    = new \Plop\Stub\Formatter();
     }
 
@@ -51,13 +51,11 @@ class Formatter extends \Plop_TestCase
      */
     public function testDefaultArgumentsOverride()
     {
-        $timezone = $this->getMock(
-            '\\DateTimeZone',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $timezone = $this->getMockBuilder('\\DateTimeZone')
+            ->setMethods(null)
+            ->setConstructorArgs(array())
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $formatter = new \Plop\Formatter('%(asctime)s', 'U', $timezone, true);
         $this->assertSame('%(asctime)s', $formatter->getFormat());
@@ -133,7 +131,7 @@ class Formatter extends \Plop_TestCase
      */
     public function testFormatTime()
     {
-        $date = $this->getMock('\\DateTime');
+        $date = $this->getMockBuilder('\\DateTime')->getMock();
         $date
             ->expects($this->once())
             ->method('format')
@@ -155,7 +153,7 @@ class Formatter extends \Plop_TestCase
      */
     public function testFormatTime2()
     {
-        $date = $this->getMock('\\DateTime');
+        $date = $this->getMockBuilder('\\DateTime')->getMock();
         $date
             ->expects($this->once())
             ->method('format')
@@ -182,8 +180,9 @@ class Formatter extends \Plop_TestCase
         $file   = __FILE__;
         $msg    = $this->formatter->formatExceptionStub($exc);
         $msg    = substr($msg, 0, strcspn($msg, "\r\n"));
-        $this->assertSame(
-            "exception 'Plop\\Exception' with message 'Foo' in $file:$line",
+        $this->assertRegExp(
+            "#^(exception ')?Plop\\\\Exception[:'] (with message ')?Foo'? " .
+            "in $file:$line$#",
             $msg
         );
     }
@@ -212,16 +211,12 @@ class Formatter extends \Plop_TestCase
      */
     public function testFormatMethod()
     {
-        $formatter = $this->getMock(
-            '\\Plop\\Formatter',
-            array(
-                'formatException',
-                'formatTime',
-            )
-        );
+        $formatter = $this->getMockBuilder('\\Plop\\Formatter')
+            ->setMethods(array('formatException', 'formatTime'))
+            ->getMock();
         $formatter = new \Plop\Formatter();
 
-        $interpolator   = $this->getMock('\\Plop\\Interpolator\\Percent');
+        $interpolator   = $this->getMockBuilder('\\Plop\\Interpolator\\Percent')->getMock();
         $interpolator   = new \Plop\Interpolator\Percent();
         $exc            = new \Plop\Exception('Foo');
         $epoch          = new \DateTime('@0', new \DateTimeZone('UTC'));

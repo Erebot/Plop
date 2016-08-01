@@ -25,25 +25,25 @@ class TimedRotatingFile extends \Plop_TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->handler = $this->getMock(
-            '\\Plop\\Stub\\Handler\\TimedRotatingFile',
-            array(
-                'computeRollover',
-                'shouldRollover',
-                'getFilesToDelete',
-                'doRollover',
-                'open',
-                'getTime',
-            ),
-            array(),
-            '',
-            false
-        );
+        $this->handler = $this->getMockBuilder('\\Plop\\Stub\\Handler\\TimedRotatingFile')
+            ->setMethods(
+                array(
+                    'computeRollover',
+                    'shouldRollover',
+                    'getFilesToDelete',
+                    'doRollover',
+                    'open',
+                    'getTime',
+                )
+            )
+            ->setConstructorArgs(array())
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->handler
             ->expects($this->once())
             ->method('open')
             ->will($this->returnValue($this->stderrStream));
-        $this->record  = $this->getMock('\\Plop\\Stub\\RecordInterface');
+        $this->record  = $this->getMockBuilder('\\Plop\\Stub\\RecordInterface')->getMock();
     }
 
     public function tearDown()

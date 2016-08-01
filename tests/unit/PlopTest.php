@@ -26,7 +26,7 @@ class Plop extends \Plop_TestCase
     {
         parent::setUp();
         $this->plop     = new \Plop\Stub\Plop(true);
-        $this->logger   = $this->getMock('\\Plop\\LoggerInterface');
+        $this->logger   = $this->getMockBuilder('\\Plop\\LoggerInterface')->getMock();
     }
 
     /**
@@ -125,7 +125,7 @@ class Plop extends \Plop_TestCase
         $this->assertSame(null, $logger->getMethod());
 
         // Add a logger for this file's directory (and test its retrieval).
-        $dirLogger = $this->getMock('\\Plop\\LoggerInterface');
+        $dirLogger = $this->getMockBuilder('\\Plop\\LoggerInterface')->getMock();
         $dirLogger
             ->expects($this->any())
             ->method('getNamespace')
@@ -135,7 +135,7 @@ class Plop extends \Plop_TestCase
         $this->assertSame($dirLogger, $logger);
 
         // Add a logger for this class (and test its retrieval).
-        $classLogger = $this->getMock('\\Plop\\LoggerInterface');
+        $classLogger = $this->getMockBuilder('\\Plop\\LoggerInterface')->getMock();
         $classLogger
             ->expects($this->any())
             ->method('getNamespace')
@@ -153,7 +153,7 @@ class Plop extends \Plop_TestCase
         $this->assertSame($classLogger, $logger);
 
         // Add a logger for this method (and test its retrieval).
-        $methodLogger = $this->getMock('\\Plop\\LoggerInterface');
+        $methodLogger = $this->getMockBuilder('\\Plop\\LoggerInterface')->getMock();
         $methodLogger
             ->expects($this->any())
             ->method('getNamespace')
@@ -304,7 +304,10 @@ class Plop extends \Plop_TestCase
      */
     public function testAddLoggerMethod()
     {
-        $plop = $this->getMock('\\Plop\\Stub\\Plop', array('offsetSet'), array(true));
+        $plop = $this->getMockBuilder('\\Plop\\Stub\\Plop')
+            ->setMethods(array('offsetSet'))
+            ->setConstructorArgs(array(true))
+            ->getMock();
         $plop
             ->expects($this->once())
             ->method('offsetSet')

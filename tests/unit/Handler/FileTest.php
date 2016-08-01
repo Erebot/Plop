@@ -25,14 +25,12 @@ class File extends \Plop_TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->handler = $this->getMock(
-            '\\Plop\\Stub\\Handler\\File',
-            array('open', 'close', 'flush', 'format'),
-            array(),
-            '',
-            false
-        );
-        $this->record = $this->getMock('\\Plop\\Stub\\RecordInterface');
+        $this->handler = $this->getMockBuilder('\\Plop\\Stub\\Handler\\File')
+            ->setMethods(array('open', 'close', 'flush', 'format'))
+            ->setConstructorArgs(array())
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->record = $this->getMockBuilder('\\Plop\\Stub\\RecordInterface')->getMock();
     }
 
     public function tearDown()

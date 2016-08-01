@@ -25,21 +25,11 @@ class IndirectLoggerAbstract extends \Plop_TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->sublogger   = $this->getMock(
-            '\\Plop\\LoggerAbstract',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $this->sublogger   = $this->getMockBuilder('\\Plop\\LoggerAbstract')->getMock();
 
-        $this->indirect    = $this->getMock(
-            '\\Plop\\IndirectLoggerAbstract',
-            array('getIndirectLogger'),
-            array(),
-            '',
-            false
-        );
+        $this->indirect    = $this->getMockBuilder('\\Plop\\IndirectLoggerAbstract')
+            ->setMethods(array('getIndirectLogger'))
+            ->getMock();
 
         $this->indirect
             ->expects($this->once())
@@ -49,9 +39,9 @@ class IndirectLoggerAbstract extends \Plop_TestCase
 
     public function providerActions()
     {
-        $handler    = $this->getMock('\\Plop\\HandlerInterface');
-        $record     = $this->getMock('\\Plop\\RecordInterface_Stub');
-        $factory    = $this->getMock('\\Plop\\RecordFactoryInterface');
+        $handler    = $this->getMockBuilder('\\Plop\\HandlerInterface')->getMock();
+        $record     = $this->getMockBuilder('\\Plop\\RecordInterface_Stub')->getMock();
+        $factory    = $this->getMockBuilder('\\Plop\\RecordFactoryInterface')->getMock();
 
         return array(
             array('log', array(\Plop\DEBUG, 'foo'), true, null),

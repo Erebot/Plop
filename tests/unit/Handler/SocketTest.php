@@ -26,21 +26,22 @@ class Socket extends \Plop_TestCase
     {
         parent::setUp();
         $this->line    = __LINE__;
-        $this->handler = $this->getMock(
-            '\\Plop\\Stub\\Handler\\Socket',
-            array(
-                'makeSocket',
-                'getCurrentTime',
-                'handleError',
-                'emit',
-                'send',
-                'makePickle',
-                'createSocket',
-                'write',
-            ),
-            array('::1', 1234)
-        );
-        $this->record  = $this->getMock('\\Plop\\Stub\\RecordInterface');
+        $this->handler = $this->getMockBuilder('\\Plop\\Stub\\Handler\\Socket')
+            ->setMethods(
+                array(
+                    'makeSocket',
+                    'getCurrentTime',
+                    'handleError',
+                    'emit',
+                    'send',
+                    'makePickle',
+                    'createSocket',
+                    'write',
+                )
+            )
+            ->setConstructorArgs(array('::1', 1234))
+            ->getMock();
+        $this->record  = $this->getMockBuilder('\\Plop\\Stub\\RecordInterface')->getMock();
     }
 
     public function tearDown()
@@ -326,12 +327,10 @@ class Socket extends \Plop_TestCase
      */
     public function testMakePickleMethod()
     {
-        $record  = $this->getMock(
-            '\\Plop\\Stub\\RecordInterface',
-            array(),
-            array(),
-            'Plop_Record_Mock'
-        );
+        $record  = $this->getMockBuilder('\\Plop\\Stub\\RecordInterface')
+            ->setConstructorArgs(array())
+            ->setMockClassName('Plop_Record_Mock')
+            ->getMock();
         $record
             ->expects($this->once())
             ->method('serialize')

@@ -25,12 +25,11 @@ class Stream extends \Plop_TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->handler = $this->getMock(
-            '\\Plop\\Stub\\Handler\\Stream',
-            array('format'),
-            array($this->stderrStream, 'ISO-8859-1')
-        );
-        $this->record = $this->getMock('\\Plop\\Stub\\RecordInterface');
+        $this->handler = $this->getMockBuilder('\\Plop\\Stub\\Handler\\Stream')
+            ->setMethods(array('format'))
+            ->setConstructorArgs(array($this->stderrStream, 'ISO-8859-1'))
+            ->getMock();
+        $this->record = $this->getMockBuilder('\\Plop\\Stub\\RecordInterface')->getMock();
     }
 
     public function tearDown()

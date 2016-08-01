@@ -27,16 +27,14 @@ class Socket2 extends \Plop_TestCase
         parent::setUp();
         $this->closed = false;
 
-        $this->record  = $this->getMock('\\Plop\\Stub\\RecordInterface');
-        $this->handler = $this->getMock(
-            '\\Plop\\Stub\\Handler\\Socket',
-            array('getStderr', 'makeSocket'),
-            array(),
-            '',
-            false
-        );
+        $this->record  = $this->getMockBuilder('\\Plop\\Stub\\RecordInterface')->getMock();
+        $this->handler = $this->getMockBuilder('\\Plop\\Stub\\Handler\\Socket')
+            ->setMethods(array('getStderr', 'makeSocket'))
+            ->setConstructorArgs(array())
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->streamMock = $this->getMock('Plop_Testenv_Socket');
+        $this->streamMock = $this->getMockBuilder('Plop_Testenv_Socket')->getMock();
         $context = stream_context_create(
             array(
                 'mock' => array('object' => $this->streamMock)

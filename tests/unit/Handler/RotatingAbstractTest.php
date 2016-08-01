@@ -25,20 +25,20 @@ class RotatingAbstract extends \Plop_TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->handler = $this->getMock(
-            '\\Plop\\Stub\\Handler\\RotatingAbstract',
-            array(
-                'doRollover',
-                'shouldRollover',
-                'handleError',
-                'open',
-                'format',
-            ),
-            array(''),
-            '',
-            false
-        );
-        $this->record  = $this->getMock('\\Plop\\Stub\\RecordInterface');
+        $this->handler = $this->getMockBuilder('\\Plop\\Stub\\Handler\\RotatingAbstract')
+            ->setMethods(
+                array(
+                    'doRollover',
+                    'shouldRollover',
+                    'handleError',
+                    'open',
+                    'format',
+                )
+            )
+            ->setConstructorArgs(array(''))
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->record  = $this->getMockBuilder('\\Plop\\Stub\\RecordInterface')->getMock();
 
         $this->handler
             ->expects($this->once())
