@@ -29,7 +29,8 @@ class RecordFactory implements \Plop\RecordFactoryInterface
 {
     protected $interpolator;
 
-    public function __construct(\Plop\InterpolatorInterface $interpolator = null) {
+    public function __construct(\Plop\InterpolatorInterface $interpolator = null)
+    {
         if ($interpolator === null) {
             $interpolator = new \Plop\Interpolator\Percent();
         }

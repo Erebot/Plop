@@ -34,13 +34,14 @@ class Psr3 implements \Plop\InterpolatorInterface
      * \copydoc Plop::InterpolatorInterface::interpolate()
      *
      * \note
-     *      The following piece of code was taken as is
-     *      from the PSR-3 documentation.
+     *      The following piece of code was almost taken as is
+     *      from the PSR-3 documentation with the addition of
+     *      a visibility keyword.
      *
      * \copyright
      *      Copyright © Jordi Boggiano and other PSR-3 contributors.
      */
-    function interpolate($message, array $args = array())
+    public function interpolate($message, array $args = array())
     {
         $replace = array();
         foreach ($args as $key => $val) {

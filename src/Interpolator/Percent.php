@@ -46,8 +46,18 @@ class Percent implements \Plop\InterpolatorInterface
         // Mapping = array(name => index)
         $keys       = array_keys($args);
         $mapping    = array_flip($keys);
-        $keys       = array_map(function ($key) { return "%($key)"; }, $keys);
-        $values     = array_map(function ($val) { return '%'.($val + 1).'$'; }, $mapping);
+        $keys       = array_map(
+            function ($key) {
+                return "%($key)";
+            },
+            $keys
+        );
+        $values     = array_map(
+            function ($val) {
+                return '%'.($val + 1).'$';
+            },
+            $mapping
+        );
         $mapping    = array_combine($keys, $values);
         $msg        = strtr($msg, $mapping);
         return vsprintf($msg, array_values($args));

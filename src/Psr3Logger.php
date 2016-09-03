@@ -27,8 +27,8 @@ namespace Plop;
  */
 class Psr3Logger extends \Psr\Log\AbstractLogger
 {
-    static $factory = null;
-    static $instance = null;
+    static protected $factory = null;
+    static protected $instance = null;
 
     public function __construct()
     {
@@ -68,7 +68,8 @@ class Psr3Logger extends \Psr\Log\AbstractLogger
             // Switch to a factory that uses PSR3-interpolation.
             $logging->setRecordFactory(static::$factory);
             $logging->$level($message, $context);
-        } catch (Exception $e) {}
+        } catch (Exception $e) {
+        }
 
         // Restore the original factory.
         $logging->setRecordFactory($factory);
