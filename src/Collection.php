@@ -31,25 +31,25 @@ class Collection implements \ArrayAccess, \Countable, \IteratorAggregate
     /// List of items in the collection.
     protected $items = array();
 
-    /// \copydoc Countable::count().
+    /// \copydoc Countable::count
     public function count()
     {
         return count($this->items);
     }
 
-    /// \copydoc IteratorAggregate::getIterator().
+    /// \copydoc IteratorAggregate::getIterator
     public function getIterator()
     {
         return new ArrayIterator($this->items);
     }
 
-    /// \copydoc ArrayAccess::offsetGet().
+    /// \copydoc ArrayAccess::offsetGet
     public function offsetGet($offset)
     {
         return $this->items[$offset];
     }
 
-    /// \copydoc ArrayAccess::offsetSet().
+    /// \copydoc ArrayAccess::offsetSet
     public function offsetSet($offset, $value)
     {
         $hint = static::TYPE_HINT;
@@ -64,7 +64,7 @@ class Collection implements \ArrayAccess, \Countable, \IteratorAggregate
         }
     }
 
-    /// \copydoc ArrayAccess::offsetExists().
+    /// \copydoc ArrayAccess::offsetExists
     public function offsetExists($offset)
     {
         $res = @isset($this->items[$offset]) ||
@@ -72,7 +72,7 @@ class Collection implements \ArrayAccess, \Countable, \IteratorAggregate
         return $res;
     }
 
-    /// \copydoc ArrayAccess::offsetUnset().
+    /// \copydoc ArrayAccess::offsetUnset
     public function offsetUnset($offset)
     {
         if (!is_int($offset)) {

@@ -173,19 +173,11 @@ interface LoggerInterface
      * Log a message with the Plop::DEBUG log level.
      *
      * \param string $msg
-     *      The message to log (possibly with values from
-     *      the \a $args parameter embedded -- read the rest
-     *      of this entry for more information).
+     *      The message to log.
      *
      * \param array $args
      *      (optional) Associative array of values that may
-     *      be replaced dynamically in the log message,
-     *      using a formatting sequence based on this model:
-     *      \verbatim %(name)<spec> \endverbatim
-     *      where \a name is the key of the variable, taken from
-     *      the \a $args parameter, and \a \<spec\> is a valid
-     *      <a href="http://php.net/sprintf">sprintf()</a> format
-     *      specification, such as \verbatim %(foo)04d \endverbatim
+     *      be replaced dynamically in the log message.
      *      By default, an empty array is used.
      *
      * \param Exception|null $exception
@@ -206,19 +198,11 @@ interface LoggerInterface
      * Log a message with the Plop::INFO log level.
      *
      * \param string $msg
-     *      The message to log (possibly with values from
-     *      the \a $args parameter embedded -- read the rest
-     *      of this entry for more information).
+     *      The message to log.
      *
      * \param array $args
      *      (optional) Associative array of values that may
-     *      be replaced dynamically in the log message,
-     *      using a formatting sequence based on this model:
-     *      \verbatim %(name)<spec> \endverbatim
-     *      where \a name is the key of the variable, taken from
-     *      the \a $args parameter, and \a \<spec\> is a valid
-     *      <a href="http://php.net/sprintf">sprintf()</a> format
-     *      specification, such as \verbatim %(foo)04d \endverbatim
+     *      be replaced dynamically in the log message.
      *      By default, an empty array is used.
      *
      * \param Exception|null $exception
@@ -239,19 +223,11 @@ interface LoggerInterface
      * Log a message with the Plop::NOTICE log level.
      *
      * \param string $msg
-     *      The message to log (possibly with values from
-     *      the \a $args parameter embedded -- read the rest
-     *      of this entry for more information).
+     *      The message to log.
      *
      * \param array $args
      *      (optional) Associative array of values that may
-     *      be replaced dynamically in the log message,
-     *      using a formatting sequence based on this model:
-     *      \verbatim %(name)<spec> \endverbatim
-     *      where \a name is the key of the variable, taken from
-     *      the \a $args parameter, and \a \<spec\> is a valid
-     *      <a href="http://php.net/sprintf">sprintf()</a> format
-     *      specification, such as \verbatim %(foo)04d \endverbatim
+     *      be replaced dynamically in the log message.
      *      By default, an empty array is used.
      *
      * \param Exception|null $exception
@@ -272,19 +248,11 @@ interface LoggerInterface
      * Log a message with the Plop::WARNING log level.
      *
      * \param string $msg
-     *      The message to log (possibly with values from
-     *      the \a $args parameter embedded -- read the rest
-     *      of this entry for more information).
+     *      The message to log.
      *
      * \param array $args
      *      (optional) Associative array of values that may
-     *      be replaced dynamically in the log message,
-     *      using a formatting sequence based on this model:
-     *      \verbatim %(name)<spec> \endverbatim
-     *      where \a name is the key of the variable, taken from
-     *      the \a $args parameter, and \a \<spec\> is a valid
-     *      <a href="http://php.net/sprintf">sprintf()</a> format
-     *      specification, such as \verbatim %(foo)04d \endverbatim
+     *      be replaced dynamically in the log message.
      *      By default, an empty array is used.
      *
      * \param Exception|null $exception
@@ -305,19 +273,11 @@ interface LoggerInterface
      * Log a message with the Plop::WARN log level.
      *
      * \param string $msg
-     *      The message to log (possibly with values from
-     *      the \a $args parameter embedded -- read the rest
-     *      of this entry for more information).
+     *      The message to log.
      *
      * \param array $args
      *      (optional) Associative array of values that may
-     *      be replaced dynamically in the log message,
-     *      using a formatting sequence based on this model:
-     *      \verbatim %(name)<spec> \endverbatim
-     *      where \a name is the key of the variable, taken from
-     *      the \a $args parameter, and \a \<spec\> is a valid
-     *      <a href="http://php.net/sprintf">sprintf()</a> format
-     *      specification, such as \verbatim %(foo)04d \endverbatim
+     *      be replaced dynamically in the log message.
      *      By default, an empty array is used.
      *
      * \param Exception|null $exception
@@ -338,19 +298,11 @@ interface LoggerInterface
      * Log a message with the Plop::ERROR log level.
      *
      * \param string $msg
-     *      The message to log (possibly with values from
-     *      the \a $args parameter embedded -- read the rest
-     *      of this entry for more information).
+     *      The message to log.
      *
      * \param array $args
      *      (optional) Associative array of values that may
-     *      be replaced dynamically in the log message,
-     *      using a formatting sequence based on this model:
-     *      \verbatim %(name)<spec> \endverbatim
-     *      where \a name is the key of the variable, taken from
-     *      the \a $args parameter, and \a \<spec\> is a valid
-     *      <a href="http://php.net/sprintf">sprintf()</a> format
-     *      specification, such as \verbatim %(foo)04d \endverbatim
+     *      be replaced dynamically in the log message.
      *      By default, an empty array is used.
      *
      * \param Exception|null $exception
@@ -371,19 +323,11 @@ interface LoggerInterface
      * Log a message with the Plop::CRITICAL log level.
      *
      * \param string $msg
-     *      The message to log (possibly with values from
-     *      the \a $args parameter embedded -- read the rest
-     *      of this entry for more information).
+     *      The message to log.
      *
      * \param array $args
      *      (optional) Associative array of values that may
-     *      be replaced dynamically in the log message,
-     *      using a formatting sequence based on this model:
-     *      \verbatim %(name)<spec> \endverbatim
-     *      where \a name is the key of the variable, taken from
-     *      the \a $args parameter, and \a \<spec\> is a valid
-     *      <a href="http://php.net/sprintf">sprintf()</a> format
-     *      specification, such as \verbatim %(foo)04d \endverbatim
+     *      be replaced dynamically in the log message.
      *      By default, an empty array is used.
      *
      * \param Exception|null $exception
@@ -404,19 +348,11 @@ interface LoggerInterface
      * Log a message with the Plop::ALERT log level.
      *
      * \param string $msg
-     *      The message to log (possibly with values from
-     *      the \a $args parameter embedded -- read the rest
-     *      of this entry for more information).
+     *      The message to log.
      *
      * \param array $args
      *      (optional) Associative array of values that may
-     *      be replaced dynamically in the log message,
-     *      using a formatting sequence based on this model:
-     *      \verbatim %(name)<spec> \endverbatim
-     *      where \a name is the key of the variable, taken from
-     *      the \a $args parameter, and \a \<spec\> is a valid
-     *      <a href="http://php.net/sprintf">sprintf()</a> format
-     *      specification, such as \verbatim %(foo)04d \endverbatim
+     *      be replaced dynamically in the log message.
      *      By default, an empty array is used.
      *
      * \param Exception|null $exception
@@ -437,19 +373,11 @@ interface LoggerInterface
      * Log a message with the Plop::EMERGENCY log level.
      *
      * \param string $msg
-     *      The message to log (possibly with values from
-     *      the \a $args parameter embedded -- read the rest
-     *      of this entry for more information).
+     *      The message to log.
      *
      * \param array $args
      *      (optional) Associative array of values that may
-     *      be replaced dynamically in the log message,
-     *      using a formatting sequence based on this model:
-     *      \verbatim %(name)<spec> \endverbatim
-     *      where \a name is the key of the variable, taken from
-     *      the \a $args parameter, and \a \<spec\> is a valid
-     *      <a href="http://php.net/sprintf">sprintf()</a> format
-     *      specification, such as \verbatim %(foo)04d \endverbatim
+     *      be replaced dynamically in the log message.
      *      By default, an empty array is used.
      *
      * \param Exception|null $exception
@@ -470,9 +398,7 @@ interface LoggerInterface
      * Log an exception.
      *
      * \param string $msg
-     *      The message to log (possibly with values from
-     *      the \a $args parameter embedded -- read the rest
-     *      of this entry for more information).
+     *      The message to log.
      *
      * \param Exception $exception
      *      An exception that should also be logged.
@@ -481,13 +407,7 @@ interface LoggerInterface
      *
      * \param array $args
      *      (optional) Associative array of values that may
-     *      be replaced dynamically in the log message,
-     *      using a formatting sequence based on this model:
-     *      \verbatim %(name)<spec> \endverbatim
-     *      where \a name is the key of the variable, taken from
-     *      the \a $args parameter, and \a \<spec\> is a valid
-     *      <a href="http://php.net/sprintf">sprintf()</a> format
-     *      specification, such as \verbatim %(foo)04d \endverbatim
+     *      be replaced dynamically in the log message.
      *      By default, an empty array is used.
      *
      * \retval Plop::LoggerInterface
@@ -524,19 +444,21 @@ interface LoggerInterface
      *      -   Plop::LoggerInterface::emergency()
      *
      * \param string $msg
-     *      The message to log (possibly with values from
-     *      the \a $args parameter embedded -- read the rest
-     *      of this entry for more information).
-     *
-     * \param array $args
-     *      (optional) Associative array of values that may
-     *      be replaced dynamically in the log message,
-     *      using a formatting sequence based on this model:
+     *      The message to log (possibly with special sequences to
+     *      embed formatted values from the \a $args parameter).
+     *      The exact sequence used to embed values depends on
+     *      the interpolator in use. For the default interpolator
+     *      (Plop::Interpolator::Percent), each sequence
+     *      must follow this model:
      *      \verbatim %(name)<spec> \endverbatim
      *      where \a name is the key of the variable, taken from
      *      the \a $args parameter, and \a \<spec\> is a valid
      *      <a href="http://php.net/sprintf">sprintf()</a> format
      *      specification, such as \verbatim %(foo)04d \endverbatim
+     *
+     * \param array $args
+     *      (optional) Associative array of values that may
+     *      be replaced dynamically in the log message.
      *      By default, an empty array is used.
      *
      * \param Exception|null $exception

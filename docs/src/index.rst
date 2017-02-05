@@ -18,6 +18,12 @@ Contents:
     Contribute
     License
 
+..  toctree::
+    :hidden:
+
+    Coding_Standard
+
+
 Badges: |badges-travis| |badges-versioneye| |badges-coveralls|
 
 ..  |badges-travis| image:: https://travis-ci.org/Erebot/Plop.png?branch=master

@@ -49,7 +49,7 @@ class Level implements \Plop\FilterInterface
         $this->level = $level;
     }
 
-    /// \copydoc Plop::FilterInterface::filter().
+    /// \copydoc Plop::FilterInterface::filter
     public function filter(\Plop\RecordInterface $record)
     {
         $res = $record['levelno'] >= $this->level;

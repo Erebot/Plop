@@ -6,15 +6,10 @@ Prerequisites
 This page assumes that the reader has a working PHP setup (either installed
 using some distribution's package manager or manually) and lists
 the dependencies required to use Plop.
+
 In case you compiled PHP yourself, you may need to recompile it to include
 additional extensions (see the list of required PHP dependencies in the section
 entitled `Getting started`_ for more information).
-
-Plop is known to work with most PHP versions.
-Plop should run correctly on both Windows (XP or later) and Linux (most distros).
-The code is tested using an automated process on Windows Vista (64 bits),
-Windows 7 (64 bits), Windows 8.1 (64 bits), Debian Stable (64 bits)
-and CentOS 6 (64 bits), as reflected by our `Continuous Integration server`_.
 
 ..  contents:: :local:
 
@@ -110,8 +105,5 @@ You may also consult the output of ``phpinfo()`` for the same purpose.
 
 ..  |---| unicode:: U+02014 .. em dash
     :trim:
-
-..  _`Continuous Integration server`:
-    https://ci.erebot.net/components/
 
 .. vim: ts=4 et

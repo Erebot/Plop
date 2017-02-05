@@ -61,26 +61,26 @@ abstract class HandlerAbstract implements \Plop\HandlerInterface
         $this->filters = $filters;
     }
 
-    /// \copydoc Plop::HandlerInterface::getFormatter().
+    /// \copydoc Plop::HandlerInterface::getFormatter
     public function getFormatter()
     {
         return $this->formatter;
     }
 
-    /// \copydoc Plop::HandlerInterface::setFormatter().
+    /// \copydoc Plop::HandlerInterface::setFormatter
     public function setFormatter(\Plop\FormatterInterface $formatter)
     {
         $this->formatter = $formatter;
         return $this;
     }
 
-    /// \copydoc Plop::HandlerInterface::getFilters().
+    /// \copydoc Plop::HandlerInterface::getFilters
     public function getFilters()
     {
         return $this->filters;
     }
 
-    /// \copydoc Plop::HandlerInterface::setFilters().
+    /// \copydoc Plop::HandlerInterface::setFilters
     public function setFilters(\Plop\FiltersCollectionAbstract $filters)
     {
         $this->filters = $filters;
@@ -112,7 +112,7 @@ abstract class HandlerAbstract implements \Plop\HandlerInterface
      */
     abstract protected function emit(\Plop\RecordInterface $record);
 
-    /// \copydoc Plop::HandlerInterface::handle().
+    /// \copydoc Plop::HandlerInterface::handle
     public function handle(\Plop\RecordInterface $record)
     {
         $rv = $this->format($record);
@@ -137,7 +137,7 @@ abstract class HandlerAbstract implements \Plop\HandlerInterface
         return fopen('php://stderr', 'at');
     }
 
-    /// \copydoc Plop::HandlerInterface::handleError().
+    /// \copydoc Plop::HandlerInterface::handleError
     public function handleError(
         \Plop\RecordInterface $record,
         \Exception $exception

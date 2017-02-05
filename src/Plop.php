@@ -82,16 +82,23 @@ const EMERGENCY = 80;
  *  logging messages:
  *  \code
  *      // Grab an instance of the logging service.
- *      $logging = \\Plop\\Plop::getInstance();
+ *      $logging = \Plop\Plop::getInstance();
+ *
  *      // Log a message with the INFO level.
  *      $logging->info('The cat is both dead and alive!');
  *  \endcode
  *
- *  This is equivalent to the following less concise
+ *  This is equivalent to the following slightly less concise
  *  piece of code:
  *  \code
- *      $logging = \\Plop\\Plop::getInstance();
+ *      // Grab an instance of the logging service.
+ *      $logging = \Plop\Plop::getInstance();
+ *
+ *      // Retrieve the logger for the current namespace,
+ *      // class and function explicitly.
  *      $logger = $logging->getLogger(__NAMESPACE__, __CLASS__, __FUNCTION__);
+ *
+ *      // Log a message with the INFO level.
  *      $logger->info('The cat is both dead and alive!');
  *  \endcode
  *
@@ -102,13 +109,13 @@ const EMERGENCY = 80;
  *  The following piece of code shows how to configure bits of Plop
  *  using PHP code:
  *  \code
- *      $logging = \\Plop\\Plop::getInstance();
+ *      $logging = \Plop\Plop::getInstance();
  *
  *      // Grab the root logger.
  *      $logger = $logging->getLogger();
  *
  *      // Log only messages with a level of INFO or more.
- *      $logger->setLevel(\\Plop::INFO);
+ *      $logger->setLevel(\Plop::INFO);
  *
  *      // Change the format used to display logs on the console.
  *      // Also, display dates as UNIX timestamps instead of using
@@ -118,15 +125,18 @@ const EMERGENCY = 80;
  *              ->setFormat('%(asctime)s - %(levelname)s - %(message)s')
  *              ->setDateFormat('U'); // We want UNIX timestamps.
  *
- *      // Send logs to the syslog (using the default format),
- *      // in addition to the console, if the level is WARNING
- *      // or above.
- *      $handler = new \\Plop\\Handler\\SysLog(
- *          \\Plop\\Handler\\SysLog::DEFAULT_ADDRESS,
+ *      // Send logs to the syslog daemon (using the default format),
+ *      // in addition to the console, but only if the record's level
+ *      // is at least WARNING.
+ *      $handler = new \Plop\Handler\SysLog(
+ *          \Plop\Handler\SysLog::DEFAULT_ADDRESS,
  *          LOG_DAEMON
  *      );
+ *      $handler->setLevel(\Plop::WARNING);
+ *
+ *      // Attach the new handler to the logger.
  *      $handlers = $logger->getHandlers();
- *      $handlers[] = $handler->setLevel(\\Plop::WARNING);
+ *      $handlers[] = $handler;
  *  \endcode
  */
 class Plop extends \Plop\IndirectLoggerAbstract implements \ArrayAccess, \Countable
@@ -328,7 +338,7 @@ class Plop extends \Plop\IndirectLoggerAbstract implements \ArrayAccess, \Counta
      *      is equivalent to
      *      \code
      *          $logging
-     *              ->getLogger(\_\_NAMESPACE\_\_, \_\_CLASS\_\_, \_\_FUNCTION\_\_)
+     *              ->getLogger(__NAMESPACE__, __CLASS__, __FUNCTION__)
      *              ->info('The quick brown fox jumps over the lazy dog');
      *      \endcode
      */
@@ -477,8 +487,8 @@ class Plop extends \Plop\IndirectLoggerAbstract implements \ArrayAccess, \Counta
      *      was found, or the root logger.
      *
      * \warning
-     *      Do not call this method directly, use
-     *      Plop::getLogger() instead.
+     *      Do not call this method directly or bad things may happen.
+     *      Use Plop::getLogger() instead.
      */
     public function offsetGet($offset)
     {

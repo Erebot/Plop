@@ -41,7 +41,7 @@ class Not implements \Plop\FilterInterface
         $this->subfilter = $filter;
     }
 
-    /// \copydoc Plop::FilterInterface::filter().
+    /// \copydoc Plop::FilterInterface::filter
     public function filter(\Plop\RecordInterface $record)
     {
         $res = !$this->subfilter->filter($record);

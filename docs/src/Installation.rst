@@ -23,7 +23,7 @@ file.
 
 Installing Plop as a PHAR archive only involves a few steps:
 
-1.  Make sure your installation fulfills all of the `prerequisites`_.
+1.  Make sure your installation fulfills all of the :ref:`prerequisites <Prerequisites>`.
 
     ..  note::
 
@@ -33,27 +33,14 @@ Installing Plop as a PHAR archive only involves a few steps:
         to run Plop's PHAR archive.
 
 2.  Download the PHAR archive for Plop. You can grab the latest
-    version from https://pear.erebot.net/get/Plop-latest.phar.
-    You **MUST** also download the public signature for the archive.
-    The signature for the latest version is available at
-    https://pear.erebot.net/get/Plop-latest.phar.pubkey.
-
-..  note::
-
-    The whole installation process using PHAR archives can be automated
-    using the following commands:
-
-    ..  sourcecode:: bash
-
-        $ wget https://packages.erebot.net/get/Plop-latest.phar     \
-            https://packages.erebot.net/get/Plop-latest.phar.pubkey
+    version from https://github.com/Erebot/Plop/releases/latest/.
 
 ..  warning::
 
-    Even though the command above should work on most installations,
-    a few known problems may occur due to incompatibilities with certain
-    PHP features and extensions. To avoid such issues, it is usually a good
-    idea to check the following items:
+    The PHAR archive should work properly on most installations.
+    However, a few issues have been discovered in the past with certain
+    PHP features and extensions. In case the archive does not work
+    on your computer,it is usually a good idea to check the following items:
 
     -   Make sure ``detect_unicode`` is set to ``Off`` in your :file:`php.ini`.
         This is especially important on MacOS where this setting tends to be
@@ -96,38 +83,18 @@ Installation using `Composer`_
 ------------------------------
 
 `Composer`_ is a simple dependency resolver / package manager aimed at
-PHP 5.3.0 or later. Their website contains extensive documentation on how to
-use it in your project to handle dependencies.
+PHP 5.3.0 or later.
 
-With that in mind, using composer to install Plop is very simple and only
-involves the following steps:
+If your project already uses Composer, installing Plop is very simple.
+You just need to add a requirement on Plop's package:
 
-1.  Install `Composer`_ on your machine:
+..  sourcecode:: bash
 
-    ..  sourcecode:: console
+    me@localhost:~/myproject/$ php /path/to/composer.phar require erebot/plop
 
-        me@home:~$ curl -s http://getcomposer.org/installer | php
-
-2.  Create a file named :file:`composer.json` in your current directory.
-
-3.  Copy/paste the following snippet in that file and save:
-
-    ..  sourcecode:: js
-
-        {
-          "require": {
-            "Erebot/Plop": "*"
-          }
-        }
-
-4.  Let composer do the rest:
-
-    ..  sourcecode:: console
-
-        me@home:~$ php composer.phar install
-
-You may now proceed to the :ref:`next step <Using Plop>`, which makes
-actual use of Plop's logging capabilities.
+That's it! Plop is now installed and you may proceed
+to the :ref:`next step <Using Plop>`, which makes actual use
+of Plop's logging capabilities.
 
 
 Installation from sources
@@ -142,8 +109,11 @@ the tools provided by your distribution:
     # For apt-based distributions such as Debian or Ubuntu
     $ apt-get install git
 
-    # For yum-based distributions such as Fedora / RHEL (RedHat)
+    # For yum-based distributions such as Fedora / RHEL / CentOS
     $ yum install git
+
+    # For dnf-based distributions such as newer Fedora releases
+    $ dnf install git
 
     # For urpmi-based distributions such as MES (Mandriva)
     $ urpmi git
@@ -154,10 +124,11 @@ the tools provided by your distribution:
     an equivalent git client. Also, make sure that :program:`git` is present
     on your account's :envvar:`PATH`. If not, you'll have to replace
     :command:`git` by the full path to :file:`git.exe` on every invocation
-    (e.g. :command:`"C:\Program Files\Git\bin\git.exe" clone ...`)
+    (e.g. :command:`"C:\\Program Files\\Git\\bin\\git.exe" clone ...`)
 
-Also, make sure you have all the `required dependencies`_ installed as well.
-Now, retrieve Plop's code from its repository, using the following command:
+Also, make sure you have all the :ref:`required dependencies <Prerequisites>`
+installed as well. Now, retrieve Plop's code from its repository,
+using the following command:
 
 ..  sourcecode:: bash
 
@@ -167,17 +138,8 @@ You may now proceed to the :ref:`next step <Using Plop>`, which makes
 actual use of Plop's logging capabilities.
 
 
-..  _`pear`:
-    http://pear.php.net/package/PEAR
-..  _`Pyrus`:
-    http://pyrus.net/
-..  _`PEAR channel`:
-    https://pear.erebot.net/
 ..  _`Git for Windows`:
     http://code.google.com/p/msysgit/downloads/list
-..  _`prerequisites`:
-..  _`required dependencies`:
-    Prerequisites.html
 ..  _`Composer`:
     http://getcomposer.org/
 

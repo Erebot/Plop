@@ -48,7 +48,7 @@ class Name implements \Plop\FilterInterface
         $this->nlen = strlen($name);
     }
 
-    /// \copydoc Plop::FilterInterface::filter().
+    /// \copydoc Plop::FilterInterface::filter
     public function filter(\Plop\RecordInterface $record)
     {
         if (!$this->nlen) {

@@ -54,7 +54,7 @@ Loggers
 
 A logger intercepts log messages for a given method, class, file or directory.
 This is decided at construction time based on the arguments passed to
-:api:`Plop::Logger::__construct`.
+:api:plop:`Plop\\Logger::__construct`.
 
 Internally, Plop builds up a hierarchy of loggers like so::
 
@@ -72,8 +72,8 @@ namespace, etc. until it reaches the root-level logger, which always exists.
 Whichever logger is found first will be the one to handle the message.
 
 ..  note::
-    The root-level logger) comes pre-configured with a handler
-    that logs messages to ``STDERR`` using some very basic formatting.
+    The root-level logger comes pre-configured with a handler that logs
+    every message to ``STDERR`` using some very basic formatting.
 
 Several aspects of a logger can be configured, such as:
 
@@ -84,8 +84,8 @@ Several aspects of a logger can be configured, such as:
 
 -   The record factory. This factory is used to create records of logging
     messages, intended to keep track of the message's contextual information.
-    This factory must implement the :api:`Plop::RecordFactoryInterface`
-    interface and is usually an instance of :api:`Plop::RecordFactory`.
+    This factory must implement the :api:plop:`Plop\\RecordFactoryInterface`
+    interface and is usually an instance of :api:plop:`Plop\\RecordFactory`.
 
 -   :ref:`Filters`.
 
@@ -106,21 +106,22 @@ be replaced with the new one.
 
 ..  seealso::
 
-    :api:`Plop::LoggerInterface`
+    :api:plop:`Plop\\LoggerInterface`
         Detailed API documentation on the interface implemented by loggers.
 
-    :api:`Plop::LoggerAbstract`
+    :api:plop:`Plop\\LoggerAbstract`
         An abstract class that can be useful when implementing your own logger.
 
-    :api:`Plop::IndirectLoggerAbstract`
+    :api:plop:`Plop\\IndirectLoggerAbstract`
         An abstract class that can be useful when implementing an indirect
         logger. An indirect logger is a logger which relies on another logger
-        to work. Plop's main class (:api:`Plop`) is an example of such a logger.
+        to work. Plop's main class (:api:plop:`Plop\\Plop`) is an example
+        of such a logger.
 
-    :api:`Plop::Logger`
+    :api:plop:`Plop\\Logger`
         The most common type of logger.
 
-    :api:`Plop::Psr3Logger`
+    :api:plop:`Plop\\Psr3Logger`
         A logger that supports the `PSR-3 <http://www.php-fig.org/psr/psr-3/>`_
         ``\Psr\Log\LoggerInterface`` interface.
 
@@ -130,10 +131,10 @@ Filters
 ~~~~~~~
 
 Filters are associated with either :ref:`loggers <Loggers>` or
-:ref:`handlers <handlers>` through an object implementing
-:api:`Plop::FiltersCollectionInterface` (usually an instance of
-:api:`Plop::FiltersCollection`) and are used to restrict which messages
-will be handled.
+:ref:`handlers <handlers>` through an object derived from the
+:api:plop:`Plop\\FiltersCollectionAbstract` abstract class
+(usually an instance of :api:plop:`Plop\\FiltersCollection`) and are used
+to restrict which messages will be handled.
 They are applied once the message has been turned into a log record
 and work by defining various criteria such a record must respect.
 
@@ -144,8 +145,8 @@ to do their work.
 ..  note::
     The "level" associated with a logger acts like a lightweight filter.
     In fact, the same effect could be obtained by defining a collection
-    containing an instance of :api:`Plop::Filter::Level` with the level
-    desired.
+    containing an instance of :api:plop:`Plop\\Filter\\Level` with the
+    desired logging level.
 
 ..  warning::
     Not all handlers make use of filters. Therefore, depending on the handlers
@@ -165,11 +166,11 @@ have to pass the new filter before they can be handled.
 
 ..  seealso::
 
-    :api:`Plop::FiltersCollectionInterface`
-        Detailed API documentation for the interface representing a collection
-        of filters.
+    :api:plop:`Plop\\FiltersCollectionAbstract`
+        Detailed API documentation for the abstract class representing
+        a collection of filters.
 
-    :api:`Plop::FilterInterface`
+    :api:plop:`Plop\\FilterInterface`
         Detailed API documentation for the interface implemented by all filters.
         This page also references all the filters that can be used in a
         collection.
@@ -179,10 +180,10 @@ have to pass the new filter before they can be handled.
 Handlers
 ~~~~~~~~
 
-Handlers are associated with :ref:`loggers <Loggers>` through an object
-implementing :api:`Plop::HandlersCollectionInterface` (usually an instance of
-:api:`Plop::HandlersCollection`) and are used to define the treatment applied
-to log records.
+Handlers are associated with :ref:`loggers <Loggers>` through an object derived
+from the :api:plop:`Plop\\HandlersCollectionAbstract` abstract class
+(usually an instance of :api:plop:`Plop\\HandlersCollection`) and are used
+to define the treatment applied to log records.
 
 Various types of handlers exist that can be used to log message to different
 locations such as the system's event logger (syslog), a (rotated) file,
@@ -207,14 +208,14 @@ will be called when a log record must be handled.
 
 ..  seealso::
 
-    :api:`Plop::HandlersCollectionInterface`
-        Detailed API documentation for the interface representing a collection
-        of handlers.
+    :api:plop:`Plop\\HandlersCollectionAbstract`
+        Detailed API documentation for the abstract class representing
+        a collection of handlers.
 
-    :api:`Plop::HandlerAbstract`
+    :api:plop:`Plop\\HandlerAbstract`
         An abstract class that can be useful when implementing a new handler.
 
-    :api:`Plop::HandlerInterface`
+    :api:plop:`Plop\\HandlerInterface`
         Detailed API documentation for the interface implemented by all
         handlers. This page also references all the handlers that can be
         used in a collection.
@@ -232,7 +233,7 @@ There are a few things about a formatter that you can configure:
 
 -   The main format. This string serves as a pattern for the final message.
 
-    When using an instance of :api:`Plop::Formatter` with default settings
+    When using an instance of :api:plop:`Plop\\Formatter` with default settings
     as the formatter, it may contain `Python-like string formats`__
     using the syntax for dictionaries.
 
@@ -241,19 +242,19 @@ There are a few things about a formatter that you can configure:
         [%(asctime)s] %(levelname)s - %(message)s
 
     The default format in that case is defined in
-    :api:`Plop::Formatter::DEFAULT_FORMAT`.
+    :api:plop:`Plop\\Formatter::DEFAULT_FORMAT`.
 
     Several pre-defined formats exist that depend on the particular
     implementation used to represent records.
-    For example, :api:`Plop::Record` closely follows the formats defined
+    For example, :api:plop:`Plop\\Record` closely follows the formats defined
     by `Python's logging module`__ whenever they are applicable.
 
 -   The format for dates and times.
 
-    When using an instance of :api:`Plop::Formatter` as the formatter,
+    When using an instance of :api:plop:`Plop\\Formatter` as the formatter,
     it uses the formatting options from PHP's `date()`__ function.
-    Also, the default format for dates and times is then defined in
-    :api:`Plop::Formatter::DEFAULT_DATE_FORMAT`.
+    Also, the default format for dates and times is defined in
+    :api:plop:`Plop\\Formatter::DEFAULT_DATE_FORMAT`.
 
 
 -   The current timezone as a `DateTimeZone`__ object.
@@ -270,14 +271,14 @@ Please note that this **will** replace any formatter previously in place.
 
 ..  seealso::
 
-    :api:`Plop::FormatterInterface`
+    :api:plop:`Plop\\FormatterInterface`
         Detailed API documentation for the interface implemented by all
         formatters.
 
-    :api:`Plop::Formatter`
+    :api:plop:`Plop\\Formatter`
         The most common implementation of formatters.
 
-    :api:`Plop::Record`
+    :api:plop:`Plop\\Record`
         The most common implementation for log records.
 
     http://php.net/class.datetime.php#datetime.constants.types

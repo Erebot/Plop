@@ -27,10 +27,9 @@ interface InterpolatorInterface
      * a message.
      *
      * \param string $msg
-     *      The message that serves as the model
-     *      for the result. It may contain refer to
-     *      the values of variables dynamically using
-     *      special formatting sequences.
+     *      The message that serves as the model for the result.
+     *      It may refer to the values of variables dynamically
+     *      using special formatting sequences.
      *
      * \param array $args
      *      (optional) Associative array of values that will

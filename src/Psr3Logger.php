@@ -30,6 +30,14 @@ class Psr3Logger extends \Psr\Log\AbstractLogger
     static protected $factory = null;
     static protected $instance = null;
 
+    /**
+     * Construct a new PSR-3 compatible logger.
+     *
+     * \note
+     *      The logger's interpolator is automatically set
+     *      to Plop::Interpolator::Psr3 to match the
+     *      requirements of the PSR-3 specification.
+     */
     public function __construct()
     {
         if (static::$factory === null) {
@@ -39,6 +47,14 @@ class Psr3Logger extends \Psr\Log\AbstractLogger
         }
     }
 
+    /**
+     * Return a PSR-3 compatible logger.
+     *
+     * \note
+     *      The logger's interpolator is automatically set
+     *      to Plop::Interpolator::Psr3 to match the
+     *      requirements of the PSR-3 specification.
+     */
     public static function getInstance()
     {
         if (static::$instance === null) {
@@ -47,6 +63,22 @@ class Psr3Logger extends \Psr\Log\AbstractLogger
         return static::$instance;
     }
 
+    /**
+     * Log some message.
+     *
+     * \param mixed $level
+     *      Level for the message (one of the constants defined
+     *      in the Psr::Log::LogLevel class).
+     *
+     * \param string $message
+     *      Actual message to log. The message may contain
+     *      placeholders in the form \a {name} to embed
+     *      the value of the key matching the given name
+     *      in the \a $context argument.
+     *
+     * \param array $context
+     *      Context for the log message.
+     */
     public function log($level, $message, array $context = array())
     {
         /***
