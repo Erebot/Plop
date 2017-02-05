@@ -18,13 +18,15 @@
     along with Plop.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-use PHPUnit\Framework\TestCase;
+if (!class_exists('PHPUnit_Framework_TestCase')) {
+    class_alias('\\PHPUnit\\Framework\\TestCase', 'PHPUnit_Framework_TestCase');
+}
 
 require_once(__DIR__ . DIRECTORY_SEPARATOR . 'Stderr.php');
 require_once(__DIR__ . DIRECTORY_SEPARATOR . 'Socket.php');
 
 class   Plop_TestCase
-extends TestCase
+extends PHPUnit_Framework_TestCase
 {
     protected $stderrExpectedRegex;
     protected $stderrExpectedString;
