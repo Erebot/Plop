@@ -281,7 +281,7 @@ Please note that this **will** replace any formatter previously in place.
     :api:plop:`Plop\\Record`
         The most common implementation for log records.
 
-    http://php.net/class.datetime.php#datetime.constants.types
+    http://php.net/manual/class.datetime.php#datetime.constants.types
         PHP's predefined constants to represent several popular
         types of date/time formatting.
 
