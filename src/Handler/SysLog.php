@@ -97,11 +97,15 @@ class SysLog extends \Plop\HandlerAbstract
      * Construct a new instance of this handler.
      *
      * \param string $address
-     *      (optional) Address of the syslog
-     *      where the log messages will be sent.
+     *      (optional) Address of the syslog daemon
+     *      where the log messages will be sent,
+     *      in the form "protocol://address:port".
      *      The default is to use the value of the
      *      Plop::Handler::SysLog::DEFAULT_ADDRESS
-     *      constant.
+     *      constant, which sends logs to the local
+     *      syslog daemon.
+     *      IPv6 addresses must be enclosed in square brackets,
+     *      eg. "tls://[fe80::1]:6514/".
      *
      * \param int|string $facility
      *      (optional) The name or the value of the
