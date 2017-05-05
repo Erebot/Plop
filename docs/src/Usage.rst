@@ -285,7 +285,7 @@ Please note that this **will** replace any formatter previously in place.
         PHP's predefined constants to represent several popular
         types of date/time formatting.
 
-    http://php.net/timezones.php
+    http://php.net/timezones
         List of timezone identifiers supported by PHP.
 
 ..  __: http://docs.python.org/2/library/stdtypes.html#string-formatting

@@ -4,11 +4,11 @@ Contributing
 So, you took interest in Plop and would like to contribute back?
 This is the right page!
 
-There are actually several ways by which would may contribute
+There are actually several ways by which you may contribute
 to the project:
 
 *   by `reporting new issues`_ (or asking for new features)
-*   by forking the code and sending `pull requests`_
+*   by forking the code and `sending pull requests`_
 
 Whichever one it is, you may also `join our IRC channel`_ to discuss issues,
 new ideas / feature requests and follow Plop's development.
