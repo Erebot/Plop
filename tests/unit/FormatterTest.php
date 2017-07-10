@@ -51,12 +51,7 @@ class Formatter extends \Plop_TestCase
      */
     public function testDefaultArgumentsOverride()
     {
-        $timezone = $this->getMockBuilder('\\DateTimeZone')
-            ->setMethods(null)
-            ->setConstructorArgs(array())
-            ->disableOriginalConstructor()
-            ->getMock();
-
+        $timezone  = new \DateTimeZone('Europe/Paris');
         $formatter = new \Plop\Formatter('%(asctime)s', 'U', $timezone, true);
         $this->assertSame('%(asctime)s', $formatter->getFormat());
         $this->assertSame('U', $formatter->getDateFormat());
