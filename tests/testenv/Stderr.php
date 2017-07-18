@@ -22,6 +22,7 @@ class Plop_Testenv_Stderr
 {
     public $context;
     protected $callback;
+    protected $buffer;
 
     public function stream_open($path, $mode, $options, &$opened_path)
     {
@@ -33,6 +34,7 @@ class Plop_Testenv_Stderr
         }
 
         $opened_path        =   $path;
+        $this->buffer       =   '';
         $this->callback     =&  $params['mock']['callback'];
         return true;
     }
