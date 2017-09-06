@@ -126,7 +126,9 @@ class Formatter extends \Plop_TestCase
      */
     public function testFormatTime()
     {
-        $date = $this->getMockBuilder('\\DateTime')->getMock();
+        $date = $this->getMockBuilder('\\DateTime')
+            ->setMethods(array('format', 'setTimeZone'))
+            ->getMock();
         $date
             ->expects($this->once())
             ->method('format')
@@ -148,7 +150,9 @@ class Formatter extends \Plop_TestCase
      */
     public function testFormatTime2()
     {
-        $date = $this->getMockBuilder('\\DateTime')->getMock();
+        $date = $this->getMockBuilder('\\DateTime')
+            ->setMethods(array('format', 'setTimeZone'))
+            ->getMock();
         $date
             ->expects($this->once())
             ->method('format')
