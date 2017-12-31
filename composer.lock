@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "ae3f9bd6d3e55e833251a6e0ed3f43c7",
+    "content-hash": "1f717200030855e2347664e9198e8d61",
     "packages": [
         {
             "name": "psr/log",
@@ -111,16 +111,16 @@
         },
         {
             "name": "erebot/buildenv",
-            "version": "1.4.1",
+            "version": "1.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Erebot/Buildenv.git",
-                "reference": "1f75c7b18cc639f0476e667f32447f5b190a029b"
+                "reference": "16e6603448fc0d63182ac336a20d6c7617a69140"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Erebot/Buildenv/zipball/1f75c7b18cc639f0476e667f32447f5b190a029b",
-                "reference": "1f75c7b18cc639f0476e667f32447f5b190a029b",
+                "url": "https://api.github.com/repos/Erebot/Buildenv/zipball/16e6603448fc0d63182ac336a20d6c7617a69140",
+                "reference": "16e6603448fc0d63182ac336a20d6c7617a69140",
                 "shasum": ""
             },
             "require": {
@@ -156,7 +156,7 @@
             "keywords": [
                 "Erebot"
             ],
-            "time": "2017-09-03T12:46:02+00:00"
+            "time": "2017-12-31T15:03:42+00:00"
         },
         {
             "name": "myclabs/deep-copy",

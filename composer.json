@@ -24,7 +24,7 @@
         "psr/log": "^1.0"
     },
     "require-dev": {
-        "erebot/buildenv": "^1.4.0",
+        "erebot/buildenv": "^1.5.0",
         "sebastian/phpcpd": "*",
         "phpmd/phpmd": "*",
         "pdepend/pdepend": "*",
