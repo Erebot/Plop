@@ -24,15 +24,11 @@ Contents:
     Coding_Standard
 
 
-Badges: |badges-travis| |badges-versioneye| |badges-coveralls|
+Badges: |badges-travis| |badges-coveralls|
 
 ..  |badges-travis| image:: https://travis-ci.org/Erebot/Plop.png?branch=master
     :alt: Travis-CI (unknown)
     :target: http://travis-ci.org/Erebot/Plop
-
-..  |badges-versioneye| image:: https://www.versioneye.com/php/erebot:plop/dev-master/badge.png
-    :alt: Versioneye (unknown)
-    :target: https://www.versioneye.com/php/erebot:plop/dev-master
 
 ..  |badges-coveralls| image:: https://coveralls.io/repos/Erebot/Plop/badge.png?branch=master
     :alt: Coveralls (unknown)
