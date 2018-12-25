@@ -27,8 +27,8 @@ namespace Plop;
  */
 class Psr3Logger extends \Psr\Log\AbstractLogger
 {
-    static protected $factory = null;
-    static protected $instance = null;
+    protected static $factory = null;
+    protected static $instance = null;
 
     /**
      * Construct a new PSR-3 compatible logger.

@@ -145,7 +145,7 @@ class Plop extends \Plop\IndirectLoggerAbstract implements \ArrayAccess, \Counta
     const BASIC_FORMAT  = '[%(levelname)s] %(message)s';
 
     /// Shared instance of the logging service.
-    static protected $instance = null;
+    protected static $instance = null;
 
     /// Associative array of loggers, indexed by their ID.
     protected $loggers;
